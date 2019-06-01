@@ -13,42 +13,34 @@ namespace Pokus1
 	{
 		private Map map;
 		private readonly Map startingMap;
-		private UserControl gameForm;
+		private readonly UserControl gameForm;
 		private IMapRenderer renderer;
 		private IInputGetter inputGetter;
-		private readonly long delay;
-		public Game(Map map, IMapRenderer renderer, UserControl gameForm, IInputGetter inputGetter, long delay)
+		public Game(Map map, IMapRenderer renderer, GameControl gameForm, IInputGetter inputGetter)
 		{
-			this.startingMap = map;  
+			this.startingMap = map;
+
+			gameForm.Game = this;
 			this.gameForm = gameForm;
 			this.inputGetter = inputGetter;
-			this.delay = delay;
 			this.renderer = renderer;
 		}
 		int activePlayer = 0;
-		public void Run()
+		public void FirstRun()
 		{
 			map = startingMap; //<-------TODO: musim udělat klonování map
-			gameForm.Show();
 			renderer.FirstRender(map);
-			long nextMove = delay;
-			while (true)
+		}
+		public void Update()
+		{
+			if (Time.IsRunning)
 			{
-				if (Time.IsRunning)
-				{
-					Time.Update();
-					nextMove -= Time.DeltaTime;
-
-					if (nextMove <= 0)
-					{
-						map.Update(ref activePlayer);
-						DetermineInput(inputGetter.CurrButton);
-						renderer.Render();
-					}
-				}
-				if (map.GameEnd)
-					break;
+				map.Update(ref activePlayer);
+				DetermineInput(inputGetter.CurrButton);
+				renderer.Render();
 			}
+			if (map.GameEnd)
+			{ }//<-----------TODO: udělat game over
 		}
 		void DetermineInput(Input input)
 		{
@@ -69,7 +61,7 @@ namespace Pokus1
 			{
 				case var x when (x is Input.WholeGame.Restart):
 					map.SetDefeat();
-					Run();
+					FirstRun();
 					break;
 				case var x when (x is Input.WholeGame.ChangeChar.Right):
 					activePlayer = (activePlayer - 1) % map.Players.Count;

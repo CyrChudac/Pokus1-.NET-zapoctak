@@ -68,7 +68,7 @@
 			this.NewGame.TabIndex = 0;
 			this.NewGame.Text = "New Game";
 			this.NewGame.UseVisualStyleBackColor = true;
-			this.NewGame.Click += new System.EventHandler(this.NewGame_Click_1);
+			this.NewGame.Click += new System.EventHandler(this.NewGame_Click);
 			// 
 			// Options
 			// 

@@ -30,11 +30,14 @@ namespace Pokus1
 
 		private void NewGame_Click(object sender, EventArgs e)
 		{
-			int gameRefreshFrequency = 200;
-
 			GameControl gf = new GameControl();
-			Game game = new Game(new DefaultMap(100, 100).GetMap(null), gf, gf, gf, gameRefreshFrequency);
-			game.Run();
+			Game game = new Game(new DefaultMap(80, 80).GetMap(null), gf, gf, gf);
+			gf.Form = Form;
+			gf.Parent = Form;
+			gf.Visible = true;
+			gf.Dock = DockStyle.Fill;
+			Form.OpenControl(gf);
+			game.FirstRun();
 		}
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -50,11 +53,6 @@ namespace Pokus1
 		private void Exit_Click_1(object sender, EventArgs e)
 		{
 			Form.Close();
-		}
-
-		private void NewGame_Click_1(object sender, EventArgs e)
-		{
-			Form.OpenControl<GameControl>();
 		}
 	}
 }

@@ -20,7 +20,7 @@ namespace Pokus1
 		}
 		protected abstract void Move(int speed);
 		protected abstract void Move();
-		public void AddKey(Input input) => ActiveKeys.Add(input);
+		public virtual void AddKey(Input input) => ActiveKeys.Add(input);
 		public abstract List<Input> ActiveKeys { set; protected get; }
 		public void ChangeSpeed(int newSpeed) { speed = newSpeed; }
 	}
@@ -32,5 +32,6 @@ namespace Pokus1
 		protected override void Move() { }
 		public static readonly NoMovement instance = new NoMovement();
 		public override List<Input> ActiveKeys { protected get { return null; } set { } }
+		public override void AddKey(Input input){}
 	}
 }

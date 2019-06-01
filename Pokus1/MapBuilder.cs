@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing;
 using CoreLib;
 using System.IO;
 
@@ -38,10 +39,11 @@ namespace Pokus1
 				}
 			}
 			List<Player> players = new List<Player>() { new Player(SkillType.noSkill, 100, 100, NoMovement.instance,
-				 "Vlad", new Location{ x = 100, y = 100}) };
-			List<Enemy> enemies = null;
-			List<IInteractiveItem> otherItems = null;
-			return new Map(field, enemies, players, otherItems, 20,20);
+				"Vlad", new Location{ x = 143, y = 59}, new SingleColorAnimation(Color.GreenYellow),
+				Location.DefaultLifeSize) };
+			List<Enemy> enemies = new List<Enemy>();
+			List<IInteractiveItem> otherItems = new List<IInteractiveItem>();
+			return new Map(field, enemies, players, otherItems, tileWidth: 30, tileHeight: 30);
 		}
 	}
 
@@ -96,8 +98,8 @@ namespace Pokus1
 				ReadNextString(reader);
 				int baseSpeed = ReadNextInt(reader);
 
-				characters.Add(new Player(skill, maxHealth, currHealth, 
-					new UsualMovement(baseSpeed), name, location));
+				characters.Add(new Player(skill, maxHealth, currHealth, new UsualMovement(baseSpeed),
+					name, location, new Animation(Time.TimeFlow, name), Location.DefaultLifeSize));
 			}
 			return characters;
 		}
@@ -117,8 +119,8 @@ namespace Pokus1
 				//ReadNextString(reader);
 				//int baseSpeed = ReadNextInt(reader);  <---- zatim neni pohyb, tak neni ani baseSpeed
 
-				enemies.Add(new NormalEnemy(maxHealth, currHealth,
-					NoMovement.instance, type, location));
+				enemies.Add(new NormalEnemy(maxHealth, currHealth, NoMovement.instance, type,
+					location, new Animation(Time.TimeFlow, type.ToString()), Location.DefaultLifeSize));
 			}
 			return enemies;
 		}

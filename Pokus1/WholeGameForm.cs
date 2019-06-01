@@ -45,9 +45,16 @@ namespace Pokus1
 		}
 		public void CloseControl()
 		{
-			ControlOrder.Pop().Visible = false;
+			Controls.Remove(ControlOrder.Pop());
+
 			//OpenControl(ControlOrder.Pop());
-			ControlOrder.Peek().Visible = true;
+			if (ControlOrder.Count > 0)
+				ControlOrder.Peek().Visible = true;
+		}
+		public void ToMenu()
+		{
+			while(ControlOrder.Count > 1)
+				CloseControl();
 		}
 		public new void Close()
 		{
@@ -56,6 +63,11 @@ namespace Pokus1
 			DialogResult result = dialog.ShowDialog();
 			if (result == DialogResult.Yes)
 				base.Close();
+		}
+
+		private void WholeGameForm_Load(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

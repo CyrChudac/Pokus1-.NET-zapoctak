@@ -28,37 +28,28 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.checkBox1 = new System.Windows.Forms.CheckBox();
+			this.components = new System.ComponentModel.Container();
+			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
-			// checkBox1
+			// timer1
 			// 
-			this.checkBox1.AutoSize = true;
-			this.checkBox1.CausesValidation = false;
-			this.checkBox1.Location = new System.Drawing.Point(315, 246);
-			this.checkBox1.Name = "checkBox1";
-			this.checkBox1.Size = new System.Drawing.Size(80, 17);
-			this.checkBox1.TabIndex = 0;
-			this.checkBox1.Text = "checkBox1";
-			this.checkBox1.UseVisualStyleBackColor = true;
+			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
 			// 
-			// GameForm
+			// GameControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(800, 450);
-			this.Controls.Add(this.checkBox1);
-			this.Name = "GameForm";
-			this.Text = "GameForm";
+			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(215)))));
+			this.Name = "GameControl";
+			this.Size = new System.Drawing.Size(800, 450);
 			this.Load += new System.EventHandler(this.GameForm_Load);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GameForm_KeyDown);
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
 		#endregion
-
-		private System.Windows.Forms.CheckBox checkBox1;
+		private System.Windows.Forms.Timer timer1;
 	}
 }

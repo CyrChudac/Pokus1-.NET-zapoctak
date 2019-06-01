@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace CoreLib
 {
@@ -32,6 +33,14 @@ namespace CoreLib
 			return new Location(x, y);
 		}
 		public int x, y;
+
+		public static Size DefaultLifeSize => new Size(10, 10);
+
+		public static explicit operator Size(Location l) => new Size(l);
+		public static explicit operator Location(Size s) => new Location(s.Width, s.Height);
+
+		public static implicit operator Location(Point p) => new Location(p.X,p.Y);
+		public static implicit operator Point(Location p) => new Point(p.x, p.y);
 	}
 
 	public class InputPoss {

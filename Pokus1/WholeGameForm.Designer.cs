@@ -38,6 +38,7 @@
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Name = "WholeGameForm";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
+			this.Load += new System.EventHandler(this.WholeGameForm_Load);
 			this.ResumeLayout(false);
 
 		}

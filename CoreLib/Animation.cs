@@ -63,4 +63,16 @@ namespace CoreLib
 		public Image Image => null;
 		public void Update() { }
 	}
+	public class SingleColorAnimation : IAnimation
+	{
+		public SingleColorAnimation(Color color)
+		{
+			image = new Bitmap(1, 1);
+			image.SetPixel(0, 0, color);
+		}
+		readonly Bitmap image;
+		public Image Image => image;
+
+		public void Update() {}
+	}
 }

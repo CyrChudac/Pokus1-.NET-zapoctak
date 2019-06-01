@@ -21,9 +21,10 @@ namespace Pokus1
 
 		protected void GameForm_Load(object sender, EventArgs e)
 		{
-			
+			timer1.Start();
 		}
 
+		internal Game Game { get; set; }
 		void ShowThis(object sender, EventArgs e){
 			this.Show();
 		}
@@ -34,6 +35,11 @@ namespace Pokus1
 				Form.OpenControl<InGameMenu>();
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
+		private void timer1_Tick(object sender, EventArgs e)
+		{
+			Game.Update();
 		}
 	}
 }

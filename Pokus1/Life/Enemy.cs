@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 using CoreLib;
 
 namespace Pokus1
 {
 	public abstract class Enemy : Life
 	{
-		public Enemy(int maxHealth, int currHealth, Movement movement, EnemyType Type, Location location)
-			: base(maxHealth, currHealth, location, movement)
+		public Enemy(int maxHealth, int currHealth, Movement movement,
+			EnemyType Type, Location location, IAnimation animation, Size size)
+			: base(maxHealth, currHealth, location, movement, animation, size)
 		{
 			this.Type = Type;
 			movement.ChangeSpeed(Speed);
@@ -28,8 +30,9 @@ namespace Pokus1
 	}
 	public class NormalEnemy : Enemy
 	{
-		public NormalEnemy(int maxHealth, int currHealth, Movement movement, EnemyType Type, Location location)
-			: base(maxHealth, currHealth, movement, Type, location)
+		public NormalEnemy(int maxHealth, int currHealth, Movement movement, 
+			EnemyType Type, Location location, IAnimation animation, Size size)
+			: base(maxHealth, currHealth, movement, Type, location, animation, size)
 		{}
 		public override void Update()
 		{
@@ -49,12 +52,13 @@ namespace Pokus1
 
 	public class EnemyBase
 	{
-		public Enemy Get(int maxHealth, int currHealth, Movement movement, EnemyType type, Location location)
+		public Enemy Get(int maxHealth, int currHealth, Movement movement,
+			EnemyType type, Location location, IAnimation animation, Size size)
 		{
 			switch (type)
 			{
 				case EnemyType.normal:
-					return new NormalEnemy(maxHealth, currHealth, movement, type, location);
+					return new NormalEnemy(maxHealth, currHealth, movement, type, location, animation, size);
 				default:
 					throw new WrongEnemyTypeFoundException();
 			}

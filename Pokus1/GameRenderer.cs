@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using CoreLib;
 
 namespace Pokus1
 {
@@ -13,6 +14,7 @@ namespace Pokus1
 		void FirstRender(Map map);
 		void Render();
 	}
+
 	public partial class GameControl : IMapRenderer
 	{
 		Map map;
@@ -41,7 +43,8 @@ namespace Pokus1
 			for(int i = 0; i < tiles.GetLength(0); i++)
 				for(int j = 0; j < tiles.GetLength(1); j++)
 				{
-					tiles[i, j].BackColor = map[i, j].Color;
+					if(map[i,j] != NoTile.Tile)
+						tiles[i, j].BackColor = map[i, j].Color;
 				}
 		}
 
@@ -50,8 +53,8 @@ namespace Pokus1
 			for (int i = 0; i < players.Count; i++)
 			{
 				players[i].Image = map.Players[i].Animation.Image;
-				players[i].Location =
-					new System.Drawing.Point(map.Players[i].Location.x, map.Players[i].Location.y);
+				players[i].Size = map.Players[i].Size;
+				players[i].Location = map.Players[i].Location;
 			}
 		}
 
@@ -79,32 +82,38 @@ namespace Pokus1
 		void MakeAll()
 		{
 			MakeTiles();
-			MakePlayers();
 			MakeEnemies();
 			MakeItems();
+			MakePlayers();
 		}
 
 		void MakeTiles()
 		{
 			tiles = new Label[map.Height, map.Height];
 
-			int height = ClientSize.Height / map.Height;
-			int width = ClientSize.Width / map.Width;
+			int height = map.oneTileHeight;//ClientSize.Height / map.Height;
+			int width = map.oneTileWidth;//ClientSize.Width / map.Width;
 
 			for (int i = 0; i < map.Width; i++)
 				for (int j = 0; j < map.Height; j++)
 				{
-					Label label = new Label()
+					if (map[i, j] != NoTile.Tile)
 					{
-						Location = new Point(i * width + 1, j * height + 1),
-						Text = "",
-						Height = height,
-						Width = width,
-						Tag = i.ToString() + " " + j.ToString()
-					};
-					tiles[i, j] = label;
-					this.Controls.Add(label);
+						Label label = new Label()
+						{
+							Location = new Point(i * width, j * height),
+							Text = "",
+							Height = height,
+							Width = width,
+							Tag = i.ToString() + " " + j.ToString()
+						};
+						tiles[i, j] = label;
+						this.Controls.Add(label);
+					}
 				}
+
+			Form.Size = new Size(tiles[map.Width - 1, map.Height - 1].Location + tiles[map.Width - 1, map.Height - 1].Size);
+			Refresh();
 		}
 
 		void MakePlayers()
@@ -115,7 +124,7 @@ namespace Pokus1
 				PictureBox pic = new PictureBox();
 				PictureBox pic2 = new PictureBox();
 				pic.Controls.Add(pic2);
-				pic2.Location = new Point(0, 0);
+				pic2.Location = player.Location;
 				pic2.BackColor = Color.Transparent;
 				pic2.BorderStyle = BorderStyle.None;
 				pic.BorderStyle = BorderStyle.None;

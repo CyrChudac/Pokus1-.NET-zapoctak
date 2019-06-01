@@ -15,7 +15,7 @@ namespace Pokus1
 		bool defeat = false;
 		public bool Defeat => !Players.All(Player => Player.Alive) || defeat;
 		public void SetDefeat() { defeat = true; }
-		public bool GameEnd => Victory || Defeat;
+		public bool GameEnd => victory || defeat;
 
 		public readonly int oneTileHeight;
 		public readonly int oneTileWidth;

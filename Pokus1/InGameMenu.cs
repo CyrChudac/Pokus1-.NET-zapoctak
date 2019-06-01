@@ -23,13 +23,13 @@ namespace Pokus1
 
 		private void Continue_Click(object sender, EventArgs e) => Form.CloseControl();
 
-		private void End_Click(object sender, EventArgs e) { }
+		private void End_Click(object sender, EventArgs e) => Form.ToMenu();
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			if (keyData == Keys.Escape)
 			{
-				End.PerformClick();
+				Continue.PerformClick();
 				return true;
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
