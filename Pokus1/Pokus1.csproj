@@ -120,9 +120,6 @@
     <EmbeddedResource Include="Editor.resx">
       <DependentUpon>Editor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GameControl.resx">
-      <DependentUpon>GameControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GameObjectControl.resx">
       <DependentUpon>GameObjectControl.cs</DependentUpon>
     </EmbeddedResource>

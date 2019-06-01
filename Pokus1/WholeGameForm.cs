@@ -27,13 +27,17 @@ namespace Pokus1
 		protected void GameForm_Load(object sender, EventArgs e)
 		{
 		}
-		public void OpenControl<T>() where T : GameObjectControl, new() => OpenControl(new T());
-		public void OpenControl(GameObjectControl control)
+		public void OpenControl<T>() where T : GameObjectControl, new()
 		{
+			T control = new T();
 			control.Parent = this;
 			control.Form = this;
 			control.Visible = true;
 			control.Dock = DockStyle.Fill;
+			OpenControl(control);
+		}
+		public void OpenControl(GameObjectControl control)
+		{
 			if (ControlOrder.Count > 0)
 				ControlOrder.Peek().Visible = false;
 			ControlOrder.Push(control);
@@ -41,8 +45,9 @@ namespace Pokus1
 		}
 		public void CloseControl()
 		{
-			ControlOrder.Pop();
-			OpenControl(ControlOrder.Peek());
+			ControlOrder.Pop().Visible = false;
+			//OpenControl(ControlOrder.Pop());
+			ControlOrder.Peek().Visible = true;
 		}
 		public new void Close()
 		{

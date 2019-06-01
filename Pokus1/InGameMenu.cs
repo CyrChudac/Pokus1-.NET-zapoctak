@@ -34,10 +34,5 @@ namespace Pokus1
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
-
-		private void InGameMenu_Load_1(object sender, EventArgs e)
-		{
-
-		}
 	}
 }

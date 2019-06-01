@@ -21,7 +21,7 @@ namespace Pokus1
 
 		protected void GameForm_Load(object sender, EventArgs e)
 		{
-			Render();
+			
 		}
 
 		void ShowThis(object sender, EventArgs e){

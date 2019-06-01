@@ -30,7 +30,7 @@ namespace Pokus1
 		{
 			map = startingMap; //<-------TODO: musim udělat klonování map
 			gameForm.Show();
-			renderer.FirstRender(ref map);
+			renderer.FirstRender(map);
 			long nextMove = delay;
 			while (true)
 			{

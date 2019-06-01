@@ -64,7 +64,7 @@
 			this.Controls.Add(this.Continue);
 			this.Name = "InGameMenu";
 			this.Size = new System.Drawing.Size(605, 346);
-			this.Load += new System.EventHandler(this.InGameMenu_Load_1);
+			this.Load += new System.EventHandler(this.InGameMenu_Load);
 			this.ResumeLayout(false);
 
 		}

@@ -11,7 +11,7 @@ using System.Windows.Forms;
 namespace Pokus1
 {
 	//[System.ComponentModel.DesignerCategory("")]
-	public abstract partial class GameObjectControl : UserControl {
+	public partial class GameObjectControl : UserControl {
 		public WholeGameForm Form { get; set; }
 		public GameObjectControl()
 		{
