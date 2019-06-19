@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using CoreLib;
 using System.IO;
+using System.Runtime.Serialization;
 
 namespace Pokus1
 {
@@ -148,6 +149,16 @@ namespace Pokus1
 		int ReadNextInt(TextReader reader)
 		{
 			return int.Parse(ReadNextString(reader));
+		}
+	}
+
+	interface IMapDesearilizer : IMapBuilder {}
+
+	class BinaryMapDeserializer : IMapDesearilizer
+	{
+		public Map GetMap(string path)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

@@ -4,27 +4,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CoreLib;
+using System.Runtime.Serialization;
 
 namespace Pokus1
 {
+	[Serializable]
 	public class Map
-	{
+	{	
+		[NonSerialized]
 		bool victory = false;
 		public bool Victory => !Enemies.Any(Enemy => Enemy.Alive) ||victory;
 		public void SetVictory() { victory = true; }
+		[NonSerialized]
 		bool defeat = false;
 		public bool Defeat => !Players.All(Player => Player.Alive) || defeat;
 		public void SetDefeat() { defeat = true; }
 		public bool GameEnd => victory || defeat;
 
+		[DataMember()]
 		public readonly int oneTileHeight;
+		[DataMember()]
 		public readonly int oneTileWidth;
+		[DataMember()]
 		public readonly int Height;
+		[DataMember()]
 		public readonly int Width;
+		[DataMember()]
 		public List<Player> Players { get; private set; }
+		[DataMember()]
 		public List<Enemy> Enemies { get; private set; }
 
+		[DataMember()]
 		public List<IInteractiveItem> OtherItems { get; private set; }
+		[DataMember()]
 		private readonly IMapTile[,] map;
 
 		/// <param name="x">Width</param>
@@ -34,32 +46,6 @@ namespace Pokus1
 			get { return map[x, y]; }
 
 			set { map[x, y] = value; }
-		}
-
-		public Map Copy()
-		{
-			IMapTile[,] tiles = new IMapTile[map.GetLength(0), map.GetLength(1)];
-			for(int i = 0; i < map.GetLength(0); i++)
-				for (int j = 0; j < map.GetLength(1); j++)
-				{
-					tiles[i, j] = map[i, j];
-				}
-
-			List<Enemy> enemies = new List<Enemy>(Enemies.Count);
-			foreach (Enemy e in Enemies)
-				enemies.Add(e.Copy());
-
-			List<Player> players = new List<Player>(Players.Count);
-			foreach (Player p in Players)
-				players.Add(p.Copy());
-
-			List<IInteractiveItem> items = new List<IInteractiveItem>(OtherItems.Count);
-			foreach (IInteractiveItem i in OtherItems)
-				items.Add(i.Copy());
-
-			Map ret = new Map(tiles, enemies, players, items, oneTileHeight, oneTileWidth);
-
-			return ret; //<----------- už?? nechybí něco?
 		}
 
 		public void Update(ref int activePlayer)

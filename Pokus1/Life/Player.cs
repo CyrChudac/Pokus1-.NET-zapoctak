@@ -5,12 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using CoreLib;
+using System.Runtime.Serialization;
 
 namespace Pokus1
 {
+	[Serializable]
 	public class Player : Life
 	{
+		[DataMember()]
 		readonly public string name;
+		[DataMember()]
 		public new Movement Movement { get { return base.Movement; }}
 		public Player(SkillType skillType, int maxHealth, int currHealth, 
 			Movement movement, string name, Location location, IAnimation animation, Size size)
@@ -19,7 +23,9 @@ namespace Pokus1
 			this.Skill = ISkill.Get(skillType, this);
 			this.name = name;
 		}
+		[DataMember()]
 		public Inventory Items { get; protected set; } = new Inventory();
+		[DataMember()]
 		public ISkill Skill { get; protected set; }
 		public void PropagateInput(Input input)
 		{
@@ -32,16 +38,12 @@ namespace Pokus1
 		public override void Update()
 		{
 
-			Movement.
+			//Movement.
 			throw new NotImplementedException();
 		}
 		protected List<IAction> actions = new List<IAction>();
-
-		public Player Copy()
-		{
-			throw new NotImplementedException();
-		}
 	}
 
+	[Serializable]
 	public class Inventory : List<Item> { }
 }

@@ -5,9 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using CoreLib;
+using System.Runtime.Serialization;
 
 namespace Pokus1
 {
+	[DataContract()]
 	public abstract class Enemy : Life
 	{
 		public Enemy(int maxHealth, int currHealth, Movement movement,
@@ -17,7 +19,7 @@ namespace Pokus1
 			this.Type = Type;
 			movement.ChangeSpeed(Speed);
 		}
-		public abstract Enemy Copy();
+		[DataMember()]
 		public EnemyType Type { get; protected set; }
 
 		public abstract int WaitingOnWalkEnd { get; }
@@ -28,6 +30,7 @@ namespace Pokus1
 
 		public abstract int Speed { get; }
 	}
+	[Serializable]
 	public class NormalEnemy : Enemy
 	{
 		public NormalEnemy(int maxHealth, int currHealth, Movement movement, 
@@ -35,10 +38,6 @@ namespace Pokus1
 			: base(maxHealth, currHealth, movement, Type, location, animation, size)
 		{}
 		public override void Update()
-		{
-			throw new NotImplementedException();
-		}
-		public override Enemy Copy()
 		{
 			throw new NotImplementedException();
 		}
