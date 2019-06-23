@@ -13,7 +13,7 @@ namespace Pokus1
 	{
 		private Map map;
 		private readonly Map startingMap;
-		private readonly UserControl gameForm;
+		private readonly GameObjectControl gameForm;
 		private IMapRenderer renderer;
 		private IInputGetter inputGetter;
 		public Game(Map map, IMapRenderer renderer, GameControl gameForm, IInputGetter inputGetter)
@@ -36,7 +36,8 @@ namespace Pokus1
 			if (Time.IsRunning)
 			{
 				map.Update(ref activePlayer);
-				DetermineInput(inputGetter.CurrButton);
+				while(inputGetter.CurrButtons.Any())
+					DetermineInput(inputGetter.CurrButtons.Dequeue());
 				renderer.Render();
 			}
 			if (map.GameEnd)
@@ -59,15 +60,18 @@ namespace Pokus1
 		{
 			switch (input)
 			{
-				case var x when (x is Input.WholeGame.Restart):
-					map.SetDefeat();
-					FirstRun();
+				case var x when (x is Input.WholeGame.Menu):
+					gameForm.Form.OpenControl<InGameMenu>();
 					break;
 				case var x when (x is Input.WholeGame.ChangeChar.Right):
 					activePlayer = (activePlayer - 1) % map.Players.Count;
 					break;
 				case var x when (x is Input.WholeGame.ChangeChar.Left):
 					activePlayer = (activePlayer + 1) % map.Players.Count;
+					break;
+				case var x when (x is Input.WholeGame.Restart):
+					map.SetDefeat();
+					FirstRun();
 					break;
 				default:
 					throw InputPoss.wrongInputFoundException;

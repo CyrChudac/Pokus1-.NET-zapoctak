@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CoreLib;
 using System.Runtime.Serialization;
+using System.IO;
 
 namespace Pokus1
 {
@@ -39,6 +40,15 @@ namespace Pokus1
 		[DataMember()]
 		private readonly IMapTile[,] map;
 
+		public Map Clone()
+		{
+			MemoryStream s = new MemoryStream();
+			new MapSerializer(s).Save(this);
+			Map result = new BinaryMapDeserializer(s).GetMap();
+			s.Dispose();
+			return result;
+		}
+
 		/// <param name="x">Width</param>
 		/// <param name="y">Height</param>
 		public IMapTile this [int x, int y]
@@ -55,7 +65,6 @@ namespace Pokus1
 				if (!Players.ElementAt(activePlayer).Alive)
 					activePlayer = (activePlayer + 1) % Players.Count;
 
-
 				foreach (Player p in Players)
 				{
 					p.Update();
@@ -64,68 +73,104 @@ namespace Pokus1
 					enemy.Update();
 			}
 		}
-		bool LocationAccesable(Location loc)
-		{ return LocationAccesable(loc.x, loc.y); }
-		bool LocationAccesable(double x, double y)
-		{
-			int X = (int)x / oneTileWidth;
-			int Y = (int)y / oneTileHeight;
-			switch (map[X, Y])
-			{
-				case null:
-					return true;
-				case var ig when (ig is Killer):
-				case var ig2 when (ig2 is FullWall):
-					return false;
-			}
-			throw new Exception("Unknown map tile detected next to given object.");
-		}
+		public bool AmIFalling(IGameObject obj)
+			=> DirectionAccesable(obj, Direction.down);
+		public bool DirectionAccesable(IGameObject obj, Direction dir) 
+			=> new DirectionAccesor(this).ObjectDirectionAccesable(obj, dir);
 
-		public bool[] ObjectPossibleDirections(IGameObject obj)
+		class DirectionAccesor
 		{
-			double left = obj.Location.x - obj.Width/ 2;
-			double top = obj.Location.y - obj.Height / 2;
-			bool[] ret = new bool[4] { true, true, true, true };
-			for(double i = 0; i <= obj.Width; i += oneTileWidth)
+			Map map;
+			public DirectionAccesor(Map map) => this.map = map;
+			double left;
+			double top;
+			public bool ObjectDirectionAccesable(IGameObject obj, Direction direction)
 			{
-				if(!LocationAccesable(top, left + i))
+				left = obj.Location.x - obj.Width / 2;
+				top = obj.Location.y - obj.Height / 2;
+				switch (direction)
 				{
-					ret[(int)Directions.up] = false;
-					break;
+					case Direction.up:
+						return CanGoUp(obj);
+					case Direction.down:
+						return CanGoDown(obj);
+					case Direction.left:
+						return CanGoLeft(obj);
+					case Direction.right:
+						return CanGoRight(obj);
+					default:
+						throw new NotImplementedException("Unknown direction used. ( = " + direction.ToString() + " )");
 				}
 			}
-			for (double i = 0; i <= obj.Width; i += oneTileWidth)
+			bool CanGoUp(IGameObject obj)
 			{
-				if (!LocationAccesable(top + obj.Height, left + i))
+				for (double i = 0; i <= obj.Width; i += map.oneTileWidth)
 				{
-					ret[(int)Directions.down] = false;
-					break;
+					if (!LocationAccesable(top, left + i))
+					{
+						return false;
+					}
 				}
+				return true;
 			}
-			for (double i = 0; i <= obj.Height; i += oneTileHeight)
+			bool CanGoDown(IGameObject obj)
 			{
-				if (!LocationAccesable(top + i, left))
+				for (double i = 0; i <= obj.Width; i += map.oneTileWidth)
 				{
-					ret[(int)Directions.left] = false;
-					break;
+					if (!LocationAccesable(top + obj.Height, left + i))
+					{
+						return false;
+					}
 				}
+				return true;
 			}
-			for (double i = 0; i <= obj.Height; i += oneTileHeight)
+			bool CanGoLeft(IGameObject obj)
 			{
-				if (!LocationAccesable(top + i, left + obj.Width))
+				for (double i = 0; i <= obj.Height; i += map.oneTileHeight)
 				{
-					ret[(int)Directions.right] = false;
-					break;
+					if (!LocationAccesable(top + i, left))
+					{
+						return false;
+					}
 				}
+				return true;
 			}
-			return ret;
+			bool CanGoRight(IGameObject obj)
+			{
+				for (double i = 0; i <= obj.Height; i += map.oneTileHeight)
+				{
+					if (!LocationAccesable(top + i, left + obj.Width))
+					{
+						return false;
+					}
+				}
+				return true;
+			}
+			bool LocationAccesable(double x, double y)
+			{
+				int X = (int)x / map.oneTileWidth;
+				int Y = (int)y / map.oneTileHeight;
+				switch (map[X, Y])
+				{
+					case null:
+						return true;
+					case var ig when (ig is Killer):
+					case var ig2 when (ig2 is FullWall):
+						return false;
+				}
+				throw new Exception("Unknown map tile detected next to given object.");
+			}
+			bool LocationAccesable(Location loc)
+			{ return LocationAccesable(loc.x, loc.y); }
 		}
 
 		public Map(IMapTile[,] map, List<Enemy> enemies, List<Player> players,
 			List<IInteractiveItem> otherItems, int tileHeight, int tileWidth)
 		{
 			this.Players = players;
+			foreach (var player in players) player.map = this;
 			this.Enemies = enemies;
+			foreach (var enemy in enemies) enemy.map = this;
 			this.OtherItems = otherItems;
 			this.map = map;
 			this.Height = map.GetLength(1);

@@ -10,37 +10,40 @@ using System.Runtime.Serialization;
 namespace Pokus1
 {
 	[Serializable]
-	public class Player : Life
+	public abstract class Player : Life
 	{
 		[DataMember()]
 		readonly public string name;
 		[DataMember()]
 		public new Movement Movement { get { return base.Movement; }}
-		public Player(SkillType skillType, int maxHealth, int currHealth, 
+		public Player(int maxHealth, int currHealth, 
 			Movement movement, string name, Location location, IAnimation animation, Size size)
 			:base(maxHealth, currHealth, location, movement, animation, size)
 		{
-			this.Skill = ISkill.Get(skillType, this);
 			this.name = name;
 		}
 		[DataMember()]
 		public Inventory Items { get; protected set; } = new Inventory();
-		[DataMember()]
-		public ISkill Skill { get; protected set; }
+
+		protected abstract void UseSkill();
+
 		public void PropagateInput(Input input)
 		{
 			if ((input == null) || (input is Input.Player.Movement)){
 				Movement.AddKey(input);
 			}
 			if (input is Input.Player.SkillUse)
-				Skill.Use();
+				UseSkill();
 		}
 		public override void Update()
 		{
-
-			//Movement.
-			throw new NotImplementedException();
+			Movement.Move();
+			if (map.AmIFalling(this))
+				Movement.Fall();
+			SkillUpdate();
+			Location += Movement.FinalDirection;
 		}
+		protected abstract void SkillUpdate();
 		protected List<IAction> actions = new List<IAction>();
 	}
 

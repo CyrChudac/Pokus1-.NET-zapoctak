@@ -1,0 +1,24 @@
+# Specifikace zápočtového programu
+--------------------------
+#### Shrnutí
+Program bude real-time platform hra. Hráč ovládá více různých postaviček, se kterými
+se snaží dosáhnout cíle specifického pro level. Každá z postav bude mít svoji vlastní
+schopnost, kterou bude moct hráč využít, aby zdárně prošel level.
+
+#### Co bude program obsahovat?
+- možnost ovládání minimálně 2 postav, kde každá postava disponuje jednou, pro ni specifickou, schopností
+- možnost uložení/načtení aktuálního stavu hry
+- možnost hru zastavit
+- velice jednoduché grafické rozhraní poskytující jasnou představu o aktuálním stavu
+#### Další cíle, ke kterým se nezavazuji
+- nepřátelé, kteří se budou pohybovat, budou útočit a půjde se jich zbavit
+- editor map
+- konfigurovatelné ovládání
+
+#### Technologie využité při vývoji
+- dědičnost (interfacy, abstraktní třídy, virtuální metody...)
+- verzování pomocí GITu
+- generické metody
+- implicitní parametry
+- serializace (ukládání levelů/aktuálního stavu)
+- WinForms (zobrazování hry)

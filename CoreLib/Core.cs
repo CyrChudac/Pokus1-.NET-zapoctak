@@ -28,9 +28,13 @@ namespace CoreLib
 		public Location Normalize()
 		{
 			int d = (int)Math.Sqrt(Math.Pow(this.x, 2) + Math.Pow(this.y, 2));
-			int x = this.x/d;
-			int y = this.y/d;
-			return new Location(x, y);
+			if (d != 0)
+			{
+				int x = this.x / d;
+				int y = this.y / d;
+				return new Location(x, y);
+			}
+			return new Location();
 		}
 		public int x, y;
 
@@ -41,6 +45,9 @@ namespace CoreLib
 
 		public static implicit operator Location(Point p) => new Location(p.X,p.Y);
 		public static implicit operator Point(Location p) => new Point(p.x, p.y);
+
+		public static Location operator +(Location first, Location second)
+			=> new Location(first.x + second.x, first.y + second.y);
 	}
 
 	public class InputPoss {
@@ -56,6 +63,6 @@ namespace CoreLib
 		class WrongInputFoundException : Exception{ }
 	}
 	
-	public enum Directions { down, left, right, up}
+	public enum Direction { down, left, right, up}
 
 }

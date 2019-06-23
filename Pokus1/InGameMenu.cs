@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CoreLib;
 
 namespace Pokus1
 {
@@ -19,9 +20,15 @@ namespace Pokus1
 			InitializeComponent();
 		}
 
-		private void InGameMenu_Load(object sender, EventArgs e) {}
+		private void InGameMenu_Load(object sender, EventArgs e) {
+			Time.Stop();
+		}
 
-		private void Continue_Click(object sender, EventArgs e) => Form.CloseControl();
+		private void Continue_Click(object sender, EventArgs e)
+		{
+			Time.Start();
+			Form.CloseControl();
+		}
 
 		private void End_Click(object sender, EventArgs e) => Form.ToMenu();
 

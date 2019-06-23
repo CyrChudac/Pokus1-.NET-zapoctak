@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Action.cs" />
+    <Compile Include="MapSaver.cs" />
     <Compile Include="Life\Attack.cs" />
     <Compile Include="Editor.cs">
       <SubType>UserControl</SubType>
@@ -67,7 +68,7 @@
     </Compile>
     <Compile Include="IItem.cs" />
     <Compile Include="InteractiveItem.cs" />
-    <Compile Include="Life\ISkill.cs" />
+    <Compile Include="Life\SkilledPlayers.cs" />
     <Compile Include="Life\Life.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameControl.cs">

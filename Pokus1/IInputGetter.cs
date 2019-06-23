@@ -10,28 +10,17 @@ namespace Pokus1
 {
 	interface IInputGetter
 	{
-		Input CurrButton { get; }
+		Queue<Input> CurrButtons { get; }
 	}
 	partial class GameControl : IInputGetter
-	{ 
-		private Input currButton;
-		public Input CurrButton
-		{
-			get
-			{
-				Input ret = currButton;
-				currButton = InputPoss.nothing;
-				return ret;
-			}
-			private set { currButton = value; }
-		}
+	{
+		public Queue<Input> CurrButtons { private set; get; } = new Queue<Input>();
 
 		protected void GameForm_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (inputCheck.Keys.Contains(e.KeyCode))
 			{
-				CurrButton = inputCheck[e.KeyCode];
-
+				CurrButtons.Enqueue(inputCheck[e.KeyCode]);
 			}
 		}
 	}

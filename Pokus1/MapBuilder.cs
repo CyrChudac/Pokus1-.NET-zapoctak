@@ -13,7 +13,7 @@ namespace Pokus1
 {
 	interface IMapBuilder
 	{
-		Map GetMap(string path);
+		Map GetMap();
 	}
 
 	class DefaultMap : IMapBuilder
@@ -25,7 +25,7 @@ namespace Pokus1
 			this.width = width;
 			this.height = height;
 		}
-		public Map GetMap(string NOTHING)
+		public Map GetMap()
 		{
 			IMapTile[,] field = new IMapTile[width, height];
 			for(int i = 0; i < width; i++)
@@ -39,7 +39,7 @@ namespace Pokus1
 					else field[i, j] = NoTile.Tile;
 				}
 			}
-			List<Player> players = new List<Player>() { new Player(SkillType.noSkill, 100, 100, NoMovement.instance,
+			List<Player> players = new List<Player>() { new Unskilled( 100, 100, NoMovement.instance,
 				"Vlad", new Location{ x = 143, y = 59}, new SingleColorAnimation(Color.GreenYellow),
 				Location.DefaultLifeSize) };
 			List<Enemy> enemies = new List<Enemy>();
@@ -50,7 +50,12 @@ namespace Pokus1
 
 	class MapReader : IMapBuilder
 	{
-		public Map GetMap(string path)
+		readonly string path;
+		public MapReader(string path)
+		{
+			this.path = path;
+		}
+		public Map GetMap()
 		{
 			StreamReader reader = new StreamReader(path);
 
@@ -99,8 +104,8 @@ namespace Pokus1
 				ReadNextString(reader);
 				int baseSpeed = ReadNextInt(reader);
 
-				characters.Add(new Player(skill, maxHealth, currHealth, new UsualMovement(baseSpeed),
-					name, location, new Animation(Time.TimeFlow, name), Location.DefaultLifeSize));
+				//characters.Add(new Player(skill, maxHealth, currHealth, new UsualMovement(baseSpeed),
+				//	name, location, new Animation(Time.TimeFlow, name), Location.DefaultLifeSize));
 			}
 			return characters;
 		}
@@ -154,9 +159,15 @@ namespace Pokus1
 
 	interface IMapDesearilizer : IMapBuilder {}
 
-	class BinaryMapDeserializer : IMapDesearilizer
+	class BinaryMapDeserializer : IMapDesearilizer, IDisposable
 	{
-		public Map GetMap(string path)
+		readonly Stream stream;
+		public BinaryMapDeserializer(Stream stream)
+		{
+			this.stream = stream;
+		}
+		public void Dispose() => stream.Dispose();
+		public Map GetMap()
 		{
 			throw new NotImplementedException();
 		}

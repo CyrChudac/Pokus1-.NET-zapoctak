@@ -32,7 +32,7 @@ namespace Pokus1
 		public int StartingHealth { get; private set; }
 		public abstract void Update();
 		[DataMember()]
-		public Directions LookingAt { get; protected set; }
+		public Direction LookingAt { get; protected set; }
 		[DataMember()]
 		public virtual int FallingSpeed { get; }
 		[DataMember()]
@@ -43,8 +43,7 @@ namespace Pokus1
 		public Location Location { get; set; }
 		[DataMember()]
 		public Size Size { get; protected set; }
-		[NonSerialized]
-		protected Map map;
+		public Map map { protected get; set; }
 	}
 
 

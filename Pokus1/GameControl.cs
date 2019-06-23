@@ -25,9 +25,7 @@ namespace Pokus1
 		}
 
 		internal Game Game { get; set; }
-		void ShowThis(object sender, EventArgs e){
-			this.Show();
-		}
+
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			if (keyData == Keys.Escape)
