@@ -31,9 +31,8 @@ namespace Pokus1
 		private void NewGame_Click(object sender, EventArgs e)
 		{
 			GameControl gf = new GameControl();
-			Game game = new Game(new DefaultMap(80, 80).GetMap(), gf, gf, gf);
+			Game game = new Game(new DefaultMap.AlsoMove(80, 80).GetMap(), gf, gf, gf);
 			gf.Form = Form;
-			gf.Parent = Form;
 			gf.Visible = true;
 			gf.Dock = DockStyle.Fill;
 			Form.OpenControl(gf);

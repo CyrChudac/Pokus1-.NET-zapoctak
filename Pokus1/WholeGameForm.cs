@@ -15,41 +15,43 @@ namespace Pokus1
 		Stack<GameObjectControl> ControlOrder = new Stack<GameObjectControl>();
 		public WholeGameForm()
 		{
-			this.WindowState = FormWindowState.Maximized;
-			this.Location = new Point(0, 0);
-			this.Size = Screen.PrimaryScreen.WorkingArea.Size;
+			//this.WindowState = FormWindowState.Maximized;
 			InitializeComponent();
+			this.Location = new Point(0, 0);
+			this.Size = Screen.PrimaryScreen.Bounds.Size;
 			KeyPreview = true;
-			//ClientSize = Size;
 			OpenControl<Menu>();
 		}
 		 
 		protected void GameForm_Load(object sender, EventArgs e)
 		{
 		}
-		public void OpenControl<T>() where T : GameObjectControl, new()
+		public GameObjectControl OpenControl<T>() where T : GameObjectControl, new()
 		{
 			T control = new T();
-			control.Parent = this;
-			control.Form = this;
 			control.Visible = true;
 			control.Dock = DockStyle.Fill;
-			OpenControl(control);
+			return OpenControl(control);
 		}
-		public void OpenControl(GameObjectControl control)
+		public GameObjectControl OpenControl(GameObjectControl control)
 		{
-			if (ControlOrder.Count > 0)
-				ControlOrder.Peek().Visible = false;
-			ControlOrder.Push(control);
 			Controls.Add(control);
+			if (ControlOrder.Count > 0)
+					ControlOrder.Peek().Visible = false;
+			ControlOrder.Push(control);
+			control.Form = this;
+			control.Focus();
+			return control;
 		}
 		public void CloseControl()
 		{
 			Controls.Remove(ControlOrder.Pop());
 
-			//OpenControl(ControlOrder.Pop());
 			if (ControlOrder.Count > 0)
+			{
 				ControlOrder.Peek().Visible = true;
+				ControlOrder.Peek().Focus();
+			}
 		}
 		public void ToMenu()
 		{

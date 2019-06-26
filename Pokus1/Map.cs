@@ -86,8 +86,8 @@ namespace Pokus1
 			double top;
 			public bool ObjectDirectionAccesable(IGameObject obj, Direction direction)
 			{
-				left = obj.Location.x - obj.Width / 2;
-				top = obj.Location.y - obj.Height / 2;
+				left = obj.Location.x   ;  /* - obj.Width / 2;		/*			*/
+				top = obj.Location.y	;  /* - obj.Height / 2;		/*			*/
 				switch (direction)
 				{
 					case Direction.up:
@@ -106,7 +106,7 @@ namespace Pokus1
 			{
 				for (double i = 0; i <= obj.Width; i += map.oneTileWidth)
 				{
-					if (!LocationAccesable(top, left + i))
+					if (!LocationAccesable(top - Movement.shift, left + i))
 					{
 						return false;
 					}
@@ -117,7 +117,7 @@ namespace Pokus1
 			{
 				for (double i = 0; i <= obj.Width; i += map.oneTileWidth)
 				{
-					if (!LocationAccesable(top + obj.Height, left + i))
+					if (!LocationAccesable(top + obj.Height + Movement.shift, left + i))
 					{
 						return false;
 					}
@@ -128,7 +128,7 @@ namespace Pokus1
 			{
 				for (double i = 0; i <= obj.Height; i += map.oneTileHeight)
 				{
-					if (!LocationAccesable(top + i, left))
+					if (!LocationAccesable(top + i, left - Movement.shift))
 					{
 						return false;
 					}
@@ -139,23 +139,24 @@ namespace Pokus1
 			{
 				for (double i = 0; i <= obj.Height; i += map.oneTileHeight)
 				{
-					if (!LocationAccesable(top + i, left + obj.Width))
+					if (!LocationAccesable(top + i, left + obj.Width + Movement.shift))
 					{
 						return false;
 					}
 				}
 				return true;
 			}
-			bool LocationAccesable(double x, double y)
+			bool LocationAccesable(double y, double x)
 			{
 				int X = (int)x / map.oneTileWidth;
 				int Y = (int)y / map.oneTileHeight;
 				switch (map[X, Y])
 				{
 					case null:
+					case var ig when (ig is NoTile):
 						return true;
-					case var ig when (ig is Killer):
-					case var ig2 when (ig2 is FullWall):
+					case var ig2 when (ig2 is Killer):
+					case var ig3 when (ig3 is FullWall):
 						return false;
 				}
 				throw new Exception("Unknown map tile detected next to given object.");
@@ -182,5 +183,6 @@ namespace Pokus1
 
 	public interface IMapTile {
 		System.Drawing.Color Color { get; }
+		System.Drawing.Brush Brush { get; }
 	}
 }

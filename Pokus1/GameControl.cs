@@ -13,10 +13,10 @@ namespace Pokus1
 {
 	public partial class GameControl : GameObjectControl
 	{
-		InputButtons inputCheck = new InputButtons();
 		public GameControl()
 		{
 			InitializeComponent();
+			timer1.Interval = Time.delay;
 		}
 
 		protected void GameForm_Load(object sender, EventArgs e)
@@ -25,15 +25,6 @@ namespace Pokus1
 		}
 
 		internal Game Game { get; set; }
-
-		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-		{
-			if (keyData == Keys.Escape)
-			{
-				Form.OpenControl<InGameMenu>();
-			}
-			return base.ProcessCmdKey(ref msg, keyData);
-		}
 
 		private void timer1_Tick(object sender, EventArgs e)
 		{

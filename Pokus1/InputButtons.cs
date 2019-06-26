@@ -8,19 +8,24 @@ using CoreLib;
 
 namespace Pokus1
 {
-	class InputButtons : Dictionary<Keys,Input>
+	class WholeGameButtons : Dictionary<Keys,Input>
 	{
-		public InputButtons()
+		public WholeGameButtons()
 		{
-			Add(System.Windows.Forms.Keys.Right, InputPoss.right);
-			Add(System.Windows.Forms.Keys.Left, InputPoss.left);
-			Add(System.Windows.Forms.Keys.Space, InputPoss.skill);
 			Add(System.Windows.Forms.Keys.Escape, InputPoss.menu);
 			Add(System.Windows.Forms.Keys.P, InputPoss.menu);
 			Add(System.Windows.Forms.Keys.R, InputPoss.restart);
 			Add(System.Windows.Forms.Keys.A, InputPoss.changePlayerLeft);
 			Add(System.Windows.Forms.Keys.S, InputPoss.changePlayerRight);
 		}
-		
+	}
+	class PlayerButtons : Dictionary<Keys, Input>
+	{
+		public PlayerButtons()
+		{
+			Add(System.Windows.Forms.Keys.Right, InputPoss.right);
+			Add(System.Windows.Forms.Keys.Left, InputPoss.left);
+			Add(System.Windows.Forms.Keys.Space, InputPoss.skill);
+		}
 	}
 }

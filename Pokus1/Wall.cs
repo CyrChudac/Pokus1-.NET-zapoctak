@@ -19,7 +19,8 @@ namespace Pokus1
 	class FullWall: IWall
 	{
 		public Color Color { get; } = Color.Black;
-		private FullWall() { }
+		public Brush Brush { get; private set; }
+		private FullWall() { Brush = new SolidBrush(Color); }
 		public static readonly IMapTile Tile = new FullWall();
 	}
 
@@ -29,7 +30,8 @@ namespace Pokus1
 	class Killer : IMapTile
 	{
 		public Color Color { get; } = Color.IndianRed;
-		private Killer() { }
+		public Brush Brush { get; private set; }
+		private Killer() { Brush = new SolidBrush(Color); }
 		public static readonly IMapTile Tile = new Killer();
 	}
 
@@ -39,7 +41,8 @@ namespace Pokus1
 	class NoTile : IMapTile
 	{
 		public Color Color { get; } = Color.SkyBlue;
-		private NoTile() { }
+		public Brush Brush { get; private set; }
+		private NoTile() { Brush = new SolidBrush(Color); }
 		public static readonly IMapTile Tile = new NoTile();
 	}
 

@@ -14,8 +14,6 @@ namespace Pokus1
 	{
 		[DataMember()]
 		readonly public string name;
-		[DataMember()]
-		public new Movement Movement { get { return base.Movement; }}
 		public Player(int maxHealth, int currHealth, 
 			Movement movement, string name, Location location, IAnimation animation, Size size)
 			:base(maxHealth, currHealth, location, movement, animation, size)
@@ -29,15 +27,26 @@ namespace Pokus1
 
 		public void PropagateInput(Input input)
 		{
-			if ((input == null) || (input is Input.Player.Movement)){
-				Movement.AddKey(input);
+			if (input is Input.Player.Movement.Left)
+			{
+				if (map.DirectionAccesable(this, Direction.left))
+					Movement.AddKey(input);
 			}
+			else
+			if (input is Input.Player.Movement.Right)
+			{
+				if (map.DirectionAccesable(this, Direction.right))
+					Movement.AddKey(input);
+			}
+			else
 			if (input is Input.Player.SkillUse)
 				UseSkill();
+			else
+				throw new ArgumentException("Unknown input type = " + input.GetType());
 		}
 		public override void Update()
 		{
-			Movement.Move();
+			Movement.ResetAndMove();
 			if (map.AmIFalling(this))
 				Movement.Fall();
 			SkillUpdate();

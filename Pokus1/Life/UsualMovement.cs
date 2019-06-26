@@ -15,7 +15,7 @@ namespace Pokus1
 		public UsualMovement(int speed) : base(speed)
 		{
 		}
-		public override void Move()
+		public override void ResetAndMove()
 		{
 			location = new Location();
 			foreach (Input key in ActiveKeys)
@@ -24,19 +24,17 @@ namespace Pokus1
 					case null:
 						break;
 					case var x when (x is Input.Player.Movement.Right):
-						location.x += shift;
+						location.x += arrowImportness;
 						break;
 					case var x when (x is Input.Player.Movement.Left):
-						location.x -= shift;
+						location.x -= arrowImportness;
 						break;
 					default:
 						throw InputPoss.wrongInputFoundException;
 				}
-			location = location.Normalize();
-			location.x *= speed;
-			location.y *= speed;
+			location *= speed;
 			ActiveKeys.Clear();
 		}
-		public override List<Input> ActiveKeys { protected get; set; }
+		public override List<Input> ActiveKeys { protected get; set; } = new List<Input>();
 	}
 }

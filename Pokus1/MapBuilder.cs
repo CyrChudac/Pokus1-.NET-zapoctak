@@ -16,7 +16,7 @@ namespace Pokus1
 		Map GetMap();
 	}
 
-	class DefaultMap : IMapBuilder
+	class DefaultMap
 	{
 		readonly int width;
 		readonly int height;
@@ -25,12 +25,13 @@ namespace Pokus1
 			this.width = width;
 			this.height = height;
 		}
-		public Map GetMap()
+
+		IMapTile[,] OnlyBorders_Wall()
 		{
 			IMapTile[,] field = new IMapTile[width, height];
-			for(int i = 0; i < width; i++)
+			for (int i = 0; i < width; i++)
 			{
-				for(int j = 0; j< height; j++)
+				for (int j = 0; j < height; j++)
 				{
 					if ((i == 0) || (i == width - 1) || (j == 0) || (j == height - 1))
 					{
@@ -39,12 +40,65 @@ namespace Pokus1
 					else field[i, j] = NoTile.Tile;
 				}
 			}
-			List<Player> players = new List<Player>() { new Unskilled( 100, 100, NoMovement.instance,
+			return field;
+		}
+
+		IMapTile[,] BordersAndSomething_Wall()
+		{
+			IMapTile[,] field = new IMapTile[width, height];
+			for (int i = 0; i < width; i++)
+			{
+				for (int j = 0; j < height; j++)
+				{
+					if ((i == 0) || (i == width - 1) || (j == 0) || (j == height - 1) || ((j == 10) && (i % 7 == 1)))
+					{
+						field[i, j] = FullWall.Tile;
+					}
+					else field[i, j] = NoTile.Tile;
+				}
+			}
+			return field;
+		}
+		public class JustExistWithPhysics : IMapBuilder
+		{
+			DefaultMap builder;
+			public JustExistWithPhysics(int width, int height)
+			{
+				builder = new DefaultMap(width, height);
+			}
+
+			public Map GetMap()
+			{
+				IMapTile[,] field = builder.OnlyBorders_Wall();
+				List<Player> players = new List<Player>() { new Unskilled(100, 100, NoMovement.instance,
 				"Vlad", new Location{ x = 143, y = 59}, new SingleColorAnimation(Color.GreenYellow),
 				Location.DefaultLifeSize) };
-			List<Enemy> enemies = new List<Enemy>();
-			List<IInteractiveItem> otherItems = new List<IInteractiveItem>();
-			return new Map(field, enemies, players, otherItems, tileWidth: 30, tileHeight: 30);
+				List<Enemy> enemies = new List<Enemy>();
+				List<IInteractiveItem> otherItems = new List<IInteractiveItem>();
+				return new Map(field, enemies, players, otherItems, tileWidth: 30, tileHeight: 30);
+			}
+		}
+		public class AlsoMove : IMapBuilder
+		{
+			DefaultMap builder;
+			public AlsoMove(int width, int height)
+			{
+				builder = new DefaultMap(width, height);
+			}
+
+			public Map GetMap()
+			{
+				IMapTile[,] field = builder.BordersAndSomething_Wall();
+				List<Player> players = new List<Player>() { new Jumper(100, 100, new UsualMovement(Life.defaultSpeed),
+				"Vlad", new Location{ x = 143, y = 59}, new SingleColorAnimation(Color.GreenYellow),
+				Location.DefaultLifeSize),
+				new Jumper(100, 100, new UsualMovement(Life.defaultSpeed),
+				"Vlad", new Location{ x = 300, y = 59}, new SingleColorAnimation(Color.OrangeRed),
+				Location.DefaultLifeSize)};
+				List<Enemy> enemies = new List<Enemy>();
+				List<IInteractiveItem> otherItems = new List<IInteractiveItem>();
+				return new Map(field, enemies, players, otherItems, tileWidth: 30, tileHeight: 30);
+			}
 		}
 	}
 

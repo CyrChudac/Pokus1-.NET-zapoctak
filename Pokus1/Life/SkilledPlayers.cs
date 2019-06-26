@@ -12,16 +12,26 @@ namespace Pokus1
 
 	class Jumper : Player
 	{
+		static int jumpDuration = 800;
+		int jumpSpeed = 3;
 		double lastTimeActivated;
 		protected override void UseSkill()
 		{
-			lastTimeActivated = Time.Now;
-			throw new NotImplementedException();
+			if (!map.AmIFalling(this))
+				lastTimeActivated = Time.Now;
 		}
 
 		protected override void SkillUpdate()
 		{
-			throw new NotImplementedException();
+			if (lastTimeActivated + jumpDuration > Time.Now)
+				if (map.DirectionAccesable(this, Direction.up))
+					Movement.AddToDirection(new Location(0, -jumpSpeed - Movement.fallingSpeed));
+				else
+					lastTimeActivated = Time.Now - jumpDuration;
+			else if (lastTimeActivated + 2 * jumpDuration > Time.Now
+				&& map.AmIFalling(this)
+				&& map.DirectionAccesable(this, Direction.up))
+				Movement.AddToDirection(new Location(0, -Movement.fallingSpeed / 2));
 		}
 
 		public Jumper(int maxHealth, int currHealth,

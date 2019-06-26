@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Action.cs" />
+    <Compile Include="Camera.cs" />
     <Compile Include="MapSaver.cs" />
     <Compile Include="Life\Attack.cs" />
     <Compile Include="Editor.cs">
@@ -95,7 +96,7 @@
     <Compile Include="Menu.Designer.cs">
       <DependentUpon>Menu.cs</DependentUpon>
     </Compile>
-    <Compile Include="Movement.cs" />
+    <Compile Include="Life\Movement.cs" />
     <Compile Include="Options.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -111,7 +112,7 @@
     <Compile Include="ReallyEndDialog.Designer.cs">
       <DependentUpon>ReallyEndDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="UsualMovement.cs" />
+    <Compile Include="Life\UsualMovement.cs" />
     <Compile Include="Wall.cs" />
     <Compile Include="WholeGameForm.cs">
       <SubType>Form</SubType>
@@ -122,6 +123,9 @@
     <EmbeddedResource Include="GameControl.resx">
       <DependentUpon>GameControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="InGameMenu.resx">
+      <DependentUpon>InGameMenu.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -130,7 +134,11 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="WholeGameForm.resx">
+      <DependentUpon>WholeGameForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -149,6 +157,9 @@
       <Project>{b7a90488-43f7-44d2-9e0a-16500deda2f5}</Project>
       <Name>CoreLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

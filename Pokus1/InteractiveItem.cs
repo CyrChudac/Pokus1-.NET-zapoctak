@@ -12,6 +12,7 @@ namespace Pokus1
 		void Interact(Player interactingPlayer);
 		IInteractiveItem Copy();
 		string Name { get; }
-		System.Drawing.Color Color { get; }
+		System.Drawing.Brush Brush { get; }
+		System.Drawing.Size Size { get; }
 	}
 }

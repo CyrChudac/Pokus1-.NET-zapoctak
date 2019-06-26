@@ -12,18 +12,22 @@ namespace Pokus1
 	[Serializable]
 	public abstract class Life : IGameObject
 	{
+		public static readonly int defaultSpeed = 3;
 		public Life(int maxHealth, int currHealth, Location location,
 			Movement movement, IAnimation animation, Size size)
 		{
 			this.Health = currHealth;
 			this.StartingHealth = maxHealth;
 			this.Movement = movement;
-			Animation = animation;
+			this.Size = size;
+			this.Location = location;
+			this.Animation = animation;
 		}
+		public Location Middle => Location + (Location)Size / 2;
 		[DataMember()]
-		public int Height { get; protected set; }
+		public int Height => Size.Height;
 		[DataMember()]
-		public int Width { get; protected set; }
+		public int Width => Size.Width;
 		[DataMember()]
 		public bool Alive { get; protected set; } = true;
 		[DataMember()]
