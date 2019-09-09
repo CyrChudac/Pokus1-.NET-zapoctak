@@ -34,29 +34,40 @@ namespace Pokus1
 				Movement.AddToDirection(new Location(0, -Movement.fallingSpeed / 2));
 		}
 
-		public Jumper(int maxHealth, int currHealth,
-			Movement movement, string name, Location location, IAnimation animation,
-			Size size) : base(maxHealth, currHealth, movement, name, location, animation, size)
+		public Jumper(int maxHealth, int currHealth, PlayerMovement movement,
+			string name, Location location, IAnimation animation, Size size, Map map)
+			: base(maxHealth, currHealth, movement, name, location, animation, size, map)
 		{
 		}
 	}
 
 	class KnifeThrower : Player
 	{
+		readonly long cooldown = 1500;
+		long lastTimeActivated = 0;
 		protected override void UseSkill()
 		{
-			throw new NotImplementedException();
+			if (cooldown + lastTimeActivated < Time.Now)
+			{
+				lastTimeActivated = Time.Now;
+				attack.Proceed(this);
+			}
 		}
 
+		RangedAttack attack;
 		protected override void SkillUpdate()
 		{
-			throw new NotImplementedException();
+			
 		}
-
-		public KnifeThrower(int maxHealth, int currHealth,
-			Movement movement, string name, Location location, IAnimation animation,
-			Size size) : base(maxHealth, currHealth, movement, name, location, animation, size)
+		int shotRange = 550;
+		static readonly int sizeModifier = 2;
+		static int projectileSpeed => Life.defaultSpeed * 2;
+		public KnifeThrower(int maxHealth, int currHealth, PlayerMovement movement, 
+			string name, Location location, IAnimation animation, Size size, Map map)
+			: base(maxHealth, currHealth, movement, name, location, animation, size, map)
 		{
+			attack = new RangedAttack(AttackSource.ally, shotRange, 
+				new Size(map.oneTileWidth / sizeModifier, map.oneTileHeight / sizeModifier), projectileSpeed);
 		}
 	}
 
@@ -76,18 +87,18 @@ namespace Pokus1
 			throw new NotImplementedException();
 		}
 
-		public Puddler(int maxHealth, int currHealth,
-			Movement movement, string name, Location location, IAnimation animation,
-			Size size) : base(maxHealth, currHealth, movement, name, location, animation, size)
+		public Puddler(int maxHealth, int currHealth, PlayerMovement movement,
+			string name, Location location, IAnimation animation, Size size, Map map)
+			: base(maxHealth, currHealth, movement, name, location, animation, size, map)
 		{
 		}
 	}
 
 	class Unskilled : Player
 	{
-		public Unskilled(int maxHealth, int currHealth,
-			Movement movement, string name, Location location, IAnimation animation,
-			Size size) : base(maxHealth, currHealth, movement, name, location, animation, size)
+		public Unskilled(int maxHealth, int currHealth, PlayerMovement movement,
+			string name, Location location, IAnimation animation, Size size, Map map)
+			: base(maxHealth, currHealth, movement, name, location, animation, size, map)
 		{
 		}
 

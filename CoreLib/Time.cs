@@ -13,30 +13,27 @@ namespace CoreLib
 		/// </summary>
 		public static float TimeFlow { get; private set; } = 1;
 		public static readonly int delay = 60;
-		private static  long milisOfInactive = 0;
 		public static long Now { get; private set; } = 0;
-		public static bool IsRunning => TimeFlow > 0; 
-		public static long pauseTime = 0;
+		public static bool IsRunning => TimeFlow > 0;
+
+		private static long milisOfInactive = 0;
+		private static long _now => (long)DateTime.UtcNow.TimeOfDay.TotalMilliseconds;
+		private static long pauseTime = 0;
+
 		public static void Stop()
 		{
-			pauseTime = Now;
+			pauseTime = _now;
 			TimeFlow = 0;
-
 		}
-		public static void Restart()
+		public static void Start(int timeFlow = 1)
 		{
-			Start();
-			milisOfInactive = 0;
-		}
-		public static void Start()
-		{
-			Now = (long)DateTime.UtcNow.TimeOfDay.TotalMilliseconds;
+			Now = _now;
 			milisOfInactive += Now - pauseTime;
-			TimeFlow = 1;
+			TimeFlow = timeFlow;
 		}
 		public static void Update()
 		{
-			long now2 = (long)DateTime.UtcNow.TimeOfDay.TotalMilliseconds;
+			long now2 = _now;
 			DeltaTime = now2 - Now;
 			Now = now2;
 		}

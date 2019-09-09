@@ -7,7 +7,7 @@ using CoreLib;
 
 namespace Pokus1
 {
-	 public class UsualMovement : Movement
+	 public class UsualMovement : PlayerMovement
 	 {
 		public UsualMovement(int speed, int fallingSpeed) : base(speed, fallingSpeed)
 		{
@@ -15,24 +15,23 @@ namespace Pokus1
 		public UsualMovement(int speed) : base(speed)
 		{
 		}
-		public override void ResetAndMove()
+		public override void Move()
 		{
-			location = new Location();
 			foreach (Input key in ActiveKeys)
 				switch (key)
 				{
 					case null:
 						break;
 					case var x when (x is Input.Player.Movement.Right):
-						location.x += arrowImportness;
+						location.x += directionsImportness;
 						break;
 					case var x when (x is Input.Player.Movement.Left):
-						location.x -= arrowImportness;
+						location.x -= directionsImportness;
 						break;
 					default:
 						throw InputPoss.wrongInputFoundException;
 				}
-			location *= speed;
+			location *= shift;
 			ActiveKeys.Clear();
 		}
 		public override List<Input> ActiveKeys { protected get; set; } = new List<Input>();

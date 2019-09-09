@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace Pokus1
 {
@@ -22,7 +23,22 @@ namespace Pokus1
 			KeyPreview = true;
 			OpenControl<Menu>();
 		}
-		 
+
+		internal void SetGameThread(Thread gameThread)
+		{
+			if (this.gameThread != null)
+				throw new Exception("Active game already exists. You cannot start any other one.");
+			this.gameThread = gameThread;
+		}
+		Thread gameThread = null;
+		internal void KillGame()
+		{
+			if (gameThread == null)
+				throw new Exception("Cannot kill game: no game found.");
+			gameThread.Abort();
+			gameThread = null;
+		}
+
 		protected void GameForm_Load(object sender, EventArgs e)
 		{
 		}

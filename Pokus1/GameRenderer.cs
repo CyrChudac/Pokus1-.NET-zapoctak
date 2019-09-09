@@ -5,17 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Drawing.Imaging;
 using CoreLib;
 
 namespace Pokus1
 {
-	interface IMapRenderer
+	public interface IMapRenderer
 	{
 		void FirstRender(Map map);
 		void Render();
 		void SetCameraMovement(Movement movement);
 		void NewPlayerLocation(Location location);
 		ICamera Camera { set; }
+		Image Screenshot();
+		Image DarkenImage(Image i, float DarkenCoeficient);
+		Size CanvasSize { get; }
 	}
 
 	//public partial class GameControl : IMapRenderer
@@ -191,13 +195,16 @@ namespace Pokus1
 
 		public void Render()
 		{
-			Camera.Update();
+			if(Time.IsRunning)
+				Camera.Update();
 			Refresh();
 		}
 
+		public Size CanvasSize => this.Size;
+
 		public new void Dispose()
 		{
-			background.Dispose();
+			//background.Dispose();
 			base.Dispose();
 		}
 
@@ -209,7 +216,6 @@ namespace Pokus1
 				| ControlStyles.AllPaintingInWmPaint,
 				true);
 			MakeBackground();
-			Render();
 		}
 
 		void MakeBackground()
@@ -232,35 +238,101 @@ namespace Pokus1
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			base.OnPaint(e);
-			e.Graphics.DrawImage(background, -Camera.Location);
-			RenderPlayers(e.Graphics);
-			RenderEnemies(e.Graphics);
-			RenderItems(e.Graphics);
+			if (map == null)
+				base.OnPaint(e);
+			else
+			{
+				e.Graphics.DrawImage(background, -Camera.Location);
+				RenderPlayers(e.Graphics);
+				RenderEnemies(e.Graphics);
+				RenderInteractiveItems(e.Graphics);
+				RenderNoninteractiveItems(e.Graphics);
+			}
 		}
+
 		void RenderPlayers(Graphics g) => RenderLife(g, map.Players);
 		void RenderEnemies(Graphics g) => RenderLife(g, map.Enemies);
 		void RenderLife(Graphics g, IEnumerable<Life> collection)
 		{
 			foreach (var life in collection)
 			{
-				g.DrawImage(life.Animation.Image,
-					life.Location.x - Camera.Location.x,
-					life.Location.y - Camera.Location.y,
-					life.Width,
-					life.Health);
+				if (life.Alive)
+					g.DrawImage(life.Animation.Image,
+						life.Location.x - Camera.Location.x,	//here the thread could be stopped so the location x and y 
+						life.Location.y - Camera.Location.y,	//would be inconsistent. However I think this would only 
+						life.Width,								//make the moves smoother.
+						life.Height);
+				else
+					g.DrawImage(DefaultDeadAnimation.instance.Image,
+						life.Location.x - Camera.Location.x, 
+						life.Location.y - Camera.Location.y,        
+						life.Width,                                 
+						life.Height);
 			}
 		}
-		void RenderItems(Graphics g)
+		void RenderInteractiveItems(Graphics g) => RenderItems(g, map.InteractiveItems);
+		void RenderNoninteractiveItems(Graphics g) => RenderItems(g, map.NoninteractiveItems);
+		void RenderItems(Graphics g, IEnumerable<IItem> collection)
 		{
-			foreach (var item in map.OtherItems)
+			foreach (var item in collection)
 			{
-				g.FillRectangle(item.Brush,
+				g.DrawImage(item.Animation.Image,
 					item.Location.x - Camera.Location.x,
 					item.Location.y - Camera.Location.y,
 					item.Size.Width,
 					item.Size.Height);
+				//g.FillRectangle(item.Brush,
+				//	item.Location.x - Camera.Location.x,
+				//	item.Location.y - Camera.Location.y,
+				//	item.Size.Width,
+				//	item.Size.Height);
 			}
+		}
+
+
+		Image IMapRenderer.Screenshot()
+		{
+			Bitmap result = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+			using (Graphics g = Graphics.FromImage(result))
+			{
+				g.CopyFromScreen(Screen.PrimaryScreen.Bounds.X,
+					Screen.PrimaryScreen.Bounds.Y,
+					0,
+					0,
+					Screen.PrimaryScreen.Bounds.Size,
+					CopyPixelOperation.SourceCopy);
+			}
+			return result;
+		}
+
+		/// <param name="darkenCoeficient">The less the darker.</param>
+		Image IMapRenderer.DarkenImage(Image image, float darkenCoeficient)
+		{
+			float dc = darkenCoeficient;
+			ColorMatrix cm = new ColorMatrix(new float[][]
+			{
+						new float[] {dc, 0, 0, 0, 0},
+						new float[] {0, dc, 0, 0, 0},
+						new float[] {0, 0, dc, 0, 0},
+						new float[] {0, 0, 0, 1, 0},
+						new float[] {0, 0, 0, 0, 1},
+			});
+			ImageAttributes ia = new ImageAttributes();
+			ia.SetColorMatrix(cm);
+			Point[] points =
+			{
+						new Point(0, 0),
+						new Point(image.Width, 0),
+						new Point(0, image.Height),
+					};
+			Rectangle rect = new Rectangle(0, 0, image.Width, image.Height);
+			Bitmap result = new Bitmap(image.Width, image.Height);
+			using (Graphics g = Graphics.FromImage(result))
+			{
+				g.DrawImage(image, points, rect, GraphicsUnit.Pixel, ia);
+			}
+
+			return result;
 		}
 	}
 }

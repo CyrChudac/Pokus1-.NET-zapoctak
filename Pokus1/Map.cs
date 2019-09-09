@@ -31,12 +31,14 @@ namespace Pokus1
 		[DataMember()]
 		public readonly int Width;
 		[DataMember()]
-		public List<Player> Players { get; private set; }
+		public List<Player> Players { get; private set; } = new List<Player>();
 		[DataMember()]
-		public List<Enemy> Enemies { get; private set; }
+		public List<Enemy> Enemies { get; private set; } = new List<Enemy>();
 
 		[DataMember()]
-		public List<IInteractiveItem> OtherItems { get; private set; }
+		public List<IInteractiveItem> InteractiveItems { get; private set; } = new List<IInteractiveItem>();
+		[DataMember()]
+		public List<INoninteractiveItem> NoninteractiveItems { get; private set; } = new List<INoninteractiveItem>();
 		[DataMember()]
 		private readonly IMapTile[,] map;
 
@@ -62,21 +64,70 @@ namespace Pokus1
 		{
 			if (!GameEnd)
 			{ 
-				if (!Players.ElementAt(activePlayer).Alive)
-					activePlayer = (activePlayer + 1) % Players.Count;
+				if (!Players[activePlayer].Alive)
+					activePlayer = (activePlayer + 1).Modulo(Players.Count);
 
-				foreach (Player p in Players)
-				{
-					p.Update();
-				}
-				foreach (Enemy enemy in Enemies)
-					enemy.Update();
+				for (int i = 0; i < Players.Count; i++)
+					Players[i].Update();
+				for (int i = 0; i < Enemies.Count; i++)
+					Enemies[i].Update();
+				for(int i = 0; i < NoninteractiveItems.Count; i++)
+					NoninteractiveItems[i].Update();
 			}
 		}
-		public bool AmIFalling(IGameObject obj)
+		public bool AmIFalling(IMovableObject obj)
 			=> DirectionAccesable(obj, Direction.down);
-		public bool DirectionAccesable(IGameObject obj, Direction dir) 
-			=> new DirectionAccesor(this).ObjectDirectionAccesable(obj, dir);
+		public bool DirectionAccesable(IMovableObject obj, Direction dir) 
+			=> new DirectionAccesor(this).DirectionAccesable(obj, dir);
+		public void RemoveMe(IGameObject obj)
+		{
+			if (obj is Player)
+				Players.Remove((Player)obj);
+			else if (obj is Enemy)
+				Enemies.Remove((Enemy)obj);
+			else if (obj is IInteractiveItem)
+				InteractiveItems.Remove((IInteractiveItem)obj);
+			else if (obj is INoninteractiveItem)
+				NoninteractiveItems.Remove((INoninteractiveItem)obj);
+			else throw new Exception("Trying to destroy unknown type: " + obj.ToString());
+		}
+
+		/// <summary>
+		/// Determines what alive player is the object touching by any part.
+		/// </summary>
+		public Player AmIOnPlayer(IMovableObject obj) => AmIOnAliveLife(obj, Players);
+		/// <summary>
+		/// Determines what alive enemy is the object touching by any part.
+		/// </summary>
+		public Enemy AmIOnEnemy(IMovableObject obj) => AmIOnAliveLife(obj, Enemies);
+		public IInteractiveItem AmIOnInteractiveItem(IMovableObject obj) => AmIOnsomething(obj, InteractiveItems);
+
+		private T AmIOnAliveLife<T>(IMovableObject obj, IEnumerable<T> collection) where T : Life
+		=> AmIOnsomething(obj, collection, t => t.Alive);
+
+		private T AmIOnsomething<T>(IMovableObject obj, IEnumerable<T> collection) where T : class, IGameObject
+		=> AmIOnsomething<T>(obj, collection, t => true);
+		private T AmIOnsomething<T>(IMovableObject obj, IEnumerable<T> collection,
+			Func<T, bool> condition) where T : class, IGameObject
+		{
+			foreach (T t in collection)
+			{
+				if (condition(t))
+					if (ObjInObj(t, obj) || ObjInObj(obj, t))
+						return t;
+			}
+			return null;
+		}
+
+		private bool ObjInObj(IGameObject first, IGameObject second)
+		=> LocationInObject(first.Location, second) ||
+					LocationInObject(first.Location + new Location(0, first.Width), second) ||
+					LocationInObject(first.Location + new Location(first.Height, 0), second) ||
+					LocationInObject(first.Location + (Location)first.Size, second);
+
+		private bool LocationInObject(Location loc, IGameObject obj)
+		=> (loc.x > obj.Location.x && loc.y > obj.Location.y) &&
+					(loc.x < obj.Location.x + obj.Size.Width && loc.y < obj.Location.y + obj.Size.Height);
 
 		class DirectionAccesor
 		{
@@ -84,7 +135,7 @@ namespace Pokus1
 			public DirectionAccesor(Map map) => this.map = map;
 			double left;
 			double top;
-			public bool ObjectDirectionAccesable(IGameObject obj, Direction direction)
+			public bool DirectionAccesable(IMovableObject obj, Direction direction)
 			{
 				left = obj.Location.x   ;  /* - obj.Width / 2;		/*			*/
 				top = obj.Location.y	;  /* - obj.Height / 2;		/*			*/
@@ -102,44 +153,73 @@ namespace Pokus1
 						throw new NotImplementedException("Unknown direction used. ( = " + direction.ToString() + " )");
 				}
 			}
-			bool CanGoUp(IGameObject obj)
+			bool CanGoUp(IMovableObject obj)
+				=> CanGoSomewhere(obj.Width, map.oneTileWidth,
+					i => top - obj.Movement.Speed, i => left + i);
+			//{
+			//	for (double i = 0; i <= obj.Width; i += map.oneTileWidth)
+			//	{
+			//		if (!LocationAccesable(top - obj.Movement.Speed, left + i))
+			//		{
+			//			return false;
+			//		}
+			//	}
+			//	return true;
+			//}
+			bool CanGoDown(IMovableObject obj)
+				=> CanGoSomewhere(obj.Width, map.oneTileWidth,
+					i => top + obj.Height + obj.Movement.Speed, i => left + i);
+			//{
+			//	for (double i = 0; i <= obj.Width; i += map.oneTileWidth)
+			//	{
+			//		if (!LocationAccesable(top + obj.Height + obj.Movement.Speed, left + i))
+			//		{
+			//			return false;
+			//		}
+			//	}
+			//	return true;
+			//}
+			bool CanGoLeft(IMovableObject obj)
+				=> CanGoSomewhere(obj.Height, map.oneTileHeight,
+					i => top + i, i => left - obj.Movement.Speed);
+			//{
+			//	for (double i = 0; i <= obj.Height; i += map.oneTileHeight)
+			//	{
+			//		if (!LocationAccesable(top + i, left - obj.Movement.Speed))
+			//		{
+			//			return false;
+			//		}
+			//	}
+			//	return true;
+			//}
+			bool CanGoRight(IMovableObject obj)
+				=> CanGoSomewhere(obj.Height, map.oneTileHeight,
+					i => top + i, i => left + obj.Width + obj.Movement.Speed);
+			//{
+			//	for (double i = 0; i <= obj.Height; i += map.oneTileHeight)
+			//	{
+			//		if (!LocationAccesable(top + i, left + obj.Width + obj.Movement.Speed))
+			//		{
+			//			return false;
+			//		}
+			//	}
+			//	return true;
+			//}
+			/// <summary>
+			/// In for cyclus goes on the edge of an object and determines,
+			/// wheter the given place can be accessable.
+			/// </summary>
+			/// <param name="maxPlus1">max for the for cyclus</param>
+			/// <param name="step">step for the for cyclus</param>
+			/// <param name="LocationX">function, that for given iteration of the cyclus gives the X coordinate</param>
+			/// <param name="LocationY">function, that for given iteration of the cyclus gives the Y coordinate</param>
+			/// <returns></returns>
+			bool CanGoSomewhere(double maxPlus1, int step,
+				Func<double, double> LocationX, Func<double, double> LocationY)
 			{
-				for (double i = 0; i <= obj.Width; i += map.oneTileWidth)
+				for (double i = 0; i < maxPlus1; i += step)
 				{
-					if (!LocationAccesable(top - Movement.shift, left + i))
-					{
-						return false;
-					}
-				}
-				return true;
-			}
-			bool CanGoDown(IGameObject obj)
-			{
-				for (double i = 0; i <= obj.Width; i += map.oneTileWidth)
-				{
-					if (!LocationAccesable(top + obj.Height + Movement.shift, left + i))
-					{
-						return false;
-					}
-				}
-				return true;
-			}
-			bool CanGoLeft(IGameObject obj)
-			{
-				for (double i = 0; i <= obj.Height; i += map.oneTileHeight)
-				{
-					if (!LocationAccesable(top + i, left - Movement.shift))
-					{
-						return false;
-					}
-				}
-				return true;
-			}
-			bool CanGoRight(IGameObject obj)
-			{
-				for (double i = 0; i <= obj.Height; i += map.oneTileHeight)
-				{
-					if (!LocationAccesable(top + i, left + obj.Width + Movement.shift))
+					if (!LocationAccesable(LocationX(i), LocationY(i)))
 					{
 						return false;
 					}
@@ -165,14 +245,8 @@ namespace Pokus1
 			{ return LocationAccesable(loc.x, loc.y); }
 		}
 
-		public Map(IMapTile[,] map, List<Enemy> enemies, List<Player> players,
-			List<IInteractiveItem> otherItems, int tileHeight, int tileWidth)
+		public Map(IMapTile[,] map,	int tileHeight, int tileWidth)
 		{
-			this.Players = players;
-			foreach (var player in players) player.map = this;
-			this.Enemies = enemies;
-			foreach (var enemy in enemies) enemy.map = this;
-			this.OtherItems = otherItems;
 			this.map = map;
 			this.Height = map.GetLength(1);
 			this.Width = map.GetLength(0);

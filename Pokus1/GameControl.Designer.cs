@@ -28,14 +28,8 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
-			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
-			// 
-			// timer1
-			// 
-			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
 			// 
 			// label1
 			// 
@@ -55,15 +49,14 @@
 			this.Name = "GameControl";
 			this.Size = new System.Drawing.Size(800, 450);
 			this.Load += new System.EventHandler(this.GameForm_Load);
-			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GameControl_KeyUp);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GameForm_KeyDown);
+			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GameControl_KeyUp);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
 		}
 
 		#endregion
-		private System.Windows.Forms.Timer timer1;
 		private System.Windows.Forms.Label label1;
 	}
 }

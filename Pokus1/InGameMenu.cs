@@ -24,17 +24,24 @@ namespace Pokus1
 			//this.BackColor = Color.FromArgb(50, Color.Black);
 		}
 
-		private void InGameMenu_Load(object sender, EventArgs e) {
+		private void InGameMenu_Load(object sender, EventArgs e)
+		{
+			Cursor.Show();
 			Time.Stop();
 		}
 
 		private void Continue_Click(object sender, EventArgs e)
 		{
+			Cursor.Hide();
 			Time.Start();
 			Form.CloseControl();
 		}
 
-		private void End_Click(object sender, EventArgs e) => Form.ToMenu();
+		private void End_Click(object sender, EventArgs e)
+		{
+			Form.KillGame();
+			Form.ToMenu();
+		}
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{

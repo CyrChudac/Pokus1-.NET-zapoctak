@@ -47,8 +47,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Action.cs" />
     <Compile Include="Camera.cs" />
+    <Compile Include="Character.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Character.Designer.cs">
+      <DependentUpon>Character.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CharactersUi.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CharactersUi.Designer.cs">
+      <DependentUpon>CharactersUi.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GameLoop.cs" />
+    <Compile Include="GameScreenControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GameScreenControl.Designer.cs">
+      <DependentUpon>GameScreenControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="MapSaver.cs" />
     <Compile Include="Life\Attack.cs" />
     <Compile Include="Editor.cs">
@@ -67,7 +85,7 @@
     <Compile Include="IInputGetter.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="IItem.cs" />
+    <Compile Include="Item.cs" />
     <Compile Include="InteractiveItem.cs" />
     <Compile Include="Life\SkilledPlayers.cs" />
     <Compile Include="Life\Life.cs" />
@@ -113,6 +131,8 @@
       <DependentUpon>ReallyEndDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Life\UsualMovement.cs" />
+    <Compile Include="StrightMovement.cs" />
+    <Compile Include="UiDoThis.cs" />
     <Compile Include="Wall.cs" />
     <Compile Include="WholeGameForm.cs">
       <SubType>Form</SubType>
@@ -120,8 +140,17 @@
     <Compile Include="WholeGameForm.Designer.cs">
       <DependentUpon>WholeGameForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Character.resx">
+      <DependentUpon>Character.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CharactersUi.resx">
+      <DependentUpon>CharactersUi.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GameControl.resx">
       <DependentUpon>GameControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameScreenControl.resx">
+      <DependentUpon>GameScreenControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InGameMenu.resx">
       <DependentUpon>InGameMenu.cs</DependentUpon>

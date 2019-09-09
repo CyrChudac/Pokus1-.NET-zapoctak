@@ -9,6 +9,7 @@ namespace CoreLib
 {
     public interface IGameObject
     {
+		Size Size { get; }
 		int Width { get; }
 		int Height { get; }
 		Location Location { get; }
@@ -20,25 +21,28 @@ namespace CoreLib
 
 	public struct Location
 	{
+		public int x, y;
+
+
 		public Location(int x, int y)
 		{
 			this.x = x;
 			this.y = y;
 		}
-		public Location Normalize(float modificator)
+		
+		public Location Normalize(float xModificator, float yModificator)
 		{
 			int d = (int)Math.Sqrt(Math.Pow(this.x, 2) + Math.Pow(this.y, 2));
 			if (d != 0)
 			{
-				int x = (int)((this.x * modificator)/ d);
-				int y = (int)((this.y * modificator) / d);
+				int x = (int)((this.x * xModificator) / d);
+				int y = (int)((this.y * yModificator) / d);
 				return new Location(x, y);
 			}
 			return new Location();
 		}
-		public int x, y;
 
-		public static Size DefaultLifeSize => new Size(100, 100);
+		public int Distance => (int)Math.Pow(Math.Pow(x, 2) + Math.Pow(y, 2), 1d / 2);
 
 		#region operators
 
@@ -93,6 +97,26 @@ namespace CoreLib
 		public static Location operator *(float second, Location first)
 			=> first * second;
 
+		/// <summary>
+		/// Works as: (a,b) * (c,d) = (a*c,b*d).
+		/// </summary>
+		public static Location operator *(Location first, Location second)
+			=> new Location(first.x * second.x, first.y * second.y);
+
+		public static explicit operator Location(Direction direction)
+		{
+			Location result = new Location();
+			if (direction == Direction.right)
+				result = new Location(result.x + 1, result.y);
+			if (direction == Direction.left)
+				result = new Location(result.x - 1, result.y);
+			if (direction == Direction.up)
+				result = new Location(result.x, result.y - 1);
+			if (direction == Direction.down)
+				result = new Location(result.x, result.y + 1);
+			return result;
+		}
+
 		#endregion
 
 		public override string ToString()
@@ -116,4 +140,17 @@ namespace CoreLib
 	
 	public enum Direction { down, left, right, up}
 
+	public static class IntExtesions
+	{
+		/// <summary>
+		/// Works properly for negative values.
+		/// </summary>
+		public static int Modulo(this int a, int b)
+		{
+			int result = a - ((a / b) * b);
+			if (result < 0)
+				return result + b;
+			return result;
+		}
+	}
 }

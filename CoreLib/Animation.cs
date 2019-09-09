@@ -75,4 +75,9 @@ namespace CoreLib
 
 		public void Update() {}
 	}
+	public class DefaultDeadAnimation : SingleColorAnimation
+	{
+		private DefaultDeadAnimation() : base(Color.LightSlateGray) { }
+		public static readonly DefaultDeadAnimation instance = new DefaultDeadAnimation();
+	}
 }

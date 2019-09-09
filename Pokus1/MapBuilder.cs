@@ -59,6 +59,28 @@ namespace Pokus1
 			}
 			return field;
 		}
+		IMapTile[,] BordersAndSomething2_Wall()
+		{
+			IMapTile[,] field = new IMapTile[width, height];
+			for (int i = 0; i < width; i++)
+			{
+				for (int j = 0; j < height; j++)
+				{
+					if ((i == 0) ||
+						(i == width - 1) ||
+						(j == 0) ||
+						(j == height - 1) ||
+						((j == 10) && (i < 11)) ||
+						(i == 15)
+						)
+					{
+						field[i, j] = FullWall.Tile;
+					}
+					else field[i, j] = NoTile.Tile;
+				}
+			}
+			return field;
+		}
 		public class JustExistWithPhysics : IMapBuilder
 		{
 			DefaultMap builder;
@@ -70,12 +92,11 @@ namespace Pokus1
 			public Map GetMap()
 			{
 				IMapTile[,] field = builder.OnlyBorders_Wall();
-				List<Player> players = new List<Player>() { new Unskilled(100, 100, NoMovement.instance,
+				Map result = new Map(field, tileWidth: 30, tileHeight: 30);
+				result.Players.Add(new Unskilled(100, 100, NoMovement.instance,
 				"Vlad", new Location{ x = 143, y = 59}, new SingleColorAnimation(Color.GreenYellow),
-				Location.DefaultLifeSize) };
-				List<Enemy> enemies = new List<Enemy>();
-				List<IInteractiveItem> otherItems = new List<IInteractiveItem>();
-				return new Map(field, enemies, players, otherItems, tileWidth: 30, tileHeight: 30);
+				Life.DefaultSize, result));
+				return result;
 			}
 		}
 		public class AlsoMove : IMapBuilder
@@ -89,127 +110,173 @@ namespace Pokus1
 			public Map GetMap()
 			{
 				IMapTile[,] field = builder.BordersAndSomething_Wall();
-				List<Player> players = new List<Player>() { new Jumper(100, 100, new UsualMovement(Life.defaultSpeed),
+				Map result = new Map(field, tileWidth: 30, tileHeight: 30);
+				result.Players.Add(new Jumper(100, 100, new UsualMovement(Life.defaultSpeed),
 				"Vlad", new Location{ x = 143, y = 59}, new SingleColorAnimation(Color.GreenYellow),
-				Location.DefaultLifeSize),
-				new Jumper(100, 100, new UsualMovement(Life.defaultSpeed),
+				Life.DefaultSize, result));
+				result.Players.Add(new Jumper(100, 100, new UsualMovement(Life.defaultSpeed),
 				"Vlad", new Location{ x = 300, y = 59}, new SingleColorAnimation(Color.OrangeRed),
-				Location.DefaultLifeSize)};
-				List<Enemy> enemies = new List<Enemy>();
-				List<IInteractiveItem> otherItems = new List<IInteractiveItem>();
-				return new Map(field, enemies, players, otherItems, tileWidth: 30, tileHeight: 30);
+				Life.DefaultSize, result));
+				return result;
+			}
+		}
+		public class WithKnifeThrower : IMapBuilder
+		{
+			DefaultMap builder;
+			public WithKnifeThrower(int width, int height)
+			{
+				builder = new DefaultMap(width, height);
+			}
+
+			public Map GetMap()
+			{
+				IMapTile[,] field = builder.BordersAndSomething2_Wall();
+				Map result = new Map(field, tileWidth: 30, tileHeight: 30);
+				result.Players.Add(new Jumper(100, 100, new UsualMovement(Life.defaultSpeed),
+					"Vlad", new Location { x = 143, y = 59 }, new SingleColorAnimation(Color.GreenYellow),
+					Life.DefaultSize, result));
+				result.Players.Add(new KnifeThrower(100, 100, new UsualMovement(Life.defaultSpeed),
+					"Vlad2", new Location{ x = 300, y = 59}, new SingleColorAnimation(Color.OrangeRed),
+					Life.DefaultSize, result));
+				return result;
+			}
+		}
+		public class WithPassiveEnemy : IMapBuilder
+		{
+			DefaultMap builder;
+			public WithPassiveEnemy(int width, int height)
+			{
+				builder = new DefaultMap(width, height);
+			}
+
+			public Map GetMap()
+			{
+				IMapTile[,] field = builder.BordersAndSomething2_Wall();
+				Map result = new Map(field, tileWidth: 30, tileHeight: 30);
+				result.Players.Add(new KnifeThrower(100, 100, new UsualMovement(Life.defaultSpeed),
+					"Vlad", new Location { x = 300, y = 59 }, new SingleColorAnimation(Color.GreenYellow),
+					Life.DefaultSize, result));
+				result.Enemies.Add(new PassiveEnemy(new Location { x = 100, y = 30 }, 1, result));
+				return result;
 			}
 		}
 	}
 
-	class MapReader : IMapBuilder
-	{
-		readonly string path;
-		public MapReader(string path)
-		{
-			this.path = path;
-		}
-		public Map GetMap()
-		{
-			StreamReader reader = new StreamReader(path);
+	//class MapReader : IMapBuilder
+	//{
+	//	readonly string path;
+	//	public MapReader(string path)
+	//	{
+	//		this.path = path;
+	//	}
+	//	public Map GetMap()
+	//	{
+	//		StreamReader reader = new StreamReader(path);
 
-			IMapTile[,] tiles = ReadTiles(reader);
+	//		IMapTile[,] tiles = ReadTiles(reader);
 
-			int tileHeight = ReadNextInt(reader);
-			int tileWidth = ReadNextInt(reader);
+	//		int tileHeight = ReadNextInt(reader);
+	//		int tileWidth = ReadNextInt(reader);
 
-			List<Player> characters = ReadCharacters(reader);
+	//		List<Player> characters = ReadCharacters(reader);
 
-			List<Enemy> enemies = ReadEnemies(reader);
+	//		List<Enemy> enemies = ReadEnemies(reader);
 
-			List<IInteractiveItem> items = ReadItems(reader);
+	//		List<IInteractiveItem> iItems = ReadInteraItems(reader);
 
-			return new Map(tiles, enemies, characters, items, tileHeight, tileWidth);
-		}
+	//		List<INoninteractiveItem> nItems = ReadNoninteraItems(reader);
 
-		IMapTile[,] ReadTiles(TextReader reader)
-		{
-			int height = ReadNextInt(reader);
-			int width = ReadNextInt(reader);
+	//		return new Map(tiles, enemies, characters, iItems, nItems, tileHeight, tileWidth);
+	//	}
 
-			IMapTile[,] tiles = new IMapTile[width, height];
+	//	IMapTile[,] ReadTiles(TextReader reader)
+	//	{
+	//		int height = ReadNextInt(reader);
+	//		int width = ReadNextInt(reader);
 
-			for (int i = 0; i < height; i++)
-				for (int j = 0; j < width; j++)
-					tiles[i, j] = TileBase.Get((TileType)ReadNextInt(reader));
-			return tiles;
-		}
+	//		IMapTile[,] tiles = new IMapTile[width, height];
 
-		List<Player> ReadCharacters(TextReader reader)
-		{
-			int charsCount = ReadNextInt(reader);
-			List<Player> characters = new List<Player>(charsCount);
-			for (int i = 0; i < charsCount; i++)
-			{
-				ReadNextString(reader); // <----- něco jako "name:"
-				string name = ReadNextString(reader);
-				ReadNextString(reader); // <----- něco jako "maxHealth:"
-				int maxHealth = ReadNextInt(reader);	//	.
-				ReadNextString(reader);					//	.
-				int currHealth = ReadNextInt(reader);	//	.
-				SkillType skill = (SkillType)ReadNextInt(reader);
-				ReadNextString(reader);
-				Location location = new Location { x = ReadNextInt(reader), y = ReadNextInt(reader) };
-				ReadNextString(reader);
-				int baseSpeed = ReadNextInt(reader);
+	//		for (int i = 0; i < height; i++)
+	//			for (int j = 0; j < width; j++)
+	//				tiles[i, j] = TileBase.Get((TileType)ReadNextInt(reader));
+	//		return tiles;
+	//	}
 
-				//characters.Add(new Player(skill, maxHealth, currHealth, new UsualMovement(baseSpeed),
-				//	name, location, new Animation(Time.TimeFlow, name), Location.DefaultLifeSize));
-			}
-			return characters;
-		}
+	//	List<Player> ReadCharacters(TextReader reader)
+	//	{
+	//		int charsCount = ReadNextInt(reader);
+	//		List<Player> characters = new List<Player>(charsCount);
+	//		for (int i = 0; i < charsCount; i++)
+	//		{
+	//			ReadNextString(reader); // <----- něco jako "name:"
+	//			string name = ReadNextString(reader);
+	//			ReadNextString(reader); // <----- něco jako "maxHealth:"
+	//			int maxHealth = ReadNextInt(reader);	//	.
+	//			ReadNextString(reader);					//	.
+	//			int currHealth = ReadNextInt(reader);	//	.
+	//			SkillType skill = (SkillType)ReadNextInt(reader);
+	//			ReadNextString(reader);
+	//			Location location = new Location { x = ReadNextInt(reader), y = ReadNextInt(reader) };
+	//			ReadNextString(reader);
+	//			int baseSpeed = ReadNextInt(reader);
 
-		List<Enemy> ReadEnemies(TextReader reader) {
-			int enemiesCount = ReadNextInt(reader);
-			List<Enemy> enemies = new List<Enemy>(enemiesCount);
-			for (int i = 0; i < enemiesCount; i++)
-			{
-				ReadNextString(reader); // <----- něco jako "type:"
-				EnemyType type = (EnemyType)ReadNextInt(reader);
-				ReadNextString(reader); // <----- něco jako "maxHealth:"
-				int maxHealth = ReadNextInt(reader);    //	.
-				ReadNextString(reader);                 //	.
-				int currHealth = ReadNextInt(reader);   //	.
-				Location location = new Location { x = ReadNextInt(reader), y = ReadNextInt(reader) };
-				//ReadNextString(reader);
-				//int baseSpeed = ReadNextInt(reader);  <---- zatim neni pohyb, tak neni ani baseSpeed
+	//			//characters.Add(new Player(skill, maxHealth, currHealth, new UsualMovement(baseSpeed),
+	//			//	name, location, new Animation(Time.TimeFlow, name), Location.DefaultLifeSize));
+	//		}
+	//		return characters;
+	//	}
 
-				enemies.Add(new NormalEnemy(maxHealth, currHealth, NoMovement.instance, type,
-					location, new Animation(Time.TimeFlow, type.ToString()), Location.DefaultLifeSize));
-			}
-			return enemies;
-		}
+	//	List<Enemy> ReadEnemies(TextReader reader) {
+	//		int enemiesCount = ReadNextInt(reader);
+	//		List<Enemy> enemies = new List<Enemy>(enemiesCount);
+	//		for (int i = 0; i < enemiesCount; i++)
+	//		{
+	//			ReadNextString(reader); // <----- něco jako "type:"
+	//			EnemyType type = (EnemyType)ReadNextInt(reader);
+	//			ReadNextString(reader); // <----- něco jako "maxHealth:"
+	//			int maxHealth = ReadNextInt(reader);    //	.
+	//			ReadNextString(reader);                 //	.
+	//			int currHealth = ReadNextInt(reader);   //	.
+	//			Location location = new Location { x = ReadNextInt(reader), y = ReadNextInt(reader) };
+	//			//ReadNextString(reader);
+	//			//int baseSpeed = ReadNextInt(reader);  <---- zatim neni pohyb, tak neni ani baseSpeed
 
-		List<IInteractiveItem> ReadItems(TextReader reader)
-		{
-			throw new NotImplementedException();
-		}
+	//			enemies.Add(new NormalEnemy(maxHealth, currHealth, NoMovement.instance, type,
+	//				location, new Animation(Time.TimeFlow, type.ToString()), Location.DefaultLifeSize, i));
+	//		}
+	//		return enemies;
+	//	}
 
-		int lastLetter = (int)' ';
-		string ReadNextString(TextReader reader)
-		{
-			int letter = lastLetter;
-			while (char.IsWhiteSpace((char)letter)){ letter = reader.Read(); }
-			StringBuilder sb = new StringBuilder();
-			while (!char.IsWhiteSpace((char)letter)){
-				sb.Append((char)letter);
-			}
-			lastLetter = letter;
+	//	List<IInteractiveItem> ReadInteraItems(TextReader reader)
+	//	{
+	//		throw new NotImplementedException();
+	//	}
 
-			if (sb[0] == '.')  // <----------- pro komentare zacni slovo teckou
-				return ReadNextString(reader);
-			return sb.ToString();
-		}
-		int ReadNextInt(TextReader reader)
-		{
-			return int.Parse(ReadNextString(reader));
-		}
-	}
+	//	List<INoninteractiveItem> ReadNoninteraItems(TextReader reader)
+	//	{
+	//		throw new NotImplementedException();
+	//	}
+
+	//	int lastLetter = (int)' ';
+	//	string ReadNextString(TextReader reader)
+	//	{
+	//		int letter = lastLetter;
+	//		while (char.IsWhiteSpace((char)letter)){ letter = reader.Read(); }
+	//		StringBuilder sb = new StringBuilder();
+	//		while (!char.IsWhiteSpace((char)letter)){
+	//			sb.Append((char)letter);
+	//		}
+	//		lastLetter = letter;
+
+	//		if (sb[0] == '.')  // <----------- pro komentare zacni slovo teckou
+	//			return ReadNextString(reader);
+	//		return sb.ToString();
+	//	}
+	//	int ReadNextInt(TextReader reader)
+	//	{
+	//		return int.Parse(ReadNextString(reader));
+	//	}
+	//}
 
 	interface IMapDesearilizer : IMapBuilder {}
 

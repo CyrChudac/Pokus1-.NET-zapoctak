@@ -10,12 +10,12 @@ namespace Pokus1
 {
 	public abstract class Item : IInteractiveItem
 	{
-		public Item(Size size, Color color)
+		public Item(Size size, IAnimation animation)
 		{
 			Size = size;
-			Color = color;
+			this.Animation = animation;
 		}
-		public Item(int height, int width, Color color) : this(new Size(width, height), color)
+		public Item(int height, int width, IAnimation animation) : this(new Size(width, height), animation)
 		{
 			
 		}
@@ -25,15 +25,8 @@ namespace Pokus1
 		public abstract IInteractiveItem Copy();
 		public Location Location {get; protected set; }
 		public string Name { get; protected set; }
-		Color _color;
-		public Color Color { get => _color;
-			private set
-			{
-				Brush = new SolidBrush(value);
-				_color = value;
-			}
-		}
-		public Brush Brush { get; private set; }
+		public IAnimation Animation { get; }
+		             
 		public void Interact(Player interactingPLayer)
 		{
 			PickUp(interactingPLayer);

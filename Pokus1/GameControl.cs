@@ -7,28 +7,43 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 using CoreLib;
 
 namespace Pokus1
+//{
 {
 	public partial class GameControl : GameObjectControl
 	{
 		public GameControl()
 		{
 			InitializeComponent();
-			timer1.Interval = Time.delay;
 		}
 
+		internal System.Windows.Forms.Timer timer1;
 		protected void GameForm_Load(object sender, EventArgs e)
 		{
-			timer1.Start();
+			Game.FirstRun();
+
+			GameLoop = new GameLoop(Game, timer1);
+			GameLoopThread = new Thread(new ThreadStart(GameLoop.Start));
+			GameLoopThread.Start();
+			Form.SetGameThread(GameLoopThread);
 		}
 
 		internal Game Game { get; set; }
+		internal ToDo ToDo { get; set; }
 
-		private void timer1_Tick(object sender, EventArgs e)
+		private Thread GameLoopThread;
+		private GameLoop GameLoop;
+
+		IMapRenderer renderer => Game.Renderer;
+
+		public new void Update()
 		{
-			Game.Update();
+			ToDo.RunAll();
+			//Game.Update();
+			renderer.Render();
 		}
 	}
 }

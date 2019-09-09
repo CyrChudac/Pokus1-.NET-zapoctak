@@ -31,11 +31,24 @@ namespace Pokus1
 		private void NewGame_Click(object sender, EventArgs e)
 		{
 			GameControl gf = new GameControl();
-			Game game = new Game(new DefaultMap.AlsoMove(80, 80).GetMap(), gf, gf, gf);
+			Map map = new DefaultMap.WithPassiveEnemy(50, 50).GetMap();
+			Game game = new Game(map.Clone(), gf, gf, gf);
+			gf.Game = game;
 			gf.Form = Form;
-			gf.Visible = true;
 			gf.Dock = DockStyle.Fill;
-			Form.OpenControl(gf);
+			gf.Name = "LOVE";
+			
+			CharactersUi charactersUi = new CharactersUi() { map = map };
+			charactersUi.Dock = DockStyle.Bottom;
+			charactersUi.Form = this.Form;
+
+			GameScreenControl gs = new GameScreenControl();
+			gs.Form = Form;
+			gs.Dock = DockStyle.Fill;
+			gs.charactersUi = charactersUi;
+			gs.gameControl = gf;
+
+			Form.OpenControl(gs);
 			game.FirstRun();
 		}
 

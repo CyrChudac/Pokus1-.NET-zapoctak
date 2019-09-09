@@ -28,20 +28,35 @@ namespace Pokus1
 			return gameInputCheck.Keys.Contains(keyData);
 		}
 
-		public void Reset() => CurrPlayerButtons = new HashSet<Input>();
+		public void Reset()
+		{
+			lock (CurrPlayerButtons)
+			{
+				CurrPlayerButtons = new HashSet<Input>();
+			}
+		}
 
 		protected void GameForm_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (gameInputCheck.Keys.Contains(e.KeyCode))
-				CurrGameButtons.Add(gameInputCheck[e.KeyCode]);
+				lock (CurrGameButtons)
+				{
+					CurrGameButtons.Add(gameInputCheck[e.KeyCode]);
+				}
 			if (playerInputCheck.Keys.Contains(e.KeyCode))
-				CurrPlayerButtons.Add(playerInputCheck[e.KeyCode]);
+				lock (CurrPlayerButtons)
+				{
+					CurrPlayerButtons.Add(playerInputCheck[e.KeyCode]);
+				}
 		}
 
 		private void GameControl_KeyUp(object sender, KeyEventArgs e)
 		{
-			if (playerInputCheck.Keys.Contains(e.KeyCode))
-				CurrPlayerButtons.Remove(playerInputCheck[e.KeyCode]);
+			lock (CurrPlayerButtons)
+			{
+				if (playerInputCheck.Keys.Contains(e.KeyCode))
+					CurrPlayerButtons.Remove(playerInputCheck[e.KeyCode]);
+			}
 		}
 	}
 }
