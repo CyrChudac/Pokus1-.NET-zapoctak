@@ -51,7 +51,7 @@ namespace Pokus1
 			JsonSerializer js = Json.DefaultSerializer;
 			MemoryStream s = new MemoryStream();
 			new MapSerializer(s).Save(this, js);
-			Map result = new MapDeserializer(s).GetMap(js);
+			Map result = new BinaryMapDeserializer(s).GetMap(js);
 			s.Dispose();
 			return result;
 		}
@@ -80,10 +80,7 @@ namespace Pokus1
 					NoninteractiveItems[i].Update();
 			}
 		}
-		public bool AmIFalling(IMovableObject obj)
-			=> DirectionAccesable(obj, Direction.down);
-		public bool DirectionAccesable(IMovableObject obj, Direction dir) 
-			=> new DirectionAccesor(this).DirectionAccesable(obj, dir);
+
 		public void RemoveMe(IGameObject obj)
 		{
 			if (obj is Player)
@@ -96,6 +93,8 @@ namespace Pokus1
 				NoninteractiveItems.Remove((INoninteractiveItem)obj);
 			else throw new Exception("Trying to destroy unknown type: " + obj.ToString());
 		}
+
+		#region SomethingOnSomething
 
 		/// <summary>
 		/// Determines what alive player is the object touching by any part.
@@ -133,6 +132,13 @@ namespace Pokus1
 		private bool LocationInObject(Location loc, IGameObject obj)
 		=> (loc.x > obj.Location.x && loc.y > obj.Location.y) &&
 					(loc.x < obj.Location.x + obj.Size.Width && loc.y < obj.Location.y + obj.Size.Height);
+
+		#endregion
+
+		public bool AmIFalling(IMovableObject obj)
+			=> DirectionAccesable(obj, Direction.down);
+		public bool DirectionAccesable(IMovableObject obj, Direction dir)
+			=> new DirectionAccesor(this).DirectionAccesable(obj, dir);
 
 		class DirectionAccesor
 		{

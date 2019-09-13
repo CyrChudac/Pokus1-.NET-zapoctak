@@ -112,7 +112,7 @@ namespace Pokus1
 			if (ShowDialog(loading))
 			{
 				Stream s = new FileStream(Game.SaveFileName + @"\" + (string)loading.list.SelectedItem, FileMode.Open);
-				Map result = new MapDeserializer(s).GetMap(Json.DefaultSerializer);
+				Map result = new BinaryMapDeserializer(s).GetMap(Json.DefaultSerializer);
 				s.Dispose();
 				return result;
 			}

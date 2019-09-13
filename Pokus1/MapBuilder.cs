@@ -280,10 +280,10 @@ namespace Pokus1
 
 	interface IMapDesearilizer : IMapBuilder {}
 
-	class MapDeserializer : IMapDesearilizer, IDisposable
+	class BinaryMapDeserializer : IMapDesearilizer, IDisposable
 	{
 		readonly Stream stream;
-		public MapDeserializer(Stream stream)
+		public BinaryMapDeserializer(Stream stream)
 		{
 			this.stream = stream;
 		}
