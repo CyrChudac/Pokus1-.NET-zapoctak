@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using CoreLib;
+using Newtonsoft.Json;
 
 namespace Pokus1
 {
@@ -18,7 +19,9 @@ namespace Pokus1
 	/// </summary>
 	class FullWall: IWall
 	{
+		[JsonIgnore]
 		public Color Color { get; } = Color.Black;
+		[JsonIgnore]
 		public Brush Brush { get; private set; }
 		private FullWall() { Brush = new SolidBrush(Color); }
 		public static readonly IMapTile Tile = new FullWall();
@@ -29,7 +32,9 @@ namespace Pokus1
 	/// </summary>
 	class Killer : IMapTile
 	{
+		[JsonIgnore]
 		public Color Color { get; } = Color.IndianRed;
+		[JsonIgnore]
 		public Brush Brush { get; private set; }
 		private Killer() { Brush = new SolidBrush(Color); }
 		public static readonly IMapTile Tile = new Killer();
@@ -40,32 +45,11 @@ namespace Pokus1
 	/// </summary>
 	class NoTile : IMapTile
 	{
+		[JsonIgnore]
 		public Color Color { get; } = Color.SkyBlue;
+		[JsonIgnore]
 		public Brush Brush { get; private set; }
 		private NoTile() { Brush = new SolidBrush(Color); }
 		public static readonly IMapTile Tile = new NoTile();
 	}
-
-	/// <summary>
-	/// All MapTile singletons should be listed here.
-	/// </summary>
-	static class TileBase
-	{
-		public static IMapTile Get(TileType type)
-		{
-			switch (type)
-			{
-				case TileType.nothing:
-					return NoTile.Tile;
-				case TileType.killer:
-					return Killer.Tile;
-				case TileType.wall:
-					return FullWall.Tile;
-				default:
-					throw new WrongTileTypeFoundException();
-			}
-		}
-		public class WrongTileTypeFoundException : Exception { } 
-	}
-	enum TileType { nothing, killer, wall}
 }

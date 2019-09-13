@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Pokus1
 {
@@ -20,6 +21,8 @@ namespace Pokus1
 		{
 			foreach (Control item in Controls)
 				item.Left = (this.Width - item.Width) / 2;
+			if (Directory.Exists(Game.SaveFileName) && Directory.GetFiles(Game.SaveFileName).Length > 0)
+				Loader.Enabled = true;
 		}
 
 		private void Exit_Click(object sender, EventArgs e) => Form.Close();
@@ -29,15 +32,17 @@ namespace Pokus1
 		private void Editor_Click(object sender, EventArgs e) => Form.OpenControl<Editor>();
 
 		private void NewGame_Click(object sender, EventArgs e)
+		=> Play(new DefaultMap.WithPassiveEnemy(50, 50).GetMap());
+
+		public void Play(Map map)
 		{
 			GameControl gf = new GameControl();
-			Map map = new DefaultMap.WithPassiveEnemy(50, 50).GetMap();
 			Game game = new Game(map.Clone(), gf, gf, gf);
 			gf.Game = game;
 			gf.Form = Form;
 			gf.Dock = DockStyle.Fill;
 			gf.Name = "LOVE";
-			
+
 			CharactersUi charactersUi = new CharactersUi() { map = map };
 			charactersUi.Dock = DockStyle.Bottom;
 			charactersUi.Form = this.Form;
@@ -65,6 +70,13 @@ namespace Pokus1
 		private void Exit_Click_1(object sender, EventArgs e)
 		{
 			Form.Close();
+		}
+
+		private void Loader_Click(object sender, EventArgs e)
+		{
+			Map map = Form.Loading();
+			if(map != null)
+				Play(map);
 		}
 	}
 }

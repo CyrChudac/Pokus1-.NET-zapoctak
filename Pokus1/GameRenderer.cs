@@ -220,7 +220,7 @@ namespace Pokus1
 
 		void MakeBackground()
 		{
-			background = new Bitmap(map.Width * map.oneTileWidth, map.Height * map.oneTileHeight);
+			background = new Bitmap(map.Width * Map.OneTileWidth, map.Height * Map.OneTileHeight);
 			using (Graphics g = Graphics.FromImage(background))
 				for (int i = 0; i < map.Height; i++)
 				{
@@ -228,10 +228,10 @@ namespace Pokus1
 					{
 						g.FillRectangle(
 							map[j, i].Brush,
-							j * map.oneTileWidth,
-							i * map.oneTileHeight,
-							map.oneTileWidth,
-							map.oneTileHeight);
+							j * Map.OneTileWidth,
+							i * Map.OneTileHeight,
+							Map.OneTileWidth,
+							Map.OneTileHeight);
 					}
 				}
 		}

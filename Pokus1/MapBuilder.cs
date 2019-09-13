@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using CoreLib;
 using System.IO;
-using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 namespace Pokus1
 {
@@ -92,7 +92,7 @@ namespace Pokus1
 			public Map GetMap()
 			{
 				IMapTile[,] field = builder.OnlyBorders_Wall();
-				Map result = new Map(field, tileWidth: 30, tileHeight: 30);
+				Map result = new Map(field);
 				result.Players.Add(new Unskilled(100, 100, NoMovement.instance,
 				"Vlad", new Location{ x = 143, y = 59}, new SingleColorAnimation(Color.GreenYellow),
 				Life.DefaultSize, result));
@@ -110,7 +110,7 @@ namespace Pokus1
 			public Map GetMap()
 			{
 				IMapTile[,] field = builder.BordersAndSomething_Wall();
-				Map result = new Map(field, tileWidth: 30, tileHeight: 30);
+				Map result = new Map(field);
 				result.Players.Add(new Jumper(100, 100, new UsualMovement(Life.defaultSpeed),
 				"Vlad", new Location{ x = 143, y = 59}, new SingleColorAnimation(Color.GreenYellow),
 				Life.DefaultSize, result));
@@ -131,7 +131,7 @@ namespace Pokus1
 			public Map GetMap()
 			{
 				IMapTile[,] field = builder.BordersAndSomething2_Wall();
-				Map result = new Map(field, tileWidth: 30, tileHeight: 30);
+				Map result = new Map(field);
 				result.Players.Add(new Jumper(100, 100, new UsualMovement(Life.defaultSpeed),
 					"Vlad", new Location { x = 143, y = 59 }, new SingleColorAnimation(Color.GreenYellow),
 					Life.DefaultSize, result));
@@ -152,7 +152,7 @@ namespace Pokus1
 			public Map GetMap()
 			{
 				IMapTile[,] field = builder.BordersAndSomething2_Wall();
-				Map result = new Map(field, tileWidth: 30, tileHeight: 30);
+				Map result = new Map(field);
 				result.Players.Add(new KnifeThrower(100, 100, new UsualMovement(Life.defaultSpeed),
 					"Vlad", new Location { x = 300, y = 59 }, new SingleColorAnimation(Color.GreenYellow),
 					Life.DefaultSize, result));
@@ -280,17 +280,29 @@ namespace Pokus1
 
 	interface IMapDesearilizer : IMapBuilder {}
 
-	class BinaryMapDeserializer : IMapDesearilizer, IDisposable
+	class MapDeserializer : IMapDesearilizer, IDisposable
 	{
 		readonly Stream stream;
-		public BinaryMapDeserializer(Stream stream)
+		public MapDeserializer(Stream stream)
 		{
 			this.stream = stream;
 		}
 		public void Dispose() => stream.Dispose();
 		public Map GetMap()
 		{
-			throw new NotImplementedException();
+			return GetMap(Json.DefaultSerializer);
+		}
+		public Map GetMap(JsonSerializer js)
+		{
+			StreamReader sr = new StreamReader(stream);
+			Map result = (Map)js.Deserialize(sr, typeof(Map));
+			foreach (Player p in result.Players)
+				p.Map = result;
+			foreach (Enemy e in result.Enemies)
+				e.Map = result;
+			return result;
+			//DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(Map));
+			//return (Map)jsonSer.ReadObject(stream);
 		}
 	}
 }

@@ -28,14 +28,14 @@ namespace Pokus1
 			if (input is Input.Player.Movement.Left)
 			{
 				LookingAt = Direction.left;
-				if (map.DirectionAccesable(this, Direction.left))
+				if (Map.DirectionAccesable(this, Direction.left))
 					((PlayerMovement)Movement).AddKey(input);
 			}
 			else
 			if (input is Input.Player.Movement.Right)
 			{
 				LookingAt = Direction.right;
-				if (map.DirectionAccesable(this, Direction.right))
+				if (Map.DirectionAccesable(this, Direction.right))
 					((PlayerMovement)Movement).AddKey(input);
 			}
 			else

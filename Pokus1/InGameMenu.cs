@@ -13,6 +13,7 @@ namespace Pokus1
 {
 	public partial class InGameMenu : GameObjectControl
 	{
+		internal Map Map;
 		Color startingBckColor;
 		public InGameMenu()
 		{
@@ -51,6 +52,18 @@ namespace Pokus1
 				return true;
 			}
 			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
+		private void save_Click(object sender, EventArgs e)
+		{
+			Form.Saving(Map);
+		}
+
+		private void load_Click(object sender, EventArgs e)
+		{
+			Map map = Form.Loading();
+			if (map != null)
+				new Menu().Play(map);
 		}
 	}
 }

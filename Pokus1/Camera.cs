@@ -24,8 +24,8 @@ namespace Pokus1
 		}
 		IMapRenderer renderer;
 		Map map;
-		int width => map.oneTileWidth * map.Width;
-		int height => map.oneTileHeight * map.Height;
+		int width => Map.OneTileWidth * map.Width;
+		int height => Map.OneTileHeight * map.Height;
 		int maxX => width - renderer.CanvasSize.Width;
 		int maxY => height - renderer.CanvasSize.Height;
 		bool freezeX, freezeY;

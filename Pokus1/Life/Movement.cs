@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CoreLib;
+using Newtonsoft.Json;
 
 namespace Pokus1
 {
@@ -16,13 +17,16 @@ namespace Pokus1
 		public Movement(int speed) {
 			this.Speed = speed;
 		}
+		[JsonRequired]
 		public int fallingSpeed { get; protected set; } = 10;
 
 		protected static readonly int directionsImportness = Time.delay / 3;
 		public static float shift => Time.TimeFlow * Time.DeltaTime ;
+		[JsonRequired]
 		public int Speed { get; protected set; }
-
+		[JsonIgnore]
 		protected Location location = new Location();
+		[JsonIgnore]
 		public Location FinalDirection
 			=> location.Normalize(Speed, fallingSpeed);
 		
@@ -57,7 +61,7 @@ namespace Pokus1
 	{
 		Movement Movement { get; }
 	}
-
+	
 	public abstract class PlayerMovement: Movement
 	{
 		public PlayerMovement(int speed) : base(speed) { }
@@ -65,7 +69,7 @@ namespace Pokus1
 		public virtual void AddKey(Input input) => ActiveKeys.Add(input);
 		public abstract List<Input> ActiveKeys { set; protected get; }
 	}
-
+	
 	public sealed class NoMovement: PlayerMovement
 	{
 		private NoMovement():base(0) { }

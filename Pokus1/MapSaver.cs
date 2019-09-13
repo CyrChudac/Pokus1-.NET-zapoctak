@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
+using Newtonsoft.Json;
+using CoreLib;
 
 namespace Pokus1
 {
@@ -18,12 +18,21 @@ namespace Pokus1
 		Stream stream;
 		public MapSerializer(Stream stream) => this.stream = stream;
 		public void Dispose() => stream.Dispose();
-		public void Save(Map map)
+		public void Save(Map map) => Save(map, Json.DefaultSerializer);
+		public void Save(Map map, JsonSerializer jsonSerializer)
 		{
-			System.Runtime.Serialization.Json.DataContractJsonSerializer jsonSer
-				= new DataContractJsonSerializer(typeof(Map));
-			jsonSer.WriteObject(stream, map);
-			throw new NotImplementedException();
+			StreamWriter sw = new StreamWriter(stream);
+			jsonSerializer.Serialize(sw, map, typeof(Map));
+			sw.Flush();
+			//DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(Map), new List<Type>()
+			//{
+			//	typeof(Life), typeof(Enemy), typeof(NormalEnemy), typeof(PassiveEnemy),
+			//		typeof(Player), typeof(Jumper), typeof(KnifeThrower), typeof(Puddler),
+			//	typeof(Animation), typeof(SingleColorAnimation), typeof(NoAnimation),
+			//	typeof(Movement), typeof(PlayerMovement), typeof(NoMovement), typeof(UsualMovement),
+
+			//});
+			//jsonSer.WriteObject(stream, map);
 		}
 	}
 }

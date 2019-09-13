@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CoreLib;
+using Newtonsoft.Json;
 
 namespace Pokus1
 {
 	 public class UsualMovement : PlayerMovement
 	 {
+		[JsonConstructor]
 		public UsualMovement(int speed, int fallingSpeed) : base(speed, fallingSpeed)
 		{
 		}

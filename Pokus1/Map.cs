@@ -3,50 +3,55 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 using CoreLib;
-using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using System.Windows.Forms;
 using System.IO;
 
 namespace Pokus1
 {
-	[Serializable]
+	[JsonObject()]
 	public class Map
 	{	
-		[NonSerialized]
+		[JsonIgnore]
 		bool victory = false;
-		public bool Victory => !Enemies.Any(Enemy => Enemy.Alive) ||victory;
+		[JsonIgnore]
+		public bool Victory => !Enemies.Any(Enemy => Enemy.Alive) || victory;
 		public void SetVictory() { victory = true; }
-		[NonSerialized]
+		[JsonIgnore]
 		bool defeat = false;
+		[JsonIgnore]
 		public bool Defeat => !Players.All(Player => Player.Alive) || defeat;
 		public void SetDefeat() { defeat = true; }
+		[JsonIgnore]
 		public bool GameEnd => victory || defeat;
 
-		[DataMember()]
-		public readonly int oneTileHeight;
-		[DataMember()]
-		public readonly int oneTileWidth;
-		[DataMember()]
+		private static int OneTileSizeModifier = 38;
+		//Both coordinates are made from width on purpose to make the tile size as square.
+		public static readonly Size OneTileSize = new Size(
+			Screen.PrimaryScreen.Bounds.Width / OneTileSizeModifier,
+			Screen.PrimaryScreen.Bounds.Width / OneTileSizeModifier);
+		public static int OneTileHeight => OneTileSize.Height;
+		public static int OneTileWidth => OneTileSize.Width;
+		[JsonIgnore]
 		public readonly int Height;
-		[DataMember()]
+		[JsonIgnore]
 		public readonly int Width;
-		[DataMember()]
 		public List<Player> Players { get; private set; } = new List<Player>();
-		[DataMember()]
 		public List<Enemy> Enemies { get; private set; } = new List<Enemy>();
 
-		[DataMember()]
 		public List<IInteractiveItem> InteractiveItems { get; private set; } = new List<IInteractiveItem>();
-		[DataMember()]
 		public List<INoninteractiveItem> NoninteractiveItems { get; private set; } = new List<INoninteractiveItem>();
-		[DataMember()]
+		[JsonRequired]
 		private readonly IMapTile[,] map;
 
 		public Map Clone()
 		{
+			JsonSerializer js = Json.DefaultSerializer;
 			MemoryStream s = new MemoryStream();
-			new MapSerializer(s).Save(this);
-			Map result = new BinaryMapDeserializer(s).GetMap();
+			new MapSerializer(s).Save(this, js);
+			Map result = new MapDeserializer(s).GetMap(js);
 			s.Dispose();
 			return result;
 		}
@@ -154,7 +159,7 @@ namespace Pokus1
 				}
 			}
 			bool CanGoUp(IMovableObject obj)
-				=> CanGoSomewhere(obj.Width, map.oneTileWidth,
+				=> CanGoSomewhere(obj.Width, OneTileWidth,
 					i => top - obj.Movement.Speed, i => left + i);
 			//{
 			//	for (double i = 0; i <= obj.Width; i += map.oneTileWidth)
@@ -167,7 +172,7 @@ namespace Pokus1
 			//	return true;
 			//}
 			bool CanGoDown(IMovableObject obj)
-				=> CanGoSomewhere(obj.Width, map.oneTileWidth,
+				=> CanGoSomewhere(obj.Width, OneTileWidth,
 					i => top + obj.Height + obj.Movement.Speed, i => left + i);
 			//{
 			//	for (double i = 0; i <= obj.Width; i += map.oneTileWidth)
@@ -180,7 +185,7 @@ namespace Pokus1
 			//	return true;
 			//}
 			bool CanGoLeft(IMovableObject obj)
-				=> CanGoSomewhere(obj.Height, map.oneTileHeight,
+				=> CanGoSomewhere(obj.Height, OneTileHeight,
 					i => top + i, i => left - obj.Movement.Speed);
 			//{
 			//	for (double i = 0; i <= obj.Height; i += map.oneTileHeight)
@@ -193,7 +198,7 @@ namespace Pokus1
 			//	return true;
 			//}
 			bool CanGoRight(IMovableObject obj)
-				=> CanGoSomewhere(obj.Height, map.oneTileHeight,
+				=> CanGoSomewhere(obj.Height, OneTileHeight,
 					i => top + i, i => left + obj.Width + obj.Movement.Speed);
 			//{
 			//	for (double i = 0; i <= obj.Height; i += map.oneTileHeight)
@@ -228,8 +233,8 @@ namespace Pokus1
 			}
 			bool LocationAccesable(double y, double x)
 			{
-				int X = (int)x / map.oneTileWidth;
-				int Y = (int)y / map.oneTileHeight;
+				int X = (int)x / OneTileWidth;
+				int Y = (int)y / OneTileHeight;
 				switch (map[X, Y])
 				{
 					case null:
@@ -245,13 +250,12 @@ namespace Pokus1
 			{ return LocationAccesable(loc.x, loc.y); }
 		}
 
-		public Map(IMapTile[,] map,	int tileHeight, int tileWidth)
+		[JsonConstructor]
+		public Map(IMapTile[,] map)
 		{
 			this.map = map;
 			this.Height = map.GetLength(1);
 			this.Width = map.GetLength(0);
-			this.oneTileHeight = tileHeight;
-			this.oneTileWidth = tileWidth;
 		}
 	}
 

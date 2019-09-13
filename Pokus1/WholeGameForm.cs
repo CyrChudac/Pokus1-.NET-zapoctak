@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using System.IO;
+using CoreLib;
 
 namespace Pokus1
 {
@@ -77,15 +79,44 @@ namespace Pokus1
 		public new void Close()
 		{
 			ReallyEndDialog dialog = new ReallyEndDialog();
-			dialog.StartPosition = FormStartPosition.CenterScreen;
-			DialogResult result = dialog.ShowDialog();
-			if (result == DialogResult.Yes)
+			if (ShowDialog(dialog))
 				base.Close();
 		}
 
 		private void WholeGameForm_Load(object sender, EventArgs e)
 		{
 
+		}
+
+		public void Saving(Map map)
+		{
+			Pokus1.Saving saving = new Saving();
+			if (ShowDialog(saving))
+			{
+				Stream s = new FileStream(Game.SaveFileName + @"\" + saving.fileName.Text, FileMode.Create);
+				new MapSerializer(s).Save(map, Json.DefaultSerializer);
+				s.Dispose();
+			}
+		}
+
+		private bool ShowDialog(Form dialog)
+		{
+			dialog.StartPosition = FormStartPosition.CenterScreen;
+			DialogResult result = dialog.ShowDialog();
+			return result == DialogResult.Yes;
+		}
+
+		public Map Loading()
+		{
+			Pokus1.Loading loading = new Loading();
+			if (ShowDialog(loading))
+			{
+				Stream s = new FileStream(Game.SaveFileName + @"\" + (string)loading.list.SelectedItem, FileMode.Open);
+				Map result = new MapDeserializer(s).GetMap(Json.DefaultSerializer);
+				s.Dispose();
+				return result;
+			}
+			return null;
 		}
 	}
 }

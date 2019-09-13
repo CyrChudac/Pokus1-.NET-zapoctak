@@ -46,10 +46,12 @@
 			this.Loader.TabIndex = 1;
 			this.Loader.Text = "Load";
 			this.Loader.UseVisualStyleBackColor = true;
+			this.Loader.Click += new System.EventHandler(this.Loader_Click);
 			// 
 			// Editor
 			// 
 			this.Editor.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.Editor.Enabled = false;
 			this.Editor.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
 			this.Editor.Location = new System.Drawing.Point(229, 165);
 			this.Editor.Name = "Editor";
@@ -73,6 +75,7 @@
 			// Options
 			// 
 			this.Options.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.Options.Enabled = false;
 			this.Options.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
 			this.Options.Location = new System.Drawing.Point(229, 226);
 			this.Options.Name = "Options";

@@ -29,7 +29,7 @@ namespace Pokus1
 
 		public new void Update()
 		{
-			Health.Width = initialHealthSize * Player.Health / Player.StartingHealth;
+			Health.Width = initialHealthSize * Player.CurrHealth / Player.MaxHealth;
 		}
 	}
 }

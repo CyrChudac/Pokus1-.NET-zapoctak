@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -66,6 +69,12 @@
     </Compile>
     <Compile Include="GameScreenControl.Designer.cs">
       <DependentUpon>GameScreenControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Loading.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Loading.Designer.cs">
+      <DependentUpon>Loading.cs</DependentUpon>
     </Compile>
     <Compile Include="MapSaver.cs" />
     <Compile Include="Life\Attack.cs" />
@@ -131,6 +140,12 @@
       <DependentUpon>ReallyEndDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Life\UsualMovement.cs" />
+    <Compile Include="Saving.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Saving.Designer.cs">
+      <DependentUpon>Saving.cs</DependentUpon>
+    </Compile>
     <Compile Include="StrightMovement.cs" />
     <Compile Include="UiDoThis.cs" />
     <Compile Include="Wall.cs" />
@@ -155,6 +170,12 @@
     <EmbeddedResource Include="InGameMenu.resx">
       <DependentUpon>InGameMenu.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Loading.resx">
+      <DependentUpon>Loading.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu.resx">
+      <DependentUpon>Menu.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -165,9 +186,13 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Saving.resx">
+      <DependentUpon>Saving.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="WholeGameForm.resx">
       <DependentUpon>WholeGameForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

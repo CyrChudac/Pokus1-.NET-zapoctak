@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using Newtonsoft.Json;
 
 namespace CoreLib
 {
@@ -42,6 +43,7 @@ namespace CoreLib
 			return new Location();
 		}
 
+		[JsonIgnore]
 		public int Distance => (int)Math.Pow(Math.Pow(x, 2) + Math.Pow(y, 2), 1d / 2);
 
 		#region operators
@@ -152,5 +154,18 @@ namespace CoreLib
 				return result + b;
 			return result;
 		}
+	}
+
+	public static class Json
+	{
+		public static JsonSerializer DefaultSerializer { get
+			{
+				JsonSerializer js = new JsonSerializer();
+				js.TypeNameHandling = TypeNameHandling.Auto;
+				js.Formatting = Formatting.Indented;
+				js.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+				js.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+				return js;
+			} }
 	}
 }

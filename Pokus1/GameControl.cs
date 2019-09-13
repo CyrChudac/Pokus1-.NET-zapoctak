@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using CoreLib;
+using System.IO;
 
 namespace Pokus1
 //{
@@ -23,6 +24,9 @@ namespace Pokus1
 		internal System.Windows.Forms.Timer timer1;
 		protected void GameForm_Load(object sender, EventArgs e)
 		{
+
+			label1.Text = Directory.GetCurrentDirectory();
+
 			Game.FirstRun();
 
 			GameLoop = new GameLoop(Game, timer1);

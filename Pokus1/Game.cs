@@ -12,7 +12,9 @@ namespace Pokus1
 {
 	class Game
 	{
-		private Map map;
+		public static readonly string SaveFileName = "Saves";
+
+		internal Map map;
 		private readonly Map startingMap;
 		private readonly GameControl gameForm;
 		public IMapRenderer Renderer { get; private set; }
@@ -32,7 +34,7 @@ namespace Pokus1
 		public void FirstRun()
 		{
 			Time.Start();
-			map = startingMap; /* startingMap.Clone();  /*	*/
+			map = startingMap.Clone();  /* startingMap; /*	*/
 			Renderer.Camera = new Camera(map, Renderer);
 			SetCorrectCameraMovement();
 			Renderer.FirstRender(map);
@@ -77,6 +79,7 @@ namespace Pokus1
 					inputGetter.Reset();
 					InGameMenu menu = new InGameMenu();
 					menu.Dock = DockStyle.Fill;
+					menu.Map = this.map;
 					menu.BackgroundImage = Renderer.DarkenImage( Renderer.Screenshot(), 0.8f);
 					menu.BackgroundImageLayout = ImageLayout.Stretch;
 					uiDoThis.Do(() => gameForm.Form.OpenControl(menu));

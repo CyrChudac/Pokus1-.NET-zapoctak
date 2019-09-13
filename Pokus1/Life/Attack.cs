@@ -46,14 +46,14 @@ namespace Pokus1
 				animation = new SingleColorAnimation(Color.RosyBrown);
 			else throw new Exception("Unknown type (" + this.source.ToString() +
 				") of attackSource is trying to fire a projectile.");
-			source.map.NoninteractiveItems.Add(
+			source.Map.NoninteractiveItems.Add(
 			new Projectile(
 				this.source,
 				attackRange,
 				source.Middle + ((Location)source.LookingAt * ((Location)source.Size / 2)),
 				ProjectilSize,
 				source.Name,
-				source.map,
+				source.Map,
 				projectileSpeed,
 				source.LookingAt,
 				animation));

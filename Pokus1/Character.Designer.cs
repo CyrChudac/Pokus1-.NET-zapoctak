@@ -54,6 +54,7 @@
 			this.Picture.Location = new System.Drawing.Point(16, 71);
 			this.Picture.Name = "Picture";
 			this.Picture.Size = new System.Drawing.Size(71, 65);
+			this.Picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
 			this.Picture.TabIndex = 2;
 			this.Picture.TabStop = false;
 			// 

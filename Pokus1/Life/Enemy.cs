@@ -5,11 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using CoreLib;
-using System.Runtime.Serialization;
 
 namespace Pokus1
 {
-	[DataContract()]
 	public abstract class Enemy : Life
 	{
 		public Enemy(int maxHealth, int currHealth, Movement movement, EnemyType Type,
@@ -19,7 +17,6 @@ namespace Pokus1
 			this.Type = Type;
 			movement.ChangeSpeed(Speed);
 		}
-		[DataMember()]
 		public EnemyType Type { get; protected set; }
 
 		public abstract int WaitingOnWalkEnd { get; } // time that enemy stays at the platform edge
@@ -30,7 +27,7 @@ namespace Pokus1
 
 		public abstract int Speed { get; }
 	}
-	[Serializable]
+
 	public class NormalEnemy : Enemy
 	{
 		public static readonly int DefaultMaxHealth = Attack.DefaultDamage;
@@ -52,7 +49,7 @@ namespace Pokus1
 		public override Attack Attack { get; } = new MeleeAttack(AttackSource.enemy, 150);
 		protected override void DuringUpdate() => throw new NotImplementedException();
 	}
-
+	
 	public class PassiveEnemy : NormalEnemy
 	{
 		public PassiveEnemy(Location location, int number, Map map)

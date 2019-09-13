@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CoreLib;
+using Newtonsoft.Json;
 
 namespace Pokus1
 {
@@ -13,24 +14,26 @@ namespace Pokus1
 	class Jumper : Player
 	{
 		static int jumpDuration = 800;
-		int jumpSpeed = 3;
-		double lastTimeActivated;
+		[JsonIgnore]
+		int jumpSpeed => 3;
+		[JsonRequired]
+		double lastTimeActivated = 0;
 		protected override void UseSkill()
 		{
-			if (!map.AmIFalling(this))
+			if (!Map.AmIFalling(this))
 				lastTimeActivated = Time.Now;
 		}
 
 		protected override void SkillUpdate()
 		{
 			if (lastTimeActivated + jumpDuration > Time.Now)
-				if (map.DirectionAccesable(this, Direction.up))
+				if (Map.DirectionAccesable(this, Direction.up))
 					Movement.AddToDirection(new Location(0, -jumpSpeed - Movement.fallingSpeed));
 				else
 					lastTimeActivated = Time.Now - jumpDuration;
 			else if (lastTimeActivated + 2 * jumpDuration > Time.Now
-				&& map.AmIFalling(this)
-				&& map.DirectionAccesable(this, Direction.up))
+				&& Map.AmIFalling(this)
+				&& Map.DirectionAccesable(this, Direction.up))
 				Movement.AddToDirection(new Location(0, -Movement.fallingSpeed / 2));
 		}
 
@@ -40,10 +43,12 @@ namespace Pokus1
 		{
 		}
 	}
-
+	
 	class KnifeThrower : Player
 	{
-		readonly long cooldown = 1500;
+		[JsonIgnore]
+		long cooldown => 1500;
+		[JsonRequired]
 		long lastTimeActivated = 0;
 		protected override void UseSkill()
 		{
@@ -59,7 +64,7 @@ namespace Pokus1
 		{
 			
 		}
-		int shotRange = 550;
+		static readonly int shotRange = 550;
 		static readonly int sizeModifier = 2;
 		static int projectileSpeed => Life.defaultSpeed * 2;
 		public KnifeThrower(int maxHealth, int currHealth, PlayerMovement movement, 
@@ -67,13 +72,15 @@ namespace Pokus1
 			: base(maxHealth, currHealth, movement, name, location, animation, size, map)
 		{
 			attack = new RangedAttack(AttackSource.ally, shotRange, 
-				new Size(map.oneTileWidth / sizeModifier, map.oneTileHeight / sizeModifier), projectileSpeed);
+				new Size(Map.OneTileWidth / sizeModifier, Map.OneTileHeight / sizeModifier), projectileSpeed);
 		}
 	}
-
+	
 	class Puddler : Player
 	{
+		[JsonRequired]
 		bool active = false;
+		[JsonRequired]
 		double lastTimeActivated = 0;
 		protected override void UseSkill()
 		{
@@ -93,7 +100,7 @@ namespace Pokus1
 		{
 		}
 	}
-
+	
 	class Unskilled : Player
 	{
 		public Unskilled(int maxHealth, int currHealth, PlayerMovement movement,
