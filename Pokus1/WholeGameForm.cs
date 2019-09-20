@@ -91,6 +91,8 @@ namespace Pokus1
 			Pokus1.Saving saving = new Saving();
 			if (ShowDialog(saving))
 			{
+				if (!Directory.Exists(Game.SaveFileName))
+					Directory.CreateDirectory(Game.SaveFileName);
 				Stream s = new FileStream(Game.SaveFileName + @"\" + saving.fileName.Text, FileMode.Create);
 				new MapSerializer(s).Save(map, Json.DefaultSerializer);
 				s.Dispose();

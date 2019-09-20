@@ -13,7 +13,7 @@ namespace Pokus1
 	class Game
 	{
 		public static readonly string SaveFileName = "Saves";
-		public static readonly string MapsFileName = "Maps";
+		public static readonly string MapsFileName = "Saves";
 
 		internal Map map;
 		private readonly Map startingMap;

@@ -258,6 +258,11 @@ namespace Pokus1
 			Saving dialog = new Saving();
 			if(Form.ShowDialog(dialog))
 			{
+				if (!Directory.Exists(Directory.GetCurrentDirectory() + @"\" +
+					Game.MapsFileName))
+					Directory.CreateDirectory(
+					Directory.GetCurrentDirectory() + @"\" +
+					Game.MapsFileName);
 				Map map = new Map(tiles);
 				players.ForEach( l => map.Players.Add(((PlayerFactory)l.Tag).GetPlayer(
 					Life.defaultHealth,
