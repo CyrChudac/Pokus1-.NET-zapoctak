@@ -26,7 +26,7 @@ namespace Pokus1
 
 		public void AddDirectionToDirection(Direction dir) => AddToDirection((Location)dir * DirectionsImportness);
 		public static readonly int DirectionsImportness = Time.delay / 3;
-		public static float shift => Time.TimeFlow * Time.DeltaTime ;
+		public static float shift => Time.TimeFlow * Math.Max(Time.DeltaTime, 1);
 		[JsonRequired]
 		public int Speed { get; protected set; } = 5;
 		[JsonIgnore]

@@ -143,7 +143,7 @@ namespace Pokus1
 		void MoveLabels(IEnumerable<Label> labels, Location vector)
 		{
 			foreach (var l in labels)
-				l.Location = new Point(l.Location.X + vector.x, l.Location.Y + vector.y);
+				l.Location = new Point(l.Location.X - vector.x, l.Location.Y - vector.y);
 		}
 
 		PlayerButtons inputGetter = new PlayerButtons();

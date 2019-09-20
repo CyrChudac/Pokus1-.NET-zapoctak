@@ -42,8 +42,7 @@ namespace Pokus1
 			{
 				DuringUpdate();
 			}
-			if (Map.AmIFalling(this))
-				Movement.Fall();
+			Movement.Fall();
 			Location vector = Movement.CalculatedVector;
 			Location += (Movement.FinalLocation = Map.GoToLocation(this, vector));
 			Movement.AfterMove();
