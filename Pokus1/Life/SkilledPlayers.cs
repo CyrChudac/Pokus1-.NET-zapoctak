@@ -28,10 +28,11 @@ namespace Pokus1
 		protected override void SkillUpdate()
 		{
 			if (lastTimeActivated + jumpDuration > Time.Now)
-				if (Map.DirectionAccesable(this, Direction.up))
-					Movement.AddToDirection(new Location(0, -jumpImportness - Movement.DirectionsImportness));
-				else
+			{
+				Movement.AddToDirection(new Location(0, -jumpImportness - Movement.DirectionsImportness));
+				if (!Map.DirectionAccesable(this, Direction.up))
 					lastTimeActivated = Time.Now - jumpDuration;
+			}
 			else if (lastTimeActivated + 2 * jumpDuration > Time.Now
 				&& Map.AmIFalling(this)
 				&& Map.DirectionAccesable(this, Direction.up))
