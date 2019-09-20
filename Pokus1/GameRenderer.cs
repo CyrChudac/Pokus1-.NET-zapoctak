@@ -10,16 +10,15 @@ using CoreLib;
 
 namespace Pokus1
 {
-	public interface IMapRenderer
+	public interface IMapRenderer : IWithCanvasSize
 	{
 		void FirstRender(Map map);
 		void Render();
-		void SetCameraMovement(Movement movement);
+		void SetCameraMovement(ILocationHolder locationHolder);
 		void NewPlayerLocation(Location location);
 		ICamera Camera { set; }
 		Image Screenshot();
 		Image DarkenImage(Image i, float DarkenCoeficient);
-		Size CanvasSize { get; }
 	}
 
 	//public partial class GameControl : IMapRenderer
@@ -190,7 +189,7 @@ namespace Pokus1
 		Image background;
 		public ICamera Camera { set; protected get; }
 
-		public void SetCameraMovement(Movement movement) => Camera.Movement = movement;
+		public void SetCameraMovement(ILocationHolder locationHolder) => Camera.locationHolder = locationHolder;
 		public void NewPlayerLocation(Location location) => Camera.NewPlayerLocation(location);
 
 		public void Render()
@@ -204,7 +203,7 @@ namespace Pokus1
 
 		public new void Dispose()
 		{
-			//background.Dispose();
+			background.Dispose();
 			base.Dispose();
 		}
 

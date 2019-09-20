@@ -23,6 +23,8 @@ namespace Pokus1
 	{
 		public PlayerButtons()
 		{
+			Add(System.Windows.Forms.Keys.Up, InputPoss.up);
+			Add(System.Windows.Forms.Keys.Down, InputPoss.down);
 			Add(System.Windows.Forms.Keys.Right, InputPoss.right);
 			Add(System.Windows.Forms.Keys.Left, InputPoss.left);
 			Add(System.Windows.Forms.Keys.Space, InputPoss.skill);

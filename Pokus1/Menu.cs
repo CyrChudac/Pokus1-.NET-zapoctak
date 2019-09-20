@@ -25,11 +25,7 @@ namespace Pokus1
 				Loader.Enabled = true;
 		}
 
-		private void Exit_Click(object sender, EventArgs e) => Form.Close();
-
 		private void Options_Click(object sender, EventArgs e) => Form.OpenControl<Options>();
-		
-		private void Editor_Click(object sender, EventArgs e) => Form.OpenControl<Editor>();
 
 		private void NewGame_Click(object sender, EventArgs e)
 		=> Play(new DefaultMap.WithPassiveEnemy(50, 50).GetMap());
@@ -77,6 +73,11 @@ namespace Pokus1
 			Map map = Form.Loading();
 			if(map != null)
 				Play(map);
+		}
+
+		private void Editor_Click_1(object sender, EventArgs e)
+		{
+			Form.OpenControl<Editor>();
 		}
 	}
 }

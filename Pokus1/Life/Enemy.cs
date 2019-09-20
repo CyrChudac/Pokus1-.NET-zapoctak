@@ -10,14 +10,12 @@ namespace Pokus1
 {
 	public abstract class Enemy : Life
 	{
-		public Enemy(int maxHealth, int currHealth, Movement movement, EnemyType Type,
+		public Enemy(int maxHealth, int currHealth, Movement movement,
 			Location location, IAnimation animation, Size size, string name, Map map)
 			: base(maxHealth, currHealth, location, movement, animation, size, name, map)
 		{
-			this.Type = Type;
 			movement.ChangeSpeed(Speed);
 		}
-		public EnemyType Type { get; protected set; }
 
 		public abstract int WaitingOnWalkEnd { get; } // time that enemy stays at the platform edge
 
@@ -31,14 +29,14 @@ namespace Pokus1
 	public class NormalEnemy : Enemy
 	{
 		public static readonly int DefaultMaxHealth = Attack.DefaultDamage;
-		public NormalEnemy(int currHealth, Movement movement, 
-			EnemyType Type, Location location, IAnimation animation, Size size, int number, Map map)
-			: base(DefaultMaxHealth, Math.Min(currHealth,Attack.DefaultDamage), movement, Type, location,
+		public NormalEnemy(int currHealth, Movement movement,
+			Location location, IAnimation animation, Size size, int number, Map map)
+			: base(DefaultMaxHealth, Math.Min(currHealth,Attack.DefaultDamage), movement, location,
 				  animation, size, nameof(NormalEnemy) + number.ToString(), map)
 		{}
-		public NormalEnemy(Movement movement, EnemyType Type, Location location,
+		public NormalEnemy(Movement movement, Location location,
 			IAnimation animation, Size size, int number, Map map)
-			: base(DefaultMaxHealth, DefaultMaxHealth, movement, Type, location,
+			: base(DefaultMaxHealth, DefaultMaxHealth, movement, location,
 				  animation, size, nameof(NormalEnemy) + number.ToString(), map)
 		{ }
 
@@ -52,28 +50,11 @@ namespace Pokus1
 	
 	public class PassiveEnemy : NormalEnemy
 	{
+		public static Color Color = Color.DarkRed;
 		public PassiveEnemy(Location location, int number, Map map)
-			: base(new UsualMovement(Life.defaultSpeed), EnemyType.normal, location,
+			: base(new Movement(Life.defaultSpeed), location,
 				  new SingleColorAnimation(Color.OrangeRed), Life.DefaultSize, number, map)
 		{ }
 		protected override void DuringUpdate() { }
 	}
-
-	//public class EnemyBase
-	//{
-	//	public Enemy Get(int maxHealth, int currHealth, Movement movement,
-	//		EnemyType type, Location location, IAnimation animation, Size size)
-	//	{
-	//		switch (type)
-	//		{
-	//			case EnemyType.normal:
-	//				return new NormalEnemy(maxHealth, currHealth, movement, type, location, animation, size);
-	//			default:
-	//				throw new WrongEnemyTypeFoundException();
-	//		}
-	//	}
-	//	public class WrongEnemyTypeFoundException : Exception { }
-	//}
-
-	public enum EnemyType { normal }
 }

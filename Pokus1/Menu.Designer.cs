@@ -51,7 +51,6 @@
 			// Editor
 			// 
 			this.Editor.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.Editor.Enabled = false;
 			this.Editor.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
 			this.Editor.Location = new System.Drawing.Point(229, 165);
 			this.Editor.Name = "Editor";
@@ -59,6 +58,7 @@
 			this.Editor.TabIndex = 2;
 			this.Editor.Text = "Editor";
 			this.Editor.UseVisualStyleBackColor = true;
+			this.Editor.Click += new System.EventHandler(this.Editor_Click_1);
 			// 
 			// NewGame
 			// 

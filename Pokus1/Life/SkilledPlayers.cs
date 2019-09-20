@@ -13,9 +13,10 @@ namespace Pokus1
 
 	class Jumper : Player
 	{
+		public static Color Color = Color.GreenYellow;
 		static int jumpDuration = 800;
 		[JsonIgnore]
-		int jumpSpeed => 3;
+		int jumpImportness => Movement.DirectionsImportness * 2 / 3;
 		[JsonRequired]
 		double lastTimeActivated = 0;
 		protected override void UseSkill()
@@ -28,24 +29,32 @@ namespace Pokus1
 		{
 			if (lastTimeActivated + jumpDuration > Time.Now)
 				if (Map.DirectionAccesable(this, Direction.up))
-					Movement.AddToDirection(new Location(0, -jumpSpeed - Movement.fallingSpeed));
+					Movement.AddToDirection(new Location(0, -jumpImportness - Movement.DirectionsImportness));
 				else
 					lastTimeActivated = Time.Now - jumpDuration;
 			else if (lastTimeActivated + 2 * jumpDuration > Time.Now
 				&& Map.AmIFalling(this)
 				&& Map.DirectionAccesable(this, Direction.up))
-				Movement.AddToDirection(new Location(0, -Movement.fallingSpeed / 2));
+				Movement.AddToDirection(new Location(0, -Movement.DirectionsImportness / 2));
 		}
-
-		public Jumper(int maxHealth, int currHealth, PlayerMovement movement,
+		[JsonConstructor]
+		public Jumper(int maxHealth, int currHealth, Movement movement,
 			string name, Location location, IAnimation animation, Size size, Map map)
-			: base(maxHealth, currHealth, movement, name, location, animation, size, map)
+			: base(maxHealth, currHealth, movement, name,
+				  location, animation, size, map)
+		{
+		}
+		public Jumper(int maxHealth, int currHealth, Movement movement,
+			string name, Location location, Size size, Map map)
+			: this(maxHealth, currHealth, movement, name,
+				  location, new SingleColorAnimation(Color), size, map)
 		{
 		}
 	}
 	
 	class KnifeThrower : Player
 	{
+		public static Color Color = Color.ForestGreen;
 		[JsonIgnore]
 		long cooldown => 1500;
 		[JsonRequired]
@@ -67,17 +76,24 @@ namespace Pokus1
 		static readonly int shotRange = 550;
 		static readonly int sizeModifier = 2;
 		static int projectileSpeed => Life.defaultSpeed * 2;
-		public KnifeThrower(int maxHealth, int currHealth, PlayerMovement movement, 
+		public KnifeThrower(int maxHealth, int currHealth, Movement movement,
+			string name, Location location, Size size, Map map)
+			: this(maxHealth, currHealth, movement, name, location, new SingleColorAnimation(Color), size, map)
+		{
+		}
+		[JsonConstructor]
+		public KnifeThrower(int maxHealth, int currHealth, Movement movement,
 			string name, Location location, IAnimation animation, Size size, Map map)
 			: base(maxHealth, currHealth, movement, name, location, animation, size, map)
 		{
-			attack = new RangedAttack(AttackSource.ally, shotRange, 
+			attack = new RangedAttack(AttackSource.ally, shotRange,
 				new Size(Map.OneTileWidth / sizeModifier, Map.OneTileHeight / sizeModifier), projectileSpeed);
 		}
 	}
 	
 	class Puddler : Player
 	{
+		public static Color Color = Color.Orange;
 		[JsonRequired]
 		bool active = false;
 		[JsonRequired]
@@ -94,16 +110,22 @@ namespace Pokus1
 			throw new NotImplementedException();
 		}
 
-		public Puddler(int maxHealth, int currHealth, PlayerMovement movement,
+		[JsonConstructor]
+		public Puddler(int maxHealth, int currHealth, Movement movement,
 			string name, Location location, IAnimation animation, Size size, Map map)
 			: base(maxHealth, currHealth, movement, name, location, animation, size, map)
+		{
+		}
+		public Puddler(int maxHealth, int currHealth, Movement movement,
+			string name, Location location, Size size, Map map)
+			: this(maxHealth, currHealth, movement, name, location, new SingleColorAnimation(Color), size, map)
 		{
 		}
 	}
 	
 	class Unskilled : Player
 	{
-		public Unskilled(int maxHealth, int currHealth, PlayerMovement movement,
+		public Unskilled(int maxHealth, int currHealth, Movement movement,
 			string name, Location location, IAnimation animation, Size size, Map map)
 			: base(maxHealth, currHealth, movement, name, location, animation, size, map)
 		{
@@ -112,6 +134,5 @@ namespace Pokus1
 		protected override void SkillUpdate() {}
 
 		protected override void UseSkill() {}
-
 	}
 }

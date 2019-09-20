@@ -24,9 +24,6 @@ namespace Pokus1
 		internal System.Windows.Forms.Timer timer1;
 		protected void GameForm_Load(object sender, EventArgs e)
 		{
-
-			label1.Text = Directory.GetCurrentDirectory();
-
 			Game.FirstRun();
 
 			GameLoop = new GameLoop(Game, timer1);
@@ -46,7 +43,6 @@ namespace Pokus1
 		public new void Update()
 		{
 			ToDo.RunAll();
-			//Game.Update();
 			renderer.Render();
 		}
 	}

@@ -13,6 +13,7 @@ namespace Pokus1
 	{
 		public static Size DefaultSize => new Size(100, 100);
 		public static readonly int defaultSpeed = 10;
+		public static readonly int defaultHealth = 100;
 		[JsonConstructor]
 		public Life(int maxHealth, int currHealth, Location location,
 			Movement movement, IAnimation animation, Size size, string name, Map map)
@@ -36,15 +37,17 @@ namespace Pokus1
 		protected virtual void DuringUpdate() { }
 		public void Update()
 		{
-			Movement.Reset();
+			Movement.BeforeMove();
 			if (Alive)
 			{
-				Movement.Move();
 				DuringUpdate();
 			}
 			if (Map.AmIFalling(this))
 				Movement.Fall();
-			Location += Movement.FinalDirection;
+			Location vector = Movement.CalculatedVector;
+			Location += (Movement.FinalLocation = Map.GoToLocation(this, vector));
+			Movement.AfterMove();
+			Movement.Reset();
 		}
 		public Direction LookingAt { get; protected set; } = Direction.right;
 		public readonly IAnimation Animation;

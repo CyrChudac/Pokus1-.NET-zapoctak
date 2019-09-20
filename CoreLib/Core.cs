@@ -128,6 +128,8 @@ namespace CoreLib
 	}
 
 	public class InputPoss {
+		public static readonly Input down = new Input.Player.Movement.Down();
+		public static readonly Input up = new Input.Player.Movement.Up();
 		public static readonly Input skill = new Input.Player.SkillUse(); 
 		public static readonly Input right = new Input.Player.Movement.Right();
 		public static readonly Input left = new Input.Player.Movement.Left();
@@ -153,6 +155,17 @@ namespace CoreLib
 			if (result < 0)
 				return result + b;
 			return result;
+		}
+	}
+
+	public static class ColorExtensions
+	{
+		public static Color OpositeColor(this Color c)
+		{
+			return Color.FromArgb(
+				255 - c.R,
+				255 - c.G,
+				255 - c.B);
 		}
 	}
 

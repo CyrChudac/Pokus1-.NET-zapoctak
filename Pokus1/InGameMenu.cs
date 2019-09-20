@@ -63,7 +63,10 @@ namespace Pokus1
 		{
 			Map map = Form.Loading();
 			if (map != null)
-				new Menu().Play(map);
+			{
+				Form.KillGame();
+				new Menu() { Form = Form }.Play(map);
+			}
 		}
 	}
 }

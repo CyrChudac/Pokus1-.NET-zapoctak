@@ -13,6 +13,7 @@ namespace Pokus1
 	class Game
 	{
 		public static readonly string SaveFileName = "Saves";
+		public static readonly string MapsFileName = "Maps";
 
 		internal Map map;
 		private readonly Map startingMap;
@@ -35,7 +36,7 @@ namespace Pokus1
 		{
 			Time.Start();
 			map = startingMap.Clone();  /* startingMap; /*	*/
-			Renderer.Camera = new Camera(map, Renderer);
+			Renderer.Camera = new Camera(new Size(map.Width * Map.OneTileWidth, map.Height * Map.OneTileHeight), Renderer);
 			SetCorrectCameraMovement();
 			Renderer.FirstRender(map);
 		}

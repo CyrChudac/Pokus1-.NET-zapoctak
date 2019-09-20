@@ -11,8 +11,23 @@ namespace CoreLib
 		{
 			public abstract class Movement : Player
 			{
-				public class Left : Movement { }
-				public class Right : Movement { }
+				public abstract Direction ToDirection();
+				public class Left : Movement
+				{
+					public override Direction ToDirection() => Direction.left;
+				}
+				public class Right : Movement
+				{
+					public override Direction ToDirection() => Direction.right;
+				}
+				public class Down : Movement
+				{
+					public override Direction ToDirection() => Direction.down;
+				}
+				public class Up : Movement
+				{
+					public override Direction ToDirection() => Direction.up;
+				}
 			}
 			public class SkillUse : Player { }
 		}

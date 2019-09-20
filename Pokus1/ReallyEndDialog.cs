@@ -13,7 +13,7 @@ namespace Pokus1
 	public partial class ReallyEndDialog : Form
 	{
 		public ReallyEndDialog()
-			: this (new Font("Pristina", 15.75F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)))) { }
+			: this (new Font("Comic Sans MS", 15.75F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)))) { }
 		public ReallyEndDialog(Font font)
 		{
 			Font font2 = new Font(font.FontFamily, font.Size + 10, FontStyle.Bold);
@@ -31,6 +31,11 @@ namespace Pokus1
 			=> this.DialogResult = DialogResult.No;
 
 		private void ReallyEndDialog_Load(object sender, EventArgs e)
+		{
+
+		}
+
+		private void ramecek_Enter(object sender, EventArgs e)
 		{
 
 		}

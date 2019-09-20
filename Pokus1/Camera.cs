@@ -5,31 +5,43 @@ using System.Text;
 using System.Threading.Tasks;
 using CoreLib;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace Pokus1
 {
+	public interface IWithCanvasSize
+	{
+		Size CanvasSize { get; }
+	}
 	public interface ICamera
 	{
-		Movement Movement { set; }
+		ILocationHolder locationHolder { set; }
 		void NewPlayerLocation(Location location);
 		Location Location { get; }
 		void Update();
 	}
 	public class Camera : ICamera
 	{
-		public Camera(Map map, IMapRenderer renderer)
+		public Camera(Size mapSize, IWithCanvasSize renderer)
 		{
-			this.map = map;
+			this.MapSize = mapSize;
 			this.renderer = renderer;
 		}
-		IMapRenderer renderer;
-		Map map;
-		int width => Map.OneTileWidth * map.Width;
-		int height => Map.OneTileHeight * map.Height;
-		int maxX => width - renderer.CanvasSize.Width;
-		int maxY => height - renderer.CanvasSize.Height;
+
+		public Camera(Size mapSize, IWithCanvasSize renderer, Location location)
+			: this(mapSize, renderer)
+		{
+			this.Location = location;
+			this.RealLocation = location;
+		}
+		IWithCanvasSize renderer;
+		readonly Size MapSize;
+		int width => MapSize.Width;
+		int height => MapSize.Height;
+		int maxX => Math.Max(0, width - renderer.CanvasSize.Width);
+		int maxY => Math.Max(0, height - renderer.CanvasSize.Height);
 		bool freezeX, freezeY;
-		public Movement Movement { protected get; set; }
+		public ILocationHolder locationHolder { protected get; set; }
 
 		public void NewPlayerLocation(Location location)
 		{
@@ -45,7 +57,7 @@ namespace Pokus1
 
 		public void Update()
 		{
-			RealLocation += Movement.FinalDirection;
+			RealLocation += locationHolder.GetHolding();
 			int x, y;
 			if (freezeX)
 				x = Location.x;

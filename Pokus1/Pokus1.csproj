@@ -70,6 +70,7 @@
     <Compile Include="GameScreenControl.Designer.cs">
       <DependentUpon>GameScreenControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="ILocationHolder.cs" />
     <Compile Include="Loading.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -161,6 +162,9 @@
     <EmbeddedResource Include="CharactersUi.resx">
       <DependentUpon>CharactersUi.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Editor.resx">
+      <DependentUpon>Editor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GameControl.resx">
       <DependentUpon>GameControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -186,6 +190,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="ReallyEndDialog.resx">
+      <DependentUpon>ReallyEndDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Saving.resx">
       <DependentUpon>Saving.cs</DependentUpon>
     </EmbeddedResource>

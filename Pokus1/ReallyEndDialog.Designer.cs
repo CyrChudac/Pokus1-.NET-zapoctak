@@ -39,17 +39,17 @@
 			// 
 			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.label1.AutoSize = true;
-			this.label1.Font = new System.Drawing.Font("Pristina", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label1.Font = new System.Drawing.Font("Comic Sans MS", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
 			this.label1.Location = new System.Drawing.Point(69, 33);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(237, 42);
+			this.label1.Size = new System.Drawing.Size(253, 45);
 			this.label1.TabIndex = 0;
 			this.label1.Text = "REALLY EXIT?";
 			// 
 			// yes
 			// 
 			this.yes.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-			this.yes.Font = new System.Drawing.Font("Pristina", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.yes.Font = new System.Drawing.Font("Comic Sans MS", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.yes.Location = new System.Drawing.Point(44, 107);
 			this.yes.Name = "yes";
 			this.yes.Size = new System.Drawing.Size(125, 59);
@@ -62,7 +62,7 @@
 			// 
 			this.no.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
 			this.no.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.no.Font = new System.Drawing.Font("Pristina", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.no.Font = new System.Drawing.Font("Comic Sans MS", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.no.Location = new System.Drawing.Point(207, 107);
 			this.no.Name = "no";
 			this.no.Size = new System.Drawing.Size(125, 59);
@@ -82,6 +82,7 @@
 			this.ramecek.Size = new System.Drawing.Size(375, 199);
 			this.ramecek.TabIndex = 3;
 			this.ramecek.TabStop = false;
+			this.ramecek.Enter += new System.EventHandler(this.ramecek_Enter);
 			// 
 			// ReallyEndDialog
 			// 

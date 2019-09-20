@@ -23,9 +23,8 @@ namespace Pokus1
 
 		protected override bool IsInputKey(Keys keyData)
 		{
-			if (playerInputCheck.Keys.Contains(keyData))
-				return true;
-			return gameInputCheck.Keys.Contains(keyData);
+			return gameInputCheck.Keys.Contains(keyData) ||
+				playerInputCheck.Keys.Contains(keyData);
 		}
 
 		public void Reset()

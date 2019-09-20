@@ -13,7 +13,7 @@ namespace Pokus1
 {
 	[JsonObject()]
 	public class Map
-	{	
+	{
 		[JsonIgnore]
 		bool victory = false;
 		[JsonIgnore]
@@ -46,29 +46,38 @@ namespace Pokus1
 		[JsonRequired]
 		private readonly IMapTile[,] map;
 
-		public Map Clone()
+		[JsonConstructor]
+		public Map(IMapTile[,] map)
 		{
-			JsonSerializer js = Json.DefaultSerializer;
-			MemoryStream s = new MemoryStream();
-			new MapSerializer(s).Save(this, js);
-			Map result = new BinaryMapDeserializer(s).GetMap(js);
-			s.Dispose();
-			return result;
+			this.map = map;
+			this.Height = map.GetLength(1);
+			this.Width = map.GetLength(0);
 		}
 
 		/// <param name="x">Width</param>
 		/// <param name="y">Height</param>
-		public IMapTile this [int x, int y]
+		public IMapTile this[int x, int y]
 		{
 			get { return map[x, y]; }
 
 			set { map[x, y] = value; }
 		}
 
+		public Map Clone()
+		{
+			JsonSerializer js = Json.DefaultSerializer;
+			MemoryStream s = new MemoryStream();
+			new MapSerializer(s).Save(this, js);
+			s.Position = 0;
+			Map result = new BinaryMapDeserializer(s).GetMap(js);
+			s.Dispose();
+			return result;
+		}
+
 		public void Update(ref int activePlayer)
 		{
 			if (!GameEnd)
-			{ 
+			{
 				if (!Players[activePlayer].Alive)
 					activePlayer = (activePlayer + 1).Modulo(Players.Count);
 
@@ -76,7 +85,7 @@ namespace Pokus1
 					Players[i].Update();
 				for (int i = 0; i < Enemies.Count; i++)
 					Enemies[i].Update();
-				for(int i = 0; i < NoninteractiveItems.Count; i++)
+				for (int i = 0; i < NoninteractiveItems.Count; i++)
 					NoninteractiveItems[i].Update();
 			}
 		}
@@ -140,16 +149,54 @@ namespace Pokus1
 		public bool DirectionAccesable(IMovableObject obj, Direction dir)
 			=> new DirectionAccesor(this).DirectionAccesable(obj, dir);
 
+		static Map()
+		{
+			LocFindCycles = (int)Math.Log(OneTileHeight, 2);
+		}
+		private static int LocFindCycles;
+		public Location GoToLocation(IGameObject obj, Location vector)
+		{
+			DirectionAccesor da = new DirectionAccesor(this);
+			Location from = DetermineCorner(obj, vector);
+			int y = vector.y;
+			int x = vector.x;
+			if (x != 0)
+				while (!da.CanGoSomewhere(obj.Height, OneTileHeight, i => from.x + x, i => obj.Location.y + i))
+				{
+					x -= Math.Sign(vector.x);
+					if (x == 0)
+						break;
+				}
+			if (y != 0)
+				while (!da.CanGoSomewhere(obj.Width, OneTileWidth, i => obj.Location.x + i, i => from.y + y))
+				{
+					y -= Math.Sign(vector.y);
+					if (y == 0)
+						break;
+				}
+			return new Location(x, y);
+		}
+
+		private Location DetermineCorner( IGameObject obj, Location vector)
+		{
+			if (vector.x < 0)
+				if (vector.y < 0)
+					return obj.Location;
+				else
+					return new Location(obj.Location.x, obj.Location.y + obj.Size.Height);
+			else
+				if (vector.y < 0)
+				return new Location(obj.Location.x + obj.Size.Width, obj.Location.y);
+			else
+				return new Location(obj.Location.x + obj.Size.Width, obj.Location.y + obj.Size.Height);
+		}
+
 		class DirectionAccesor
 		{
-			Map map;
+			readonly Map map;
 			public DirectionAccesor(Map map) => this.map = map;
-			double left;
-			double top;
 			public bool DirectionAccesable(IMovableObject obj, Direction direction)
 			{
-				left = obj.Location.x   ;  /* - obj.Width / 2;		/*			*/
-				top = obj.Location.y	;  /* - obj.Height / 2;		/*			*/
 				switch (direction)
 				{
 					case Direction.up:
@@ -166,56 +213,21 @@ namespace Pokus1
 			}
 			bool CanGoUp(IMovableObject obj)
 				=> CanGoSomewhere(obj.Width, OneTileWidth,
-					i => top - obj.Movement.Speed, i => left + i);
-			//{
-			//	for (double i = 0; i <= obj.Width; i += map.oneTileWidth)
-			//	{
-			//		if (!LocationAccesable(top - obj.Movement.Speed, left + i))
-			//		{
-			//			return false;
-			//		}
-			//	}
-			//	return true;
-			//}
+					i => obj.Location.x + i,
+					i => obj.Location.y - obj.Movement.ExampleLoc.y);
 			bool CanGoDown(IMovableObject obj)
 				=> CanGoSomewhere(obj.Width, OneTileWidth,
-					i => top + obj.Height + obj.Movement.Speed, i => left + i);
-			//{
-			//	for (double i = 0; i <= obj.Width; i += map.oneTileWidth)
-			//	{
-			//		if (!LocationAccesable(top + obj.Height + obj.Movement.Speed, left + i))
-			//		{
-			//			return false;
-			//		}
-			//	}
-			//	return true;
-			//}
+					i => obj.Location.x + i,
+					i => obj.Location.y + obj.Height + obj.Movement.ExampleLoc.y);
 			bool CanGoLeft(IMovableObject obj)
 				=> CanGoSomewhere(obj.Height, OneTileHeight,
-					i => top + i, i => left - obj.Movement.Speed);
-			//{
-			//	for (double i = 0; i <= obj.Height; i += map.oneTileHeight)
-			//	{
-			//		if (!LocationAccesable(top + i, left - obj.Movement.Speed))
-			//		{
-			//			return false;
-			//		}
-			//	}
-			//	return true;
-			//}
+					i => obj.Location.x - obj.Movement.ExampleLoc.x,
+					i => obj.Location.y + i);
 			bool CanGoRight(IMovableObject obj)
 				=> CanGoSomewhere(obj.Height, OneTileHeight,
-					i => top + i, i => left + obj.Width + obj.Movement.Speed);
-			//{
-			//	for (double i = 0; i <= obj.Height; i += map.oneTileHeight)
-			//	{
-			//		if (!LocationAccesable(top + i, left + obj.Width + obj.Movement.Speed))
-			//		{
-			//			return false;
-			//		}
-			//	}
-			//	return true;
-			//}
+					i => obj.Location.x + obj.Width + obj.Movement.ExampleLoc.x,
+					i => obj.Location.y + i);
+
 			/// <summary>
 			/// In for cyclus goes on the edge of an object and determines,
 			/// wheter the given place can be accessable.
@@ -225,7 +237,7 @@ namespace Pokus1
 			/// <param name="LocationX">function, that for given iteration of the cyclus gives the X coordinate</param>
 			/// <param name="LocationY">function, that for given iteration of the cyclus gives the Y coordinate</param>
 			/// <returns></returns>
-			bool CanGoSomewhere(double maxPlus1, int step,
+			public bool CanGoSomewhere(double maxPlus1, int step,
 				Func<double, double> LocationX, Func<double, double> LocationY)
 			{
 				for (double i = 0; i < maxPlus1; i += step)
@@ -235,9 +247,11 @@ namespace Pokus1
 						return false;
 					}
 				}
+				if (!LocationAccesable(LocationX(maxPlus1), LocationY(maxPlus1)))
+					return false; 
 				return true;
 			}
-			bool LocationAccesable(double y, double x)
+			public bool LocationAccesable(double x, double y)
 			{
 				int X = (int)x / OneTileWidth;
 				int Y = (int)y / OneTileHeight;
@@ -246,26 +260,17 @@ namespace Pokus1
 					case null:
 					case var ig when (ig is NoTile):
 						return true;
-					case var ig2 when (ig2 is Killer):
 					case var ig3 when (ig3 is FullWall):
+					case var ig2 when (ig2 is Killer):
 						return false;
 				}
 				throw new Exception("Unknown map tile detected next to given object.");
 			}
-			bool LocationAccesable(Location loc)
-			{ return LocationAccesable(loc.x, loc.y); }
-		}
-
-		[JsonConstructor]
-		public Map(IMapTile[,] map)
-		{
-			this.map = map;
-			this.Height = map.GetLength(1);
-			this.Width = map.GetLength(0);
 		}
 	}
 
-	public interface IMapTile {
+	public interface IMapTile
+	{
 		System.Drawing.Color Color { get; }
 		System.Drawing.Brush Brush { get; }
 	}

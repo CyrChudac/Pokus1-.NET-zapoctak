@@ -26,14 +26,14 @@ namespace Pokus1
 
 	public class RangedAttack : Attack
 	{
-		readonly Size ProjectilSize;
+		readonly Size projectileSize;
 		int projectileSpeed;
 		public RangedAttack(AttackSource source, int attackRange,
-			Size projectilSize, int projectilSpeed)
+			Size projectileSize, int projectileSpeed)
 			: base (source, attackRange)
 		{
-			this.ProjectilSize = projectilSize;
-			this.projectileSpeed = projectilSpeed;
+			this.projectileSize = projectileSize;
+			this.projectileSpeed = projectileSpeed;
 		}
 		public override void Proceed(Life source)
 		{
@@ -51,7 +51,7 @@ namespace Pokus1
 				this.source,
 				attackRange,
 				source.Middle + ((Location)source.LookingAt * ((Location)source.Size / 2)),
-				ProjectilSize,
+				projectileSize,
 				source.Name,
 				source.Map,
 				projectileSpeed,
@@ -112,7 +112,7 @@ namespace Pokus1
 			this.Location = location;
 			this.startingLoc = location;
 			this.Size = size;
-			this.Name = "Projectil of " + sourceName;
+			this.Name = "Projectile of " + sourceName;
 			this.map = map;
 			this.Animation = animation;
 		}
@@ -132,12 +132,13 @@ namespace Pokus1
 			if ((startingLoc - Location).Distance > distance)
 				map.RemoveMe(this);
 			if (dirs.TrueForAll(dir => map.DirectionAccesable(this, dir)))
-				Movement.ResetAndMove();
+			{
+				Movement.BeforeMove();
+				this.Location += Movement.CalculatedVector;
+				Movement.AfterMove();
+			}
 			else
 				map.RemoveMe(this);
-
-
-			this.Location += Movement.FinalDirection;
 		}
 	}
 

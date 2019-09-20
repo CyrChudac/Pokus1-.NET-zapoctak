@@ -8,53 +8,51 @@ using Newtonsoft.Json;
 
 namespace Pokus1
 {
-	public abstract class Movement
+	public class Movement : ILocationHolder
 	{
+		[JsonConstructor]
 		public Movement(int speed, int fallingSpeed):this(speed)
 		{
 			this.fallingSpeed = fallingSpeed;
 		}
 		public Movement(int speed) {
 			this.Speed = speed;
+
+			AddToDirection(new Location(1, 1));
+			_exLoc = CalculatedVector;
 		}
 		[JsonRequired]
-		public int fallingSpeed { get; protected set; } = 10;
+		public int fallingSpeed { get; protected set; } = 15;
 
-		protected static readonly int directionsImportness = Time.delay / 3;
+		public void AddDirectionToDirection(Direction dir) => AddToDirection((Location)dir * DirectionsImportness);
+		public static readonly int DirectionsImportness = Time.delay / 3;
 		public static float shift => Time.TimeFlow * Time.DeltaTime ;
 		[JsonRequired]
-		public int Speed { get; protected set; }
+		public int Speed { get; protected set; } = 5;
 		[JsonIgnore]
-		protected Location location = new Location();
+		private Location location = new Location();
+		public object locationLocker = new object();
 		[JsonIgnore]
-		public Location FinalDirection
+		public Location CalculatedVector
 			=> location.Normalize(Speed, fallingSpeed);
-		
-		public void Fall() => AddToDirection(new Location(0, fallingSpeed)* shift);
+
+		Location _exLoc;
+		public Location ExampleLoc => _exLoc;
+
+		public void Fall() => AddToDirection(new Location(0, DirectionsImportness));
 		public void AddToDirection(Location loc)
 		{
-			location += loc * directionsImportness;
-		}
-		public virtual void Move(int speed)
-		{
-			int tmp = this.Speed;
-			this.Speed = speed;
-			Move();
-			this.Speed = tmp;
-		}
-		public void ResetAndMove()
-		{
-			Reset();
-			Move();
-		}
-		public void ResetAndMove(int speed)
-		{
-			Reset();
-			Move(speed);
+			location += loc * shift;
 		}
 		public void Reset() => location = new Location();
-		public abstract void Move();
+		public virtual void BeforeMove() { }
+		public virtual void AfterMove() { }
 		public void ChangeSpeed(int newSpeed) { Speed = newSpeed; }
+
+
+		public Location FinalLocation { private get; set; } = new Location();
+		Location ILocationHolder.GetHolding()
+			=> FinalLocation;
 	}
 
 	public interface IMovableObject : IGameObject
@@ -62,24 +60,10 @@ namespace Pokus1
 		Movement Movement { get; }
 	}
 	
-	public abstract class PlayerMovement: Movement
+	public sealed class NoMovement: Movement
 	{
-		public PlayerMovement(int speed) : base(speed) { }
-		public PlayerMovement(int speed, int fallingSpeed) : base(speed, fallingSpeed) { }
-		public virtual void AddKey(Input input) => ActiveKeys.Add(input);
-		public abstract List<Input> ActiveKeys { set; protected get; }
-	}
-	
-	public sealed class NoMovement: PlayerMovement
-	{
-		private NoMovement():base(0) { }
-		public override void Move(int speed) { }
-		public override void Move() { }
-
-		public override void AddKey(Input input) { }
+		private NoMovement():base(0, 0) { }
 
 		public static readonly NoMovement instance = new NoMovement();
-
-		public override List<Input> ActiveKeys { protected get => new List<Input>(); set { } }
 	}
 }

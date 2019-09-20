@@ -18,9 +18,9 @@ namespace Pokus1
 		{
 		}
 		Location Vector;
-		public override void Move()
+		public override void BeforeMove()
 		{
-			location += (Vector*Speed).Normalize(shift,0);
+			AddToDirection(Vector);
 		}
 	}
 }

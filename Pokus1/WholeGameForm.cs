@@ -25,7 +25,6 @@ namespace Pokus1
 			KeyPreview = true;
 			OpenControl<Menu>();
 		}
-
 		internal void SetGameThread(Thread gameThread)
 		{
 			if (this.gameThread != null)
@@ -78,8 +77,7 @@ namespace Pokus1
 		}
 		public new void Close()
 		{
-			ReallyEndDialog dialog = new ReallyEndDialog();
-			if (ShowDialog(dialog))
+			if (ShowDialog(new ReallyEndDialog()))
 				base.Close();
 		}
 
@@ -99,7 +97,7 @@ namespace Pokus1
 			}
 		}
 
-		private bool ShowDialog(Form dialog)
+		internal bool ShowDialog(Form dialog)
 		{
 			dialog.StartPosition = FormStartPosition.CenterScreen;
 			DialogResult result = dialog.ShowDialog();
@@ -111,10 +109,14 @@ namespace Pokus1
 			Pokus1.Loading loading = new Loading();
 			if (ShowDialog(loading))
 			{
-				Stream s = new FileStream(Game.SaveFileName + @"\" + (string)loading.list.SelectedItem, FileMode.Open);
+				try
+				{
+					Stream s = new FileStream(Game.SaveFileName + @"\" + (string)loading.list.SelectedItem, FileMode.Open);
 				Map result = new BinaryMapDeserializer(s).GetMap(Json.DefaultSerializer);
 				s.Dispose();
 				return result;
+				}
+				catch (IOException) { }
 			}
 			return null;
 		}
