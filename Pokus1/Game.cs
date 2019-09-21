@@ -15,6 +15,7 @@ namespace Pokus1
 	public class Game
 	{
 		public static int ThreadsCount => Process.GetCurrentProcess().Threads.Count;
+		public static readonly string LevelsFileName = "Levels";
 		public static readonly string SaveFileName = "Saves";
 		public static readonly string MapsFileName = "Saves";
 		public static readonly string ImagesFileName = "Images";

@@ -27,8 +27,28 @@ namespace Pokus1
 
 		private void Options_Click(object sender, EventArgs e) => Form.OpenControl<Options>();
 
+		int currLevel = 0;
 		private void NewGame_Click(object sender, EventArgs e)
-		=> Play(new DefaultMap.WithPassiveEnemy(50, 50).GetMap());
+		{
+			string fileName = GetCurrLevelName();
+			if (fileName == null)
+			{
+				currLevel = 0;
+				fileName = GetCurrLevelName();
+			}
+			currLevel++;
+			Play(new JsonMapDeserializer(new FileStream(fileName, FileMode.Open)).GetMap());
+		}
+
+		string GetCurrLevelName()
+		{
+			foreach (var f in Directory.GetFiles(Game.CurrentDirectory + @"\" + Game.LevelsFileName))
+			{
+				if (f.Contains(currLevel.ToString()))
+					return f;
+			}
+			return null;
+		}
 
 		public void Play(Map map)
 		{

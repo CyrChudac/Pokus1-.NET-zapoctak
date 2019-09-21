@@ -80,7 +80,7 @@ namespace Pokus1
 			MemoryStream s = new MemoryStream();
 			new MapSerializer(s).Save(this, js);
 			s.Position = 0;
-			Map result = new BinaryMapDeserializer(s).GetMap(js);
+			Map result = new JsonMapDeserializer(s).GetMap(js);
 			s.Dispose();
 			return result;
 		}

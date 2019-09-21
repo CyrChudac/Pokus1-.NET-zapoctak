@@ -300,10 +300,10 @@ namespace Pokus1
 
 	interface IMapDesearilizer : IMapBuilder {}
 
-	class BinaryMapDeserializer : IMapDesearilizer, IDisposable
+	class JsonMapDeserializer : IMapDesearilizer, IDisposable
 	{
 		readonly Stream stream;
-		public BinaryMapDeserializer(Stream stream)
+		public JsonMapDeserializer(Stream stream)
 		{
 			this.stream = stream;
 		}
@@ -321,8 +321,6 @@ namespace Pokus1
 			foreach (Enemy e in result.Enemies)
 				e.Map = result;
 			return result;
-			//DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(Map));
-			//return (Map)jsonSer.ReadObject(stream);
 		}
 	}
 }
