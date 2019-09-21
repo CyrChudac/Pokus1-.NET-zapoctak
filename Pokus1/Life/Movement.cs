@@ -22,19 +22,19 @@ namespace Pokus1
 			_exLoc = CalculatedVector;
 		}
 		[JsonRequired]
-		public int fallingSpeed { get; protected set; } = 15;
+		public int fallingSpeed { get; protected set; } = 8 * Map.OneTileHeight;
 
 		public void AddDirectionToDirection(Direction dir) => AddToDirection((Location)dir * DirectionsImportness);
 		public static readonly int DirectionsImportness = Time.delay / 3;
-		public static float shift => Time.TimeFlow * Math.Max(Time.DeltaTime, 1);
+		public static float shift => Math.Max(1f / Life.defaultSpeed, Time.TimeFlow * Math.Max(Time.DeltaTime, 1) / 1000);
 		[JsonRequired]
-		public int Speed { get; protected set; } = 5;
+		public int Speed { get; protected set; }
 		[JsonIgnore]
 		private Location location = new Location();
 		public object locationLocker = new object();
 		[JsonIgnore]
 		public Location CalculatedVector
-			=> location.Normalize(Speed, fallingSpeed);
+			=> location.Normalize(Speed * shift, fallingSpeed * shift);
 
 		Location _exLoc;
 		public Location ExampleLoc => _exLoc;
@@ -42,7 +42,7 @@ namespace Pokus1
 		public void Fall() => AddToDirection(new Location(0, DirectionsImportness));
 		public void AddToDirection(Location loc)
 		{
-			location += loc * shift;
+			location += loc;
 		}
 		public void Reset() => location = new Location();
 		public virtual void BeforeMove() { }

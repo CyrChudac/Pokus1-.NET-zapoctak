@@ -19,10 +19,6 @@ namespace Pokus1
 		{
 			InitializeComponent();
 			startingBckColor = this.BackColor;
-			//this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-			//this.BackColor = Color.FromArgb(230, startingBckColor);
-			//this.BackColor = Color.Transparent;
-			//this.BackColor = Color.FromArgb(50, Color.Black);
 		}
 
 		private void InGameMenu_Load(object sender, EventArgs e)

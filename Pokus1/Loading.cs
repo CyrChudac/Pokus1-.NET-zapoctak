@@ -23,7 +23,7 @@ namespace Pokus1
 
 		private void Loading_Load(object sender, EventArgs e)
 		{
-			foreach (var f in Directory.GetFiles(Game.SaveFileName))
+			foreach (var f in Directory.GetFiles(Game.CurrentDirectory + @"\" + Game.SaveFileName))
 				list.Items.Add(f.Substring(f.LastIndexOf('\\') + 1));
 		}
 

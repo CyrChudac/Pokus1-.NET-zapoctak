@@ -8,7 +8,7 @@ using CoreLib;
 
 namespace Pokus1
 {
-	interface IInputGetter
+	public interface IInputGetter
 	{
 		HashSet<Input> CurrPlayerButtons { get; }
 		HashSet<Input> CurrGameButtons { get; }

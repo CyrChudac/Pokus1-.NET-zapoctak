@@ -12,7 +12,7 @@ namespace Pokus1
 	public abstract class Life : IMovableObject
 	{
 		public static Size DefaultSize => new Size(100, 100);
-		public static readonly int defaultSpeed = 10;
+		public static readonly int defaultSpeed = 6 * Map.OneTileWidth;
 		public static readonly int defaultHealth = 100;
 		[JsonConstructor]
 		public Life(int maxHealth, int currHealth, Location location,

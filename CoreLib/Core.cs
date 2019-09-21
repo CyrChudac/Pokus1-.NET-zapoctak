@@ -37,7 +37,7 @@ namespace CoreLib
 			if (d != 0)
 			{
 				int x = (int)((this.x * xModificator) / d);
-				int y = (int)((this.y * yModificator) / d);
+				int y = Math.Sign(this.y) * (int)yModificator; //(int)((this.y * yModificator) / d);
 				return new Location(x, y);
 			}
 			return new Location();

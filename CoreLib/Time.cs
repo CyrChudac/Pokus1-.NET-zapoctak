@@ -12,7 +12,7 @@ namespace CoreLib
 		/// Number from 0 to 1 representing how much is time running at the moment.
 		/// </summary>
 		public static float TimeFlow { get; private set; } = 1;
-		public static readonly int delay = 60;
+		public static readonly int delay = 20;
 		public static long Now { get; private set; } = 0;
 		public static bool IsRunning => TimeFlow > 0;
 

@@ -14,7 +14,7 @@ namespace Pokus1
 	class Jumper : Player
 	{
 		public static Color Color = Color.GreenYellow;
-		static int jumpDuration = 800;
+		static int jumpDuration = 650;
 		[JsonIgnore]
 		int jumpImportness => Movement.DirectionsImportness * 2 / 3;
 		[JsonRequired]

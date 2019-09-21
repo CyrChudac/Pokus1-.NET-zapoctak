@@ -12,7 +12,7 @@ namespace Pokus1
 		void Do<T>(Func<T> f);
 	}
 
-	interface ToDo
+	public interface ToDo
 	{
 		void RunAll();
 		Action What { get; }

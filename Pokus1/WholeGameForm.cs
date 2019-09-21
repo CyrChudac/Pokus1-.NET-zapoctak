@@ -13,8 +13,14 @@ using CoreLib;
 
 namespace Pokus1
 {
-	public partial class WholeGameForm : Form
+	public interface IGameObjectOpener
 	{
+		GameObjectControl OpenControl<T>() where T : GameObjectControl, new();
+		GameObjectControl OpenControl(GameObjectControl control);
+	}
+
+	public partial class WholeGameForm : Form, IGameObjectOpener
+	{ 
 		Stack<GameObjectControl> ControlOrder = new Stack<GameObjectControl>();
 		public WholeGameForm()
 		{
@@ -46,8 +52,6 @@ namespace Pokus1
 		public GameObjectControl OpenControl<T>() where T : GameObjectControl, new()
 		{
 			T control = new T();
-			control.Visible = true;
-			control.Dock = DockStyle.Fill;
 			return OpenControl(control);
 		}
 		public GameObjectControl OpenControl(GameObjectControl control)
@@ -56,6 +60,7 @@ namespace Pokus1
 			if (ControlOrder.Count > 0)
 					ControlOrder.Peek().Visible = false;
 			ControlOrder.Push(control);
+			control.Dock = DockStyle.Fill;
 			control.Form = this;
 			control.Focus();
 			return control;
@@ -113,7 +118,8 @@ namespace Pokus1
 			{
 				try
 				{
-					Stream s = new FileStream(Game.SaveFileName + @"\" + (string)loading.list.SelectedItem, FileMode.Open);
+					Stream s = new FileStream(Game.CurrentDirectory + @"\" + 
+						Game.SaveFileName + @"\" + (string)loading.list.SelectedItem, FileMode.Open);
 				Map result = new BinaryMapDeserializer(s).GetMap(Json.DefaultSerializer);
 				s.Dispose();
 				return result;

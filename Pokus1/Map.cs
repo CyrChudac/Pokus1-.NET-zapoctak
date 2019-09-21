@@ -15,17 +15,28 @@ namespace Pokus1
 	public class Map
 	{
 		[JsonIgnore]
-		bool victory = false;
+		public bool Victory
+		{
+			get
+			{
+				if (!Enemies.Any(Enemy => Enemy.Alive))
+					if (Players.Count > 1)
+					{
+						for (int i = 1; i < Players.Count; i++)
+						{
+							if (!ObjInObj(Players[i], Players[0]))
+								return false;
+						}
+						return true;
+					}
+					else return true;
+				else return false;
+			}
+		}
 		[JsonIgnore]
-		public bool Victory => !Enemies.Any(Enemy => Enemy.Alive) || victory;
-		public void SetVictory() { victory = true; }
+		public bool Defeat => !Players.All(Player => Player.Alive);
 		[JsonIgnore]
-		bool defeat = false;
-		[JsonIgnore]
-		public bool Defeat => !Players.All(Player => Player.Alive) || defeat;
-		public void SetDefeat() { defeat = true; }
-		[JsonIgnore]
-		public bool GameEnd => victory || defeat;
+		public bool GameEnd => Victory || Defeat;
 
 		private static int OneTileSizeModifier = 38;
 		//Both coordinates are made from width on purpose to make the tile size as square.
@@ -139,8 +150,8 @@ namespace Pokus1
 					LocationInObject(first.Location + (Location)first.Size, second);
 
 		private bool LocationInObject(Location loc, IGameObject obj)
-		=> (loc.x > obj.Location.x && loc.y > obj.Location.y) &&
-					(loc.x < obj.Location.x + obj.Size.Width && loc.y < obj.Location.y + obj.Size.Height);
+		=> (loc.x >= obj.Location.x && loc.y >= obj.Location.y) &&
+					(loc.x <= obj.Location.x + obj.Size.Width && loc.y <= obj.Location.y + obj.Size.Height);
 
 		#endregion
 

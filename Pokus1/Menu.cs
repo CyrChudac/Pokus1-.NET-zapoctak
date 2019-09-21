@@ -33,7 +33,7 @@ namespace Pokus1
 		public void Play(Map map)
 		{
 			GameControl gf = new GameControl();
-			Game game = new Game(map.Clone(), gf, gf, gf);
+			Game game = new Game(map.Clone(), gf, Form, gf, gf);
 			gf.Game = game;
 			gf.Form = Form;
 			gf.Dock = DockStyle.Fill;
@@ -49,8 +49,8 @@ namespace Pokus1
 			gs.charactersUi = charactersUi;
 			gs.gameControl = gf;
 
-			Form.OpenControl(gs);
 			game.FirstRun();
+			Form.OpenControl(gs);
 		}
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -78,6 +78,11 @@ namespace Pokus1
 		private void Editor_Click_1(object sender, EventArgs e)
 		{
 			Form.OpenControl<Editor>();
+		}
+
+		private void HelpButton_Click(object sender, EventArgs e)
+		{
+			Form.OpenControl<HelpControl>();
 		}
 	}
 }

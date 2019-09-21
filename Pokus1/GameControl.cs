@@ -14,29 +14,25 @@ using System.IO;
 namespace Pokus1
 //{
 {
-	public partial class GameControl : GameObjectControl
+
+	public interface IWithToDo
+	{
+		ToDo ToDo { get; set; }
+	}
+
+	public partial class GameControl : GameObjectControl, IWithToDo
 	{
 		public GameControl()
 		{
 			InitializeComponent();
 		}
-
-		internal System.Windows.Forms.Timer timer1;
+		
 		protected void GameForm_Load(object sender, EventArgs e)
 		{
-			Game.FirstRun();
-
-			GameLoop = new GameLoop(Game, timer1);
-			GameLoopThread = new Thread(new ThreadStart(GameLoop.Start));
-			GameLoopThread.Start();
-			Form.SetGameThread(GameLoopThread);
 		}
 
 		internal Game Game { get; set; }
-		internal ToDo ToDo { get; set; }
-
-		private Thread GameLoopThread;
-		private GameLoop GameLoop;
+		public ToDo ToDo { get; set; }
 
 		IMapRenderer renderer => Game.Renderer;
 

@@ -1,6 +1,6 @@
 ﻿namespace Pokus1
 {
-	partial class GameScreenControl
+	partial class HelpControl
 	{
 		/// <summary> 
 		/// Required designer variable.
@@ -30,13 +30,15 @@
 		{
 			this.SuspendLayout();
 			// 
-			// GameScreenControl
+			// HelpControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Name = "GameScreenControl";
-			this.Size = new System.Drawing.Size(533, 347);
-			this.Load += new System.EventHandler(this.GameScreenControl_Load);
+			this.Name = "HelpControl";
+			this.Size = new System.Drawing.Size(429, 231);
+			this.Load += new System.EventHandler(this.HelpControl_Load);
+			this.Click += new System.EventHandler(this.HelpControl_Click);
+			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.HelpControl_KeyDown);
 			this.ResumeLayout(false);
 
 		}

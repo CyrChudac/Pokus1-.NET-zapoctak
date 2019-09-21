@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CoreLib;
+using System.Threading;
 
 namespace Pokus1
 {
@@ -16,24 +17,29 @@ namespace Pokus1
 		public GameScreenControl()
 		{
 			InitializeComponent();
-			timer1.Interval = Time.delay;
 		}
 
 		internal CharactersUi charactersUi;
 		internal GameControl gameControl;
+
+		private Thread GameLoopThread;
+		private GameLoop GameLoop;
+
 		private void GameScreenControl_Load(object sender, EventArgs e)
 		{
-			gameControl.timer1 = timer1;
+			GameLoop = new GameLoop(gameControl.Game, this);
+			GameLoopThread = new Thread(new ThreadStart(GameLoop.Start));
+			GameLoopThread.Start();
+			Form.SetGameThread(GameLoopThread);
+
 			Controls.Add(gameControl);
 			Controls.Add(charactersUi);
 			gameControl.Focus();
 			charactersUi.TabStop = false;
 			
-			timer1.Start();
 			Cursor.Hide();
 		}
-
-		private void timer1_Tick(object sender, EventArgs e)
+		public new void Update()
 		{
 			gameControl.Update();
 			charactersUi.Update();

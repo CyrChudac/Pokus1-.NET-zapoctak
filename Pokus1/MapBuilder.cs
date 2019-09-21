@@ -16,7 +16,7 @@ namespace Pokus1
 		Map GetMap();
 	}
 
-	class DefaultMap
+	public class DefaultMap
 	{
 		readonly int width;
 		readonly int height;

@@ -21,168 +21,6 @@ namespace Pokus1
 		Image DarkenImage(Image i, float DarkenCoeficient);
 	}
 
-	//public partial class GameControl : IMapRenderer
-	//{
-	//	Map map;
-	//	Label[,] tiles;
-	//	List<PictureBox> players;
-	//	List<PictureBox> enemies;
-	//	List<Label> items;
-	//	public ICamera Camera { set; protected get; }
-
-	//	public void SetCameraMovement(Movement movement) => Camera.Movement = movement;
-
-	//	public virtual void FirstRender(Map map)
-	//	{
-	//		Form.Bounds = Screen.PrimaryScreen.Bounds;
-	//		this.map = map;
-	//		MakeAll();
-	//		RenderMap();
-	//		Render();
-	//	}
-	//	public virtual void Render()
-	//	{
-	//		Camera.Update();
-	//		RenderPlayers();
-	//		RenderEnemies();
-	//		RenderItems();
-	//	}
-
-	//	void RenderMap()
-	//	{
-			
-	//		for(int i = 0; i < tiles.GetLength(0); i++)
-	//			for(int j = 0; j < tiles.GetLength(1); j++)
-	//			{
-	//				if(map[i,j] != NoTile.Tile)
-	//					tiles[i, j].BackColor = map[i, j].Color;
-	//			}
-	//	}
-
-	//	void RenderPlayers()
-	//	{
-	//		for (int i = 0; i < players.Count; i++)
-	//		{
-	//			players[i].Image = map.Players[i].Animation.Image;
-	//			players[i].Size = map.Players[i].Size;
-	//			players[i].Location = map.Players[i].Location;
-	//		}
-	//	}
-
-	//	void RenderEnemies()
-	//	{
-	//		for (int i = 0; i < enemies.Count; i++)
-	//		{
-	//			enemies[i].Image = map.Enemies[i].Animation.Image;
-	//			enemies[i].Location =
-	//				new Point(map.Enemies[i].Location.x, map.Enemies[i].Location.y);
-	//		}
-	//	}
-
-	//	void RenderItems()
-	//	{
-	//		for (int i = 0; i < items.Count; i++)
-	//		{
-	//			items[i].BackColor = map.OtherItems[i].Color;
-	//			items[i].Location = 
-	//				new System.Drawing.Point(map.OtherItems[i].Location.x, map.OtherItems[i].Location.y);
-	//		}
-	//	}
-
-	//	#region void MakeAll()...
-	//	void MakeAll()
-	//	{
-	//		// Order of this determines the Z axes
-	//		MakeTiles();
-	//		MakeEnemies();
-	//		MakeItems();
-	//		MakePlayers();
-	//	}
-
-	//	void MakeTiles()
-	//	{
-	//		tiles = new Label[map.Height, map.Height];
-
-	//		int height = map.oneTileHeight;//ClientSize.Height / map.Height;
-	//		int width = map.oneTileWidth;//ClientSize.Width / map.Width;
-
-	//		for (int i = 0; i < map.Width; i++)
-	//			for (int j = 0; j < map.Height; j++)
-	//			{
-	//				if (map[i, j] != NoTile.Tile)
-	//				{
-	//					Label label = new Label()
-	//					{
-	//						Parent = Form,
-	//						Location = new Point(i * width, j * height),
-	//						Text = "",
-	//						Height = height,
-	//						Width = width,
-	//						Tag = i.ToString() + " " + j.ToString()
-	//					};
-	//					tiles[i, j] = label;
-	//					this.Controls.Add(label);
-	//				}
-	//			}
-
-	//		//Form.Size = new Size(tiles[map.Width - 1, map.Height - 1].Location + tiles[map.Width - 1, map.Height - 1].Size);
-	//		Refresh();
-	//	}
-
-	//	void MakePlayers()
-	//	{
-	//		players = new List<PictureBox>(map.Players.Count);
-	//		foreach (Player player in map.Players)
-	//		{
-	//			PictureBox pic = new PictureBox()
-	//			{
-	//				BorderStyle = BorderStyle.None,
-	//				SizeMode = PictureBoxSizeMode.StretchImage,
-	//				Tag = player.name
-	//			};
-	//			players.Add(pic);
-	//			Controls.Add(pic);
-	//		}
-	//	}
-
-	//	void MakeEnemies()
-	//	{
-	//		enemies = new List<PictureBox>(map.Enemies.Count);
-	//		foreach (Enemy enemy in map.Enemies)
-	//		{
-	//			PictureBox pic = new PictureBox() {
-	//				BorderStyle = BorderStyle.None,
-	//				SizeMode = PictureBoxSizeMode.AutoSize,
-	//				Tag = enemy.Type.ToString()
-	//			};
-	//			players.Add(pic);
-	//			Controls.Add(pic);
-	//		}
-	//	}
-
-	//	void MakeItems()
-	//	{
-	//		items = new List<Label>(map.OtherItems.Count);
-	//		int width = 10;
-	//		int height = 10;
-	//		foreach (IInteractiveItem item in map.OtherItems)
-	//		{
-	//			Label label = new Label()
-	//			{
-	//				BackColor = item.Color,
-	//				Location = new Point(item.Location.x, item.Location.y),
-	//				Text = "",
-	//				Tag = item.Name,
-	//				Height = height,
-	//				Width = width
-	//			};
-	//			this.Controls.Add(label);
-	//			items.Add(label);
-	//		}
-	//	}
-	//	#endregion
-	//}
-
 	public partial class GameControl : IMapRenderer, IDisposable
 	{
 		Map map;
@@ -194,7 +32,7 @@ namespace Pokus1
 
 		public void Render()
 		{
-			if(Time.IsRunning)
+			if (Time.IsRunning)
 				Camera.Update();
 			Refresh();
 		}
@@ -257,15 +95,15 @@ namespace Pokus1
 			{
 				if (life.Alive)
 					g.DrawImage(life.Animation.Image,
-						life.Location.x - Camera.Location.x,	//here the thread could be stopped so the location x and y 
-						life.Location.y - Camera.Location.y,	//would be inconsistent. However I think this would only 
-						life.Width,								//make the moves smoother.
+						life.Location.x - Camera.Location.x,    //here the thread could be stopped so the location x and y 
+						life.Location.y - Camera.Location.y,    //would be inconsistent. However I think this would only 
+						life.Width,                             //make the moves smoother.
 						life.Height);
 				else
 					g.DrawImage(DefaultDeadAnimation.instance.Image,
-						life.Location.x - Camera.Location.x, 
-						life.Location.y - Camera.Location.y,        
-						life.Width,                                 
+						life.Location.x - Camera.Location.x,
+						life.Location.y - Camera.Location.y,
+						life.Width,
 						life.Height);
 			}
 		}

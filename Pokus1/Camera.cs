@@ -13,6 +13,7 @@ namespace Pokus1
 	{
 		Size CanvasSize { get; }
 	}
+
 	public interface ICamera
 	{
 		ILocationHolder locationHolder { set; }
@@ -20,6 +21,7 @@ namespace Pokus1
 		Location Location { get; }
 		void Update();
 	}
+
 	public class Camera : ICamera
 	{
 		public Camera(Size mapSize, IWithCanvasSize renderer)

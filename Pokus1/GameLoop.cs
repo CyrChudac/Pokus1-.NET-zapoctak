@@ -5,41 +5,91 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using CoreLib;
 
 namespace Pokus1
 {
-	class GameLoop
+	public class GameLoop
 	{
-		readonly Game Game;
-		readonly System.Windows.Forms.Timer Timer;
-		ManualResetEvent WaitHandle = new ManualResetEvent(false);
-		bool IShouldRun = false;
-		public GameLoop(Game game, System.Windows.Forms.Timer timer)
+		readonly Game game;
+		readonly Ticker Timer = new IndependentTicker();
+		GameScreenControl screenControl;
+		public GameLoop(Game game, GameScreenControl screenControl)
 		{
-			this.Game = game;
-			this.Timer = timer;
+			this.game = game;
+			this.screenControl = screenControl;
 		}
+
+		protected virtual bool Condition => !game.map.GameEnd;
+
 		public void Start()
 		{
-			Timer.Tick += (object sender, EventArgs e) => Run();
-			while (true)
+			game.FirstRun();
+			Timer.AddToTick((object sender, EventArgs e) => Update());
+			Timer.Interval = Time.delay;
+			Timer.Start();
+		}
+		delegate void Updating();
+		void Update()
+		{
+			Updating u = screenControl.Update;
+			screenControl.Invoke(u);
+			//screenControl.Continue();
+			if (Condition)
 			{
-				if (!IShouldRun)
-					WaitHandle.WaitOne();
-				Stop();
-				Game.Update();
+				DuringUpdate();
+				game.Update();
+			}
+			else
+			{
+				Timer.Stop();
+				//screenControl.end = true;
 			}
 		}
 
-		void Run()
+		protected virtual void DuringUpdate() { }
+	}
+
+	public interface Ticker
+	{
+		void AddToTick(Action<object, EventArgs> action);
+		void Start();
+		void Stop();
+		double Interval { get; set; }
+	}
+
+	class FormTicker :  Ticker
+	{
+		System.Windows.Forms.Timer t;
+		public FormTicker(System.Windows.Forms.Timer t)
 		{
-			IShouldRun = true;
-			WaitHandle.Set();
+			this.t = t;
 		}
-		void Stop()
+		public void AddToTick(Action<object, EventArgs> action) => t.Tick += new EventHandler(action);
+		public void Start() => t.Start();
+		public void Stop() => t.Stop();
+		public double Interval
 		{
-			IShouldRun = false;
-			WaitHandle.Reset();
+			get => t.Interval;
+			set => t.Interval = (int)value;
 		}
+	}
+
+	class IndependentTicker : Ticker
+	{
+		System.Timers.Timer Timer = new System.Timers.Timer();
+		public void AddToTick(Action<object, EventArgs> action)
+		{
+			Timer.Elapsed += new System.Timers.ElapsedEventHandler(
+				(object o, System.Timers.ElapsedEventArgs e) => action(o, e));
+		}
+		public double Interval
+		{
+			get => Timer.Interval;
+			set => Timer.Interval = value;
+		}
+
+		public void Start() => Timer.Start();
+		public void Stop() => Timer.Stop();
 	}
 }

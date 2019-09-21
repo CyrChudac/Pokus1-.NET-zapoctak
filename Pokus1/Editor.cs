@@ -258,10 +258,10 @@ namespace Pokus1
 			Saving dialog = new Saving();
 			if(Form.ShowDialog(dialog))
 			{
-				if (!Directory.Exists(Directory.GetCurrentDirectory() + @"\" +
+				if (!Directory.Exists(Game.CurrentDirectory + @"\" +
 					Game.MapsFileName))
 					Directory.CreateDirectory(
-					Directory.GetCurrentDirectory() + @"\" +
+					Game.CurrentDirectory + @"\" +
 					Game.MapsFileName);
 				Map map = new Map(tiles);
 				players.ForEach( l => map.Players.Add(((PlayerFactory)l.Tag).GetPlayer(
@@ -279,7 +279,7 @@ namespace Pokus1
 				if (interactiveItems.Count + noninteractiveItems.Count > 0)
 					throw new NotImplementedException("There is no code for making interactive and noninteractive items through editor yet.");
 				Stream stream = new FileStream(
-					Directory.GetCurrentDirectory() + @"\" +
+					Game.CurrentDirectory + @"\" +
 					Game.MapsFileName + @"\" + 
 					dialog.fileName.Text,
 					FileMode.Create);

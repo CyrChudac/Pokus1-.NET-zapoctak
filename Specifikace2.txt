@@ -1,0 +1,5 @@
+3) derivace fronty pro producer-consumer z Queue<T> není správně, máš paralelní volání Enqueue a Dequeue a std. Queue není v tomto ohledu threadsafe (co když se bude zrovna resizovat vnitřní buffer?). Měli jste použít implementaci cyklické fronty ve fixed size array.
+
+Oprav výše uvedené, zatím nepovažuji za splněné. Pokud se ti navíc bude chtít, tak zvaž:
+- Je Envelope<T> vážně závislost nutná pro každou frontu producer-consumer?
+- neznásilňuj yield return, je v kódu použit nadbytečně. něpřináší nic, jen snižuje výkon kódu (režie stavového automatu)

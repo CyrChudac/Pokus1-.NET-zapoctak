@@ -9,7 +9,9 @@ schopnost, kterou bude moct hráč využít, aby zdárně prošel level.
 - možnost ovládání minimálně 2 postav, kde každá postava disponuje jednou, pro ni specifickou, schopností
 - možnost uložení/načtení aktuálního stavu hry
 - možnost hru zastavit
+- samotnou herní smyčku běžící v jiném vlákně, než uživatelské rozhraní
 - velice jednoduché grafické rozhraní poskytující jasnou představu o aktuálním stavu
+
 #### Další cíle, ke kterým se nezavazuji
 - nepřátelé, kteří se budou pohybovat, budou útočit a půjde se jich zbavit
 - editor map

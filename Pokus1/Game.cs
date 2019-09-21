@@ -8,34 +8,40 @@ using System.IO;
 using CoreLib;
 using System.Drawing;
 
+using System.Diagnostics;
+
 namespace Pokus1
 {
-	class Game
+	public class Game
 	{
+		public static int ThreadsCount => Process.GetCurrentProcess().Threads.Count;
 		public static readonly string SaveFileName = "Saves";
 		public static readonly string MapsFileName = "Saves";
+		public static readonly string ImagesFileName = "Images";
+		public static readonly string CurrentDirectory = 
+			Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString(); 
 
 		internal Map map;
 		private readonly Map startingMap;
-		private readonly GameControl gameForm;
+		private readonly IGameObjectOpener opener;
 		public IMapRenderer Renderer { get; private set; }
 		private IInputGetter inputGetter;
 		private UiDoThis uiDoThis; 
-		public Game(Map map, IMapRenderer renderer, GameControl gameForm, IInputGetter inputGetter)
+		public Game(Map map, IMapRenderer renderer, IGameObjectOpener opener, IInputGetter inputGetter, IWithToDo withToDo)
 		{
 			this.startingMap = map;
-			this.gameForm = gameForm;
+			this.opener = opener;
 			this.inputGetter = inputGetter;
 			this.Renderer = renderer;
 			DelegatesQueue dq = new DelegatesQueue();
 			this.uiDoThis = dq;
-			gameForm.ToDo = dq;
+			withToDo.ToDo = dq;
 		}
 		int activePlayer = 0;
 		public void FirstRun()
 		{
 			Time.Start();
-			map = startingMap.Clone();  /* startingMap; /*	*/
+			map = startingMap.Clone(); 
 			Renderer.Camera = new Camera(new Size(map.Width * Map.OneTileWidth, map.Height * Map.OneTileHeight), Renderer);
 			SetCorrectCameraMovement();
 			Renderer.FirstRender(map);
@@ -49,7 +55,19 @@ namespace Pokus1
 				map.Update(ref activePlayer);
 			}
 			if (map.GameEnd)
-			{ }//<-----------TODO: udělat game over
+			{
+				Time.Stop();
+				if (map.Victory)
+				{
+					uiDoThis.Do(() => opener.OpenControl<EndControl>());
+				}
+				else if (map.Defeat)
+				{
+					uiDoThis.Do(() => opener.OpenControl(
+						new EndControl() { Text = "You Failed!" }));
+				}
+				else throw new Exception("Unexpected game end");
+			}//<-----------TODO: udělat game over
 		}
 		void PropagateInput()
 		{
@@ -83,7 +101,7 @@ namespace Pokus1
 					menu.Map = this.map;
 					menu.BackgroundImage = Renderer.DarkenImage( Renderer.Screenshot(), 0.8f);
 					menu.BackgroundImageLayout = ImageLayout.Stretch;
-					uiDoThis.Do(() => gameForm.Form.OpenControl(menu));
+					uiDoThis.Do(() => opener.OpenControl(menu));
 					break;
 				case var x when (x is Input.WholeGame.ChangeChar.Right):
 					activePlayer = (activePlayer - 1).Modulo(map.Players.Count);
@@ -94,7 +112,6 @@ namespace Pokus1
 					SetCorrectCameraMovement();
 					break;
 				case var x when (x is Input.WholeGame.Restart):
-					map.SetDefeat();
 					FirstRun();
 					break;
 				default:
