@@ -45,6 +45,7 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.MapHeight = new System.Windows.Forms.TextBox();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
+			this.load = new System.Windows.Forms.Button();
 			this.panel1.SuspendLayout();
 			this.panel3.SuspendLayout();
 			this.panel2.SuspendLayout();
@@ -54,6 +55,7 @@
 			// 
 			// panel1
 			// 
+			this.panel1.Controls.Add(this.load);
 			this.panel1.Controls.Add(this.panel3);
 			this.panel1.Controls.Add(this.panel2);
 			this.panel1.Controls.Add(this.save);
@@ -70,7 +72,7 @@
 			this.panel3.Controls.Add(this.passiveEnemy);
 			this.panel3.Location = new System.Drawing.Point(619, 5);
 			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(161, 58);
+			this.panel3.Size = new System.Drawing.Size(93, 58);
 			this.panel3.TabIndex = 3;
 			// 
 			// passiveEnemy
@@ -142,7 +144,7 @@
 			this.save.Name = "save";
 			this.save.Size = new System.Drawing.Size(48, 41);
 			this.save.TabIndex = 2;
-			this.save.Text = "Save";
+			this.save.Text = "&Save";
 			this.save.UseVisualStyleBackColor = false;
 			this.save.Click += new System.EventHandler(this.save_Click);
 			// 
@@ -239,6 +241,23 @@
 			// 
 			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
 			// 
+			// load
+			// 
+			this.load.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.load.BackColor = System.Drawing.Color.WhiteSmoke;
+			this.load.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.load.FlatAppearance.BorderColor = System.Drawing.Color.White;
+			this.load.FlatAppearance.BorderSize = 0;
+			this.load.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.load.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+			this.load.Location = new System.Drawing.Point(748, 10);
+			this.load.Name = "load";
+			this.load.Size = new System.Drawing.Size(48, 41);
+			this.load.TabIndex = 4;
+			this.load.Text = "&Load";
+			this.load.UseVisualStyleBackColor = false;
+			this.load.Click += new System.EventHandler(this.load_Click);
+			// 
 			// Editor
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -279,5 +298,6 @@
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.Button knifeThrower;
 		private System.Windows.Forms.Button jumper;
+		private System.Windows.Forms.Button load;
 	}
 }

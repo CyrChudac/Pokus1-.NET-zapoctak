@@ -57,6 +57,9 @@ namespace Pokus1
 		[JsonRequired]
 		private readonly IMapTile[,] map;
 
+		[JsonIgnore]
+		public IMapTile[,] Tiles => map;
+
 		[JsonConstructor]
 		public Map(IMapTile[,] map)
 		{

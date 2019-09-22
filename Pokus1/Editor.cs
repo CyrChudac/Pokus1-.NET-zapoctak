@@ -293,13 +293,13 @@ namespace Pokus1
 		List<Label> interactiveItems = new List<Label>();
 		List<Label> noninteractiveItems = new List<Label>();
 
-		private Label ItemInCentre<T>(Color c, ILifeFactory<T> type, IList<Label> addTo) where T : Life
+		private Label ItemInCentre<T>(Color c, ILifeFactory<T> factory, IList<Label> addTo) where T : Life
 		{
 			Label l = new Label();
 			l.BackColor = c;
 			l.Size = Life.DefaultSize;
 			l.Location = new Point(CanvasSize.Width / 2, CanvasSize.Height / 2);
-			l.Tag = type;
+			l.Tag = factory;
 			addTo.Add(l);
 			return l;
 		}
@@ -341,6 +341,53 @@ namespace Pokus1
 			enemies.ForEach(en => en.AllowDrop = false);
 			interactiveItems.ForEach(ii => ii.AllowDrop = false);
 			noninteractiveItems.ForEach(ni => ni.AllowDrop = false);
+		}
+
+		private void load_Click(object sender, EventArgs e)
+		{
+			Map m = Form.Loading();
+			if (m != null)
+			{
+				GetFromMap(m);
+				Refresh();
+			}
+		}
+
+		void GetFromMap(Map map)
+		{
+			MapHeight.Text = map.Height.ToString();
+			MapWidth.Text = map.Width.ToString();
+			tiles = map.Tiles;
+			MakeBackground();
+			players = new List<Label>();
+			enemies = new List<Label>();
+			interactiveItems = new List<Label>();
+			noninteractiveItems = new List<Label>();
+			var s = new Dictionary<Type, Func<Label>>()
+			{
+				{typeof(Jumper), () => ItemInCentre(Jumper.Color,
+				new JumperFactory(), players) },
+				{typeof(KnifeThrower), () => ItemInCentre(KnifeThrower.Color,
+				new KnifeThrowerFactory(), players) },
+				{typeof(Puddler), () => ItemInCentre(Puddler.Color,
+				new PuddlerFactory(), players) },
+				{typeof(PassiveEnemy), () => ItemInCentre(PassiveEnemy.Color,
+				new PassiveEnemyFactory(), enemies) }
+			};
+			foreach (Player p in map.Players)
+				LabelAtRightLocation(p, s);
+			foreach (Enemy e in map.Enemies)
+				LabelAtRightLocation(e, s);
+			foreach (IInteractiveItem i in map.InteractiveItems)
+				LabelAtRightLocation(i, s);
+			foreach (INoninteractiveItem n in map.NoninteractiveItems)
+				LabelAtRightLocation(n, s);
+		}
+
+		void LabelAtRightLocation(IGameObject obj, Dictionary<Type, Func<Label>> dic)
+		{
+			Label l = dic[obj.GetType()]();
+			l.Location = obj.Location - Camera.Location;
 		}
 	}
 }

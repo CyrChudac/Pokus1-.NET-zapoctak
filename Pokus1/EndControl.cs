@@ -17,7 +17,7 @@ namespace Pokus1
 			InitializeComponent();
 		}
 
-		public new string Text = "You have successfuly finished the game!";
+		public new string Text = "You have successfuly finished the level!";
 		private void WellDoneControl_Load(object sender, EventArgs e)
 		{
 			label1.Text = Text;

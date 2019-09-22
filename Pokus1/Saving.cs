@@ -30,7 +30,7 @@ namespace Pokus1
 				save.Enabled = false;
 			}
 			if (Directory.Exists(Game.SaveFileName) &&
-				Directory.GetFiles(Game.SaveFileName).Select(x => x.Substring(x.LastIndexOf('\\') + 1)).Contains(fileName.Text))
+				Directory.GetFiles(Game.CurrentDirectory + @"\" + Game.SaveFileName).Select(x => x.Substring(x.LastIndexOf('\\') + 1)).Contains(fileName.Text))
 			{
 				note.Text = "Save of this name already exists.";
 				save.Text = "Overwrite";
