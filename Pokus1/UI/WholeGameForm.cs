@@ -91,7 +91,7 @@ namespace Pokus1
 
 		}
 
-		public void Saving(Map map)
+		public void Saving(Environment map)
 		{
 			Pokus1.Saving saving = new Saving();
 			if (ShowDialog(saving))
@@ -99,7 +99,7 @@ namespace Pokus1
 				if (!Directory.Exists(Game.SaveFileName))
 					Directory.CreateDirectory(Game.SaveFileName);
 				Stream s = new FileStream(Game.SaveFileName + @"\" + saving.fileName.Text, FileMode.Create);
-				new MapSerializer(s).Save(map, Json.DefaultSerializer);
+				new JsonMapSerializer(s).Save(map, Json.DefaultSerializer);
 				s.Dispose();
 			}
 		}
@@ -111,7 +111,7 @@ namespace Pokus1
 			return result == DialogResult.Yes;
 		}
 
-		public Map Loading()
+		public Environment Loading()
 		{
 			Pokus1.Loading loading = new Loading();
 			if (ShowDialog(loading))
@@ -120,7 +120,7 @@ namespace Pokus1
 				{
 					Stream s = new FileStream(Game.CurrentDirectory + @"\" + 
 						Game.SaveFileName + @"\" + (string)loading.list.SelectedItem, FileMode.Open);
-				Map result = new JsonMapDeserializer(s).GetMap(Json.DefaultSerializer);
+				Environment result = new JsonMapDeserializer(s).GetMap(Json.DefaultSerializer);
 				s.Dispose();
 				return result;
 				}

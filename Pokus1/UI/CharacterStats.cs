@@ -10,11 +10,11 @@ using System.Windows.Forms;
 
 namespace Pokus1
 {
-	public partial class Character : GameObjectControl
+	public partial class CharacterStats : GameObjectControl
 	{
-		public Player Player { get; set; }
+		public PlayerCharacter Player { get; set; }
 		int initialHealthSize;
-		public Character()
+		public CharacterStats()
 		{
 			InitializeComponent();
 		}

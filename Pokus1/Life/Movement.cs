@@ -22,7 +22,7 @@ namespace Pokus1
 			_exLoc = CalculatedVector;
 		}
 		[JsonRequired]
-		public int fallingSpeed { get; protected set; } = 8 * Map.OneTileHeight;
+		public int fallingSpeed { get; protected set; } = 8 * Environment.OneTileHeight;
 
 		public void AddDirectionToDirection(Direction dir) => AddToDirection((Location)dir * DirectionsImportness);
 		public static readonly int DirectionsImportness = Time.delay / 3;
@@ -34,7 +34,7 @@ namespace Pokus1
 		public object locationLocker = new object();
 		[JsonIgnore]
 		public Location CalculatedVector
-			=> location.Normalize(Speed * shift, fallingSpeed * shift);
+			=> location.PseudoNormalize(Speed * shift, fallingSpeed * shift);
 
 		Location _exLoc;
 		public Location ExampleLoc => _exLoc;

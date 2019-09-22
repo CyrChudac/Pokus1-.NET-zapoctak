@@ -11,7 +11,7 @@ namespace Pokus1
 {
 	public enum SkillType { noSkill, jump, knifeThrow, puddle}
 
-	class Jumper : Player
+	class Jumper : PlayerCharacter
 	{
 		public static Color Color = Color.GreenYellow;
 		static int jumpDuration = 650;
@@ -40,20 +40,20 @@ namespace Pokus1
 		}
 		[JsonConstructor]
 		public Jumper(int maxHealth, int currHealth, Movement movement,
-			string name, Location location, IAnimation animation, Size size, Map map)
+			string name, Location location, IAnimation animation, Size size, Environment map)
 			: base(maxHealth, currHealth, movement, name,
 				  location, animation, size, map)
 		{
 		}
 		public Jumper(int maxHealth, int currHealth, Movement movement,
-			string name, Location location, Size size, Map map)
+			string name, Location location, Size size, Environment map)
 			: this(maxHealth, currHealth, movement, name,
 				  location, new SingleColorAnimation(Color), size, map)
 		{
 		}
 	}
 	
-	class KnifeThrower : Player
+	class KnifeThrower : PlayerCharacter
 	{
 		public static Color Color = Color.ForestGreen;
 		[JsonIgnore]
@@ -78,21 +78,21 @@ namespace Pokus1
 		static readonly int sizeModifier = 2;
 		static int projectileSpeed => Life.defaultSpeed * 2;
 		public KnifeThrower(int maxHealth, int currHealth, Movement movement,
-			string name, Location location, Size size, Map map)
+			string name, Location location, Size size, Environment map)
 			: this(maxHealth, currHealth, movement, name, location, new SingleColorAnimation(Color), size, map)
 		{
 		}
 		[JsonConstructor]
 		public KnifeThrower(int maxHealth, int currHealth, Movement movement,
-			string name, Location location, IAnimation animation, Size size, Map map)
+			string name, Location location, IAnimation animation, Size size, Environment map)
 			: base(maxHealth, currHealth, movement, name, location, animation, size, map)
 		{
 			attack = new RangedAttack(AttackSource.ally, shotRange,
-				new Size(Map.OneTileWidth / sizeModifier, Map.OneTileHeight / sizeModifier), projectileSpeed);
+				new Size(Environment.OneTileWidth / sizeModifier, Environment.OneTileHeight / sizeModifier), projectileSpeed);
 		}
 	}
 	
-	class Puddler : Player
+	class Puddler : PlayerCharacter
 	{
 		public static Color Color = Color.Orange;
 		[JsonRequired]
@@ -113,21 +113,21 @@ namespace Pokus1
 
 		[JsonConstructor]
 		public Puddler(int maxHealth, int currHealth, Movement movement,
-			string name, Location location, IAnimation animation, Size size, Map map)
+			string name, Location location, IAnimation animation, Size size, Environment map)
 			: base(maxHealth, currHealth, movement, name, location, animation, size, map)
 		{
 		}
 		public Puddler(int maxHealth, int currHealth, Movement movement,
-			string name, Location location, Size size, Map map)
+			string name, Location location, Size size, Environment map)
 			: this(maxHealth, currHealth, movement, name, location, new SingleColorAnimation(Color), size, map)
 		{
 		}
 	}
 	
-	class Unskilled : Player
+	class Unskilled : PlayerCharacter
 	{
 		public Unskilled(int maxHealth, int currHealth, Movement movement,
-			string name, Location location, IAnimation animation, Size size, Map map)
+			string name, Location location, IAnimation animation, Size size, Environment map)
 			: base(maxHealth, currHealth, movement, name, location, animation, size, map)
 		{
 		}

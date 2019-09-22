@@ -89,8 +89,8 @@ namespace Pokus1
 				}
 			tiles = newField;
 			MakeBackground();
-			Camera = new Camera(new Size(tiles.GetLength(0) * Map.OneTileWidth,
-					tiles.GetLength(1) * Map.OneTileHeight), 
+			Camera = new Camera(new Size(tiles.GetLength(0) * Environment.OneTileWidth,
+					tiles.GetLength(1) * Environment.OneTileHeight), 
 				this,
 				Camera.Location);
 			Camera.locationHolder = Movement;
@@ -100,7 +100,7 @@ namespace Pokus1
 
 		void MakeBackground()
 		{
-			Image result = new Bitmap(tiles.GetLength(0) * Map.OneTileWidth, tiles.GetLength(1) * Map.OneTileHeight);
+			Image result = new Bitmap(tiles.GetLength(0) * Environment.OneTileWidth, tiles.GetLength(1) * Environment.OneTileHeight);
 			using (Graphics g = Graphics.FromImage(result))
 			{
 				for (int i = 0; i < tiles.GetLength(0); i++)
@@ -108,10 +108,10 @@ namespace Pokus1
 					for (int j = 0; j < tiles.GetLength(1); j++)
 					{
 						g.FillRectangle(tiles[i, j].Brush,
-							i * Map.OneTileWidth,
-							j * Map.OneTileHeight,
-							Map.OneTileWidth,
-							Map.OneTileHeight);
+							i * Environment.OneTileWidth,
+							j * Environment.OneTileHeight,
+							Environment.OneTileWidth,
+							Environment.OneTileHeight);
 					}
 				}
 			}
@@ -234,8 +234,8 @@ namespace Pokus1
 
 		void ChangeTile(Point mouseLocation)
 		{
-			int row = (mouseLocation + Camera.Location).x / Map.OneTileWidth;
-			int column = (mouseLocation + Camera.Location).y / Map.OneTileHeight;
+			int row = (mouseLocation + Camera.Location).x / Environment.OneTileWidth;
+			int column = (mouseLocation + Camera.Location).y / Environment.OneTileHeight;
 			if (row < tiles.GetLength(0) && row >= 0
 				&& column < tiles.GetLength(1) && column >= 0)
 			{
@@ -243,10 +243,10 @@ namespace Pokus1
 				using (Graphics g = Graphics.FromImage(background))
 				{
 					g.FillRectangle(active.Brush,
-						row * Map.OneTileWidth,
-						column * Map.OneTileHeight,
-						Map.OneTileWidth,
-						Map.OneTileHeight);
+						row * Environment.OneTileWidth,
+						column * Environment.OneTileHeight,
+						Environment.OneTileWidth,
+						Environment.OneTileHeight);
 				}
 				Refresh();
 			}
@@ -263,7 +263,7 @@ namespace Pokus1
 					Directory.CreateDirectory(
 					Game.CurrentDirectory + @"\" +
 					Game.MapsFileName);
-				Map map = new Map(tiles);
+				Environment map = new Environment(tiles);
 				players.ForEach( l => map.Players.Add(((PlayerFactory)l.Tag).GetPlayer(
 					Life.defaultHealth,
 					new Movement(Life.defaultSpeed),
@@ -283,7 +283,7 @@ namespace Pokus1
 					Game.MapsFileName + @"\" + 
 					dialog.fileName.Text,
 					FileMode.Create);
-				MapSerializer serializer = new MapSerializer(stream);
+				JsonMapSerializer serializer = new JsonMapSerializer(stream);
 				serializer.Save(map);
 				stream.Dispose();
 			}
@@ -346,7 +346,7 @@ namespace Pokus1
 
 		private void load_Click(object sender, EventArgs e)
 		{
-			Map m = Form.Loading();
+			Environment m = Form.Loading();
 			if (m != null)
 			{
 				GetFromMap(m);
@@ -354,7 +354,7 @@ namespace Pokus1
 			}
 		}
 
-		void GetFromMap(Map map)
+		void GetFromMap(Environment map)
 		{
 			MapHeight.Text = map.Height.ToString();
 			MapWidth.Text = map.Width.ToString();
@@ -375,7 +375,7 @@ namespace Pokus1
 				{typeof(PassiveEnemy), () => ItemInCentre(PassiveEnemy.Color,
 				new PassiveEnemyFactory(), enemies) }
 			};
-			foreach (Player p in map.Players)
+			foreach (PlayerCharacter p in map.Players)
 				LabelAtRightLocation(p, s);
 			foreach (Enemy e in map.Enemies)
 				LabelAtRightLocation(e, s);

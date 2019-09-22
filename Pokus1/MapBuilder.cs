@@ -13,7 +13,7 @@ namespace Pokus1
 {
 	interface IMapBuilder
 	{
-		Map GetMap();
+		Environment GetMap();
 	}
 
 	public class DefaultMap
@@ -109,10 +109,10 @@ namespace Pokus1
 				builder = new DefaultMap(width, height);
 			}
 
-			public Map GetMap()
+			public Environment GetMap()
 			{
 				IMapTile[,] field = builder.OnlyBorders_Wall();
-				Map result = new Map(field);
+				Environment result = new Environment(field);
 				result.Players.Add(new Unskilled(100, 100, NoMovement.instance,
 				"Vlad", new Location{ x = 143, y = 59}, new SingleColorAnimation(Color.GreenYellow),
 				Life.DefaultSize, result));
@@ -127,10 +127,10 @@ namespace Pokus1
 				builder = new DefaultMap(width, height);
 			}
 
-			public Map GetMap()
+			public Environment GetMap()
 			{
 				IMapTile[,] field = builder.BordersAndSomething_Wall();
-				Map result = new Map(field);
+				Environment result = new Environment(field);
 				result.Players.Add(new Jumper(100, 100, new Movement(Life.defaultSpeed),
 				"Vlad", new Location{ x = 143, y = 59},
 				Life.DefaultSize, result));
@@ -148,10 +148,10 @@ namespace Pokus1
 				builder = new DefaultMap(width, height);
 			}
 
-			public Map GetMap()
+			public Environment GetMap()
 			{
 				IMapTile[,] field = builder.BordersAndSomething2_Wall();
-				Map result = new Map(field);
+				Environment result = new Environment(field);
 				result.Players.Add(new Jumper(100, 100, new Movement(Life.defaultSpeed),
 					"Vlad", new Location { x = 143, y = 59 }, new SingleColorAnimation(Color.GreenYellow),
 					Life.DefaultSize, result));
@@ -169,10 +169,10 @@ namespace Pokus1
 				builder = new DefaultMap(width, height);
 			}
 
-			public Map GetMap()
+			public Environment GetMap()
 			{
 				IMapTile[,] field = builder.BordersAndSomething2_Wall();
-				Map result = new Map(field);
+				Environment result = new Environment(field);
 				result.Players.Add(new KnifeThrower(100, 100, new Movement(Life.defaultSpeed),
 					"Vlad", new Location { x = 300, y = 59 }, new SingleColorAnimation(Color.GreenYellow),
 					Life.DefaultSize, result));
@@ -181,123 +181,7 @@ namespace Pokus1
 			}
 		}
 	}
-
-	//class MapReader : IMapBuilder
-	//{
-	//	readonly string path;
-	//	public MapReader(string path)
-	//	{
-	//		this.path = path;
-	//	}
-	//	public Map GetMap()
-	//	{
-	//		StreamReader reader = new StreamReader(path);
-
-	//		IMapTile[,] tiles = ReadTiles(reader);
-
-	//		int tileHeight = ReadNextInt(reader);
-	//		int tileWidth = ReadNextInt(reader);
-
-	//		List<Player> characters = ReadCharacters(reader);
-
-	//		List<Enemy> enemies = ReadEnemies(reader);
-
-	//		List<IInteractiveItem> iItems = ReadInteraItems(reader);
-
-	//		List<INoninteractiveItem> nItems = ReadNoninteraItems(reader);
-
-	//		return new Map(tiles, enemies, characters, iItems, nItems, tileHeight, tileWidth);
-	//	}
-
-	//	IMapTile[,] ReadTiles(TextReader reader)
-	//	{
-	//		int height = ReadNextInt(reader);
-	//		int width = ReadNextInt(reader);
-
-	//		IMapTile[,] tiles = new IMapTile[width, height];
-
-	//		for (int i = 0; i < height; i++)
-	//			for (int j = 0; j < width; j++)
-	//				tiles[i, j] = TileBase.Get((TileType)ReadNextInt(reader));
-	//		return tiles;
-	//	}
-
-	//	List<Player> ReadCharacters(TextReader reader)
-	//	{
-	//		int charsCount = ReadNextInt(reader);
-	//		List<Player> characters = new List<Player>(charsCount);
-	//		for (int i = 0; i < charsCount; i++)
-	//		{
-	//			ReadNextString(reader); // <----- něco jako "name:"
-	//			string name = ReadNextString(reader);
-	//			ReadNextString(reader); // <----- něco jako "maxHealth:"
-	//			int maxHealth = ReadNextInt(reader);	//	.
-	//			ReadNextString(reader);					//	.
-	//			int currHealth = ReadNextInt(reader);	//	.
-	//			SkillType skill = (SkillType)ReadNextInt(reader);
-	//			ReadNextString(reader);
-	//			Location location = new Location { x = ReadNextInt(reader), y = ReadNextInt(reader) };
-	//			ReadNextString(reader);
-	//			int baseSpeed = ReadNextInt(reader);
-
-	//			//characters.Add(new Player(skill, maxHealth, currHealth, new UsualMovement(baseSpeed),
-	//			//	name, location, new Animation(Time.TimeFlow, name), Location.DefaultLifeSize));
-	//		}
-	//		return characters;
-	//	}
-
-	//	List<Enemy> ReadEnemies(TextReader reader) {
-	//		int enemiesCount = ReadNextInt(reader);
-	//		List<Enemy> enemies = new List<Enemy>(enemiesCount);
-	//		for (int i = 0; i < enemiesCount; i++)
-	//		{
-	//			ReadNextString(reader); // <----- něco jako "type:"
-	//			EnemyType type = (EnemyType)ReadNextInt(reader);
-	//			ReadNextString(reader); // <----- něco jako "maxHealth:"
-	//			int maxHealth = ReadNextInt(reader);    //	.
-	//			ReadNextString(reader);                 //	.
-	//			int currHealth = ReadNextInt(reader);   //	.
-	//			Location location = new Location { x = ReadNextInt(reader), y = ReadNextInt(reader) };
-	//			//ReadNextString(reader);
-	//			//int baseSpeed = ReadNextInt(reader);  <---- zatim neni pohyb, tak neni ani baseSpeed
-
-	//			enemies.Add(new NormalEnemy(maxHealth, currHealth, NoMovement.instance, type,
-	//				location, new Animation(Time.TimeFlow, type.ToString()), Location.DefaultLifeSize, i));
-	//		}
-	//		return enemies;
-	//	}
-
-	//	List<IInteractiveItem> ReadInteraItems(TextReader reader)
-	//	{
-	//		throw new NotImplementedException();
-	//	}
-
-	//	List<INoninteractiveItem> ReadNoninteraItems(TextReader reader)
-	//	{
-	//		throw new NotImplementedException();
-	//	}
-
-	//	int lastLetter = (int)' ';
-	//	string ReadNextString(TextReader reader)
-	//	{
-	//		int letter = lastLetter;
-	//		while (char.IsWhiteSpace((char)letter)){ letter = reader.Read(); }
-	//		StringBuilder sb = new StringBuilder();
-	//		while (!char.IsWhiteSpace((char)letter)){
-	//			sb.Append((char)letter);
-	//		}
-	//		lastLetter = letter;
-
-	//		if (sb[0] == '.')  // <----------- pro komentare zacni slovo teckou
-	//			return ReadNextString(reader);
-	//		return sb.ToString();
-	//	}
-	//	int ReadNextInt(TextReader reader)
-	//	{
-	//		return int.Parse(ReadNextString(reader));
-	//	}
-	//}
-
+	
 	interface IMapDesearilizer : IMapBuilder {}
 
 	class JsonMapDeserializer : IMapDesearilizer, IDisposable
@@ -308,15 +192,15 @@ namespace Pokus1
 			this.stream = stream;
 		}
 		public void Dispose() => stream.Dispose();
-		public Map GetMap()
+		public Environment GetMap()
 		{
 			return GetMap(Json.DefaultSerializer);
 		}
-		public Map GetMap(JsonSerializer js)
+		public Environment GetMap(JsonSerializer js)
 		{
 			StreamReader sr = new StreamReader(stream);
-			Map result = (Map)js.Deserialize(sr, typeof(Map));
-			foreach (Player p in result.Players)
+			Environment result = (Environment)js.Deserialize(sr, typeof(Environment));
+			foreach (PlayerCharacter p in result.Players)
 				p.Map = result;
 			foreach (Enemy e in result.Enemies)
 				e.Map = result;

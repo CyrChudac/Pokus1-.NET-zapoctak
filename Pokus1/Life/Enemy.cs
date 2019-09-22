@@ -11,7 +11,7 @@ namespace Pokus1
 	public abstract class Enemy : Life
 	{
 		public Enemy(int maxHealth, int currHealth, Movement movement,
-			Location location, IAnimation animation, Size size, string name, Map map)
+			Location location, IAnimation animation, Size size, string name, Environment map)
 			: base(maxHealth, currHealth, location, movement, animation, size, name, map)
 		{
 			movement.ChangeSpeed(Speed);
@@ -30,12 +30,12 @@ namespace Pokus1
 	{
 		public static readonly int DefaultMaxHealth = Attack.DefaultDamage;
 		public NormalEnemy(int currHealth, Movement movement,
-			Location location, IAnimation animation, Size size, int number, Map map)
+			Location location, IAnimation animation, Size size, int number, Environment map)
 			: base(DefaultMaxHealth, Math.Min(currHealth,Attack.DefaultDamage), movement, location,
 				  animation, size, nameof(NormalEnemy) + number.ToString(), map)
 		{}
 		public NormalEnemy(Movement movement, Location location,
-			IAnimation animation, Size size, int number, Map map)
+			IAnimation animation, Size size, int number, Environment map)
 			: base(DefaultMaxHealth, DefaultMaxHealth, movement, location,
 				  animation, size, nameof(NormalEnemy) + number.ToString(), map)
 		{ }
@@ -51,7 +51,7 @@ namespace Pokus1
 	public class PassiveEnemy : NormalEnemy
 	{
 		public static Color Color = Color.DarkRed;
-		public PassiveEnemy(Location location, int number, Map map)
+		public PassiveEnemy(Location location, int number, Environment map)
 			: base(new Movement(Life.defaultSpeed), location,
 				  new SingleColorAnimation(Color.OrangeRed), Life.DefaultSize, number, map)
 		{ }

@@ -12,7 +12,7 @@ using System.IO;
 namespace Pokus1
 {
 	[JsonObject()]
-	public class Map
+	public class Environment
 	{
 		[JsonIgnore]
 		public bool Victory
@@ -49,7 +49,7 @@ namespace Pokus1
 		public readonly int Height;
 		[JsonIgnore]
 		public readonly int Width;
-		public List<Player> Players { get; private set; } = new List<Player>();
+		public List<PlayerCharacter> Players { get; private set; } = new List<PlayerCharacter>();
 		public List<Enemy> Enemies { get; private set; } = new List<Enemy>();
 
 		public List<IInteractiveItem> InteractiveItems { get; private set; } = new List<IInteractiveItem>();
@@ -61,7 +61,7 @@ namespace Pokus1
 		public IMapTile[,] Tiles => map;
 
 		[JsonConstructor]
-		public Map(IMapTile[,] map)
+		public Environment(IMapTile[,] map)
 		{
 			this.map = map;
 			this.Height = map.GetLength(1);
@@ -77,13 +77,13 @@ namespace Pokus1
 			set { map[x, y] = value; }
 		}
 
-		public Map Clone()
+		public Environment Clone()
 		{
 			JsonSerializer js = Json.DefaultSerializer;
 			MemoryStream s = new MemoryStream();
-			new MapSerializer(s).Save(this, js);
+			new JsonMapSerializer(s).Save(this, js);
 			s.Position = 0;
-			Map result = new JsonMapDeserializer(s).GetMap(js);
+			Environment result = new JsonMapDeserializer(s).GetMap(js);
 			s.Dispose();
 			return result;
 		}
@@ -106,8 +106,8 @@ namespace Pokus1
 
 		public void RemoveMe(IGameObject obj)
 		{
-			if (obj is Player)
-				Players.Remove((Player)obj);
+			if (obj is PlayerCharacter)
+				Players.Remove((PlayerCharacter)obj);
 			else if (obj is Enemy)
 				Enemies.Remove((Enemy)obj);
 			else if (obj is IInteractiveItem)
@@ -122,7 +122,7 @@ namespace Pokus1
 		/// <summary>
 		/// Determines what alive player is the object touching by any part.
 		/// </summary>
-		public Player AmIOnPlayer(IMovableObject obj) => AmIOnAliveLife(obj, Players);
+		public PlayerCharacter AmIOnPlayer(IMovableObject obj) => AmIOnAliveLife(obj, Players);
 		/// <summary>
 		/// Determines what alive enemy is the object touching by any part.
 		/// </summary>
@@ -163,7 +163,7 @@ namespace Pokus1
 		public bool DirectionAccesable(IMovableObject obj, Direction dir)
 			=> new DirectionAccesor(this).DirectionAccesable(obj, dir);
 
-		static Map()
+		static Environment()
 		{
 			LocFindCycles = (int)Math.Log(OneTileHeight, 2);
 		}
@@ -207,8 +207,8 @@ namespace Pokus1
 
 		class DirectionAccesor
 		{
-			readonly Map map;
-			public DirectionAccesor(Map map) => this.map = map;
+			readonly Environment map;
+			public DirectionAccesor(Environment map) => this.map = map;
 			public bool DirectionAccesable(IMovableObject obj, Direction direction)
 			{
 				switch (direction)

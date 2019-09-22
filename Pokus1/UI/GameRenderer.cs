@@ -12,7 +12,7 @@ namespace Pokus1
 {
 	public interface IMapRenderer : IWithCanvasSize
 	{
-		void FirstRender(Map map);
+		void FirstRender(Environment map);
 		void Render();
 		void SetCameraMovement(ILocationHolder locationHolder);
 		void NewPlayerLocation(Location location);
@@ -23,7 +23,7 @@ namespace Pokus1
 
 	public partial class GameControl : IMapRenderer, IDisposable
 	{
-		Map map;
+		Environment map;
 		Image background;
 		public ICamera Camera { set; protected get; }
 
@@ -45,7 +45,7 @@ namespace Pokus1
 			base.Dispose();
 		}
 
-		public void FirstRender(Map map)
+		public void FirstRender(Environment map)
 		{
 			this.map = map;
 			SetStyle(ControlStyles.OptimizedDoubleBuffer //Canvas do not blink cause of that
@@ -57,7 +57,7 @@ namespace Pokus1
 
 		void MakeBackground()
 		{
-			background = new Bitmap(map.Width * Map.OneTileWidth, map.Height * Map.OneTileHeight);
+			background = new Bitmap(map.Width * Environment.OneTileWidth, map.Height * Environment.OneTileHeight);
 			using (Graphics g = Graphics.FromImage(background))
 				for (int i = 0; i < map.Height; i++)
 				{
@@ -65,10 +65,10 @@ namespace Pokus1
 					{
 						g.FillRectangle(
 							map[j, i].Brush,
-							j * Map.OneTileWidth,
-							i * Map.OneTileHeight,
-							Map.OneTileWidth,
-							Map.OneTileHeight);
+							j * Environment.OneTileWidth,
+							i * Environment.OneTileHeight,
+							Environment.OneTileWidth,
+							Environment.OneTileHeight);
 					}
 				}
 		}

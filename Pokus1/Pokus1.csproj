@@ -181,54 +181,54 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
-    <Compile Include="Character.cs">
+    <Compile Include="UI\CharacterStats.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Character.Designer.cs">
-      <DependentUpon>Character.cs</DependentUpon>
+    <Compile Include="UI\CharacterStats.Designer.cs">
+      <DependentUpon>CharacterStats.cs</DependentUpon>
     </Compile>
-    <Compile Include="CharactersUi.cs">
+    <Compile Include="UI\CharactersUi.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="CharactersUi.Designer.cs">
+    <Compile Include="UI\CharactersUi.Designer.cs">
       <DependentUpon>CharactersUi.cs</DependentUpon>
     </Compile>
     <Compile Include="GameLoop.cs" />
-    <Compile Include="GameScreenControl.cs">
+    <Compile Include="UI\GameScreenControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GameScreenControl.Designer.cs">
+    <Compile Include="UI\GameScreenControl.Designer.cs">
       <DependentUpon>GameScreenControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="HelpControl.cs">
+    <Compile Include="UI\HelpControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="HelpControl.Designer.cs">
+    <Compile Include="UI\HelpControl.Designer.cs">
       <DependentUpon>HelpControl.cs</DependentUpon>
     </Compile>
     <Compile Include="ILocationHolder.cs" />
-    <Compile Include="Loading.cs">
+    <Compile Include="UI\Loading.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Loading.Designer.cs">
+    <Compile Include="UI\Loading.Designer.cs">
       <DependentUpon>Loading.cs</DependentUpon>
     </Compile>
     <Compile Include="MapSaver.cs" />
     <Compile Include="Life\Attack.cs" />
-    <Compile Include="Editor.cs">
+    <Compile Include="UI\Editor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Editor.Designer.cs">
+    <Compile Include="UI\Editor.Designer.cs">
       <DependentUpon>Editor.cs</DependentUpon>
     </Compile>
     <Compile Include="Life\Enemy.cs" />
-    <Compile Include="GameObjectControl.cs">
+    <Compile Include="UI\GameObjectControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GameObjectControl.Designer.cs">
+    <Compile Include="UI\GameObjectControl.Designer.cs">
       <DependentUpon>GameObjectControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="IInputGetter.cs">
+    <Compile Include="UI\IInputGetter.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Item.cs" />
@@ -236,90 +236,90 @@
     <Compile Include="Life\SkilledPlayers.cs" />
     <Compile Include="Life\Life.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="GameControl.cs">
+    <Compile Include="UI\GameControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GameControl.Designer.cs">
+    <Compile Include="UI\GameControl.Designer.cs">
       <DependentUpon>GameControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="GameRenderer.cs">
+    <Compile Include="UI\GameRenderer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="InGameMenu.cs">
+    <Compile Include="UI\InGameMenu.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="InGameMenu.Designer.cs">
+    <Compile Include="UI\InGameMenu.Designer.cs">
       <DependentUpon>InGameMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="InputButtons.cs" />
-    <Compile Include="Map.cs" />
+    <Compile Include="Environment.cs" />
     <Compile Include="MapBuilder.cs" />
-    <Compile Include="Menu.cs">
+    <Compile Include="UI\Menu.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Menu.Designer.cs">
+    <Compile Include="UI\Menu.Designer.cs">
       <DependentUpon>Menu.cs</DependentUpon>
     </Compile>
     <Compile Include="Life\Movement.cs" />
-    <Compile Include="Options.cs">
+    <Compile Include="UI\Options.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Options.Designer.cs">
+    <Compile Include="UI\Options.Designer.cs">
       <DependentUpon>Options.cs</DependentUpon>
     </Compile>
-    <Compile Include="Life\Player.cs" />
+    <Compile Include="Life\PlayerCharacter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReallyEndDialog.cs">
+    <Compile Include="UI\ReallyEndDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ReallyEndDialog.Designer.cs">
+    <Compile Include="UI\ReallyEndDialog.Designer.cs">
       <DependentUpon>ReallyEndDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Life\UsualMovement.cs" />
-    <Compile Include="Saving.cs">
+    <Compile Include="UI\Saving.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Saving.Designer.cs">
+    <Compile Include="UI\Saving.Designer.cs">
       <DependentUpon>Saving.cs</DependentUpon>
     </Compile>
-    <Compile Include="StrightMovement.cs" />
+    <Compile Include="Life\StrightMovement.cs" />
     <Compile Include="UiDoThis.cs" />
     <Compile Include="Wall.cs" />
-    <Compile Include="EndControl.cs">
+    <Compile Include="UI\EndControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="EndControl.Designer.cs">
+    <Compile Include="UI\EndControl.Designer.cs">
       <DependentUpon>EndControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="WholeGameForm.cs">
+    <Compile Include="UI\WholeGameForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WholeGameForm.Designer.cs">
+    <Compile Include="UI\WholeGameForm.Designer.cs">
       <DependentUpon>WholeGameForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Character.resx">
-      <DependentUpon>Character.cs</DependentUpon>
+    <EmbeddedResource Include="UI\CharacterStats.resx">
+      <DependentUpon>CharacterStats.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CharactersUi.resx">
+    <EmbeddedResource Include="UI\CharactersUi.resx">
       <DependentUpon>CharactersUi.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Editor.resx">
+    <EmbeddedResource Include="UI\Editor.resx">
       <DependentUpon>Editor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GameScreenControl.resx">
+    <EmbeddedResource Include="UI\GameScreenControl.resx">
       <DependentUpon>GameScreenControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="HelpControl.resx">
+    <EmbeddedResource Include="UI\HelpControl.resx">
       <DependentUpon>HelpControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InGameMenu.resx">
+    <EmbeddedResource Include="UI\InGameMenu.resx">
       <DependentUpon>InGameMenu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Loading.resx">
+    <EmbeddedResource Include="UI\Loading.resx">
       <DependentUpon>Loading.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Menu.resx">
+    <EmbeddedResource Include="UI\Menu.resx">
       <DependentUpon>Menu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -332,16 +332,16 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="ReallyEndDialog.resx">
+    <EmbeddedResource Include="UI\ReallyEndDialog.resx">
       <DependentUpon>ReallyEndDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Saving.resx">
+    <EmbeddedResource Include="UI\Saving.resx">
       <DependentUpon>Saving.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EndControl.resx">
+    <EmbeddedResource Include="UI\EndControl.resx">
       <DependentUpon>EndControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WholeGameForm.resx">
+    <EmbeddedResource Include="UI\WholeGameForm.resx">
       <DependentUpon>WholeGameForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />

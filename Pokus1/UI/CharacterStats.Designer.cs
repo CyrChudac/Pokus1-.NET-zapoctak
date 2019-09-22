@@ -1,6 +1,6 @@
 ﻿namespace Pokus1
 {
-	partial class Character
+	partial class CharacterStats
 	{
 		/// <summary> 
 		/// Required designer variable.

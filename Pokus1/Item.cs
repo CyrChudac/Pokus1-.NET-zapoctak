@@ -27,11 +27,11 @@ namespace Pokus1
 		public string Name { get; protected set; }
 		public IAnimation Animation { get; }
 		             
-		public void Interact(Player interactingPLayer)
+		public void Interact(PlayerCharacter interactingPLayer)
 		{
 			PickUp(interactingPLayer);
 		}
-		protected void PickUp(Player interactingPlayer)
+		protected void PickUp(PlayerCharacter interactingPlayer)
 		{
 			interactingPlayer.Items.Add(this);
 		}

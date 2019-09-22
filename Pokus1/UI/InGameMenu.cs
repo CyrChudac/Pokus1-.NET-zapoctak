@@ -13,7 +13,7 @@ namespace Pokus1
 {
 	public partial class InGameMenu : GameObjectControl
 	{
-		internal Map Map;
+		internal Environment Map;
 		Color startingBckColor;
 		public InGameMenu()
 		{
@@ -57,7 +57,7 @@ namespace Pokus1
 
 		private void load_Click(object sender, EventArgs e)
 		{
-			Map map = Form.Loading();
+			Environment map = Form.Loading();
 			if (map != null)
 			{
 				Form.KillGame();

@@ -12,20 +12,20 @@ namespace Pokus1
 {
 	public partial class CharactersUi : GameObjectControl
 	{
-		internal Map map;
+		internal Environment map;
 
 		public CharactersUi()
 		{
 			InitializeComponent();
 		}
 
-		List<Character> characters;
+		List<CharacterStats> characters;
 		private void CharactersUi_Load(object sender, EventArgs e)
 		{
-			characters = new List<Character>();
-			foreach (Player p in map.Players)
+			characters = new List<CharacterStats>();
+			foreach (PlayerCharacter p in map.Players)
 			{
-				Character ch = new Character();
+				CharacterStats ch = new CharacterStats();
 				ch.Player = p;
 				ch.Dock = DockStyle.Left;
 				ch.Form = this.Form;

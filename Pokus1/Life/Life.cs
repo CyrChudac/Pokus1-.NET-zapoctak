@@ -12,11 +12,11 @@ namespace Pokus1
 	public abstract class Life : IMovableObject
 	{
 		public static Size DefaultSize => new Size(100, 100);
-		public static readonly int defaultSpeed = 6 * Map.OneTileWidth;
+		public static readonly int defaultSpeed = 6 * Environment.OneTileWidth;
 		public static readonly int defaultHealth = 100;
 		[JsonConstructor]
 		public Life(int maxHealth, int currHealth, Location location,
-			Movement movement, IAnimation animation, Size size, string name, Map map)
+			Movement movement, IAnimation animation, Size size, string name, Environment map)
 		{
 			this.CurrHealth = currHealth;
 			this.MaxHealth = maxHealth;
@@ -54,7 +54,7 @@ namespace Pokus1
 		public Movement Movement { get; private set; }
 		public Location Location { get; set; }
 		public Size Size { get; protected set; }
-		public Map Map { get; set; }
+		public Environment Map { get; set; }
 		public void Attacked(INoninteractiveItem weapon)
 		{
 			CurrHealth -= Attack.DefaultDamage;

@@ -77,20 +77,20 @@ namespace Pokus1
 
 		public Movement Movement { get; protected set; }
 
-		Map map;
+		Environment map;
 
 		List<Direction> dirs = new List<Direction>();
 
 		AttackSource source;
 		public Projectile(AttackSource source, int distance, Location location,
-			Size size, string sourceName, Map map, int speed, Direction direction, IAnimation animation)
+			Size size, string sourceName, Environment map, int speed, Direction direction, IAnimation animation)
 			: this(source, distance, location, size, sourceName, map, new StrightMovement(speed, direction), animation)
 		{
 			dirs.Add(direction);
 		}
 
 		public Projectile(AttackSource source, int distance, Location location,
-			Size size, string sourceName, Map map, int speed, Location vector, IAnimation animation)
+			Size size, string sourceName, Environment map, int speed, Location vector, IAnimation animation)
 			: this(source, distance, location, size, sourceName, map, new StrightMovement(speed, vector), animation)
 		{
 			if (vector.x < 0)
@@ -104,7 +104,7 @@ namespace Pokus1
 		}
 
 		private Projectile(AttackSource source, int distance, Location location,
-			Size size, string sourceName, Map map, Movement movement, IAnimation animation)
+			Size size, string sourceName, Environment map, Movement movement, IAnimation animation)
 		{
 			this.Movement = movement;
 			this.source = source;

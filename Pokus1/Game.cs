@@ -22,13 +22,13 @@ namespace Pokus1
 		public static readonly string CurrentDirectory = 
 			Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString(); 
 
-		internal Map map;
-		private readonly Map startingMap;
+		internal Environment map;
+		private readonly Environment startingMap;
 		private readonly IGameObjectOpener opener;
 		public IMapRenderer Renderer { get; private set; }
 		private IInputGetter inputGetter;
 		private UiDoThis uiDoThis; 
-		public Game(Map map, IMapRenderer renderer, IGameObjectOpener opener, IInputGetter inputGetter, IWithToDo withToDo)
+		public Game(Environment map, IMapRenderer renderer, IGameObjectOpener opener, IInputGetter inputGetter, IWithToDo withToDo)
 		{
 			this.startingMap = map;
 			this.opener = opener;
@@ -43,7 +43,7 @@ namespace Pokus1
 		{
 			Time.Start();
 			map = startingMap.Clone(); 
-			Renderer.Camera = new Camera(new Size(map.Width * Map.OneTileWidth, map.Height * Map.OneTileHeight), Renderer);
+			Renderer.Camera = new Camera(new Size(map.Width * Environment.OneTileWidth, map.Height * Environment.OneTileHeight), Renderer);
 			SetCorrectCameraMovement();
 			Renderer.FirstRender(map);
 		}

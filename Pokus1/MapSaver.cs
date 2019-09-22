@@ -11,28 +11,19 @@ namespace Pokus1
 {
 	interface IMapSaver
 	{
-		void Save(Map map);
+		void Save(Environment map);
 	}
-	class MapSerializer : IMapSaver
+	class JsonMapSerializer : IMapSaver
 	{
 		Stream stream;
-		public MapSerializer(Stream stream) => this.stream = stream;
+		public JsonMapSerializer(Stream stream) => this.stream = stream;
 		public void Dispose() => stream.Dispose();
-		public void Save(Map map) => Save(map, Json.DefaultSerializer);
-		public void Save(Map map, JsonSerializer jsonSerializer)
+		public void Save(Environment map) => Save(map, Json.DefaultSerializer);
+		public void Save(Environment map, JsonSerializer jsonSerializer)
 		{
 			StreamWriter sw = new StreamWriter(stream);
-			jsonSerializer.Serialize(sw, map, typeof(Map));
+			jsonSerializer.Serialize(sw, map, typeof(Environment));
 			sw.Flush();
-			//DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(Map), new List<Type>()
-			//{
-			//	typeof(Life), typeof(Enemy), typeof(NormalEnemy), typeof(PassiveEnemy),
-			//		typeof(Player), typeof(Jumper), typeof(KnifeThrower), typeof(Puddler),
-			//	typeof(Animation), typeof(SingleColorAnimation), typeof(NoAnimation),
-			//	typeof(Movement), typeof(PlayerMovement), typeof(NoMovement), typeof(UsualMovement),
-
-			//});
-			//jsonSer.WriteObject(stream, map);
 		}
 	}
 }

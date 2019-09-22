@@ -14,7 +14,7 @@ namespace Pokus1
 	}
 	public interface IInteractiveItem : IItem
 	{
-		void Interact(Player interactingPlayer);
+		void Interact(PlayerCharacter interactingPlayer);
 	}
 
 	public interface INoninteractiveItem : IItem

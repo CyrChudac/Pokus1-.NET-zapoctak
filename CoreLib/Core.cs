@@ -31,9 +31,13 @@ namespace CoreLib
 			this.y = y;
 		}
 		
-		public Location Normalize(float xModificator, float yModificator)
+
+		/// <summary>
+		/// Returns new Location(x * xModificator / Distance, Sign(y) * yMOdificator).
+		/// </summary>
+		public Location PseudoNormalize(float xModificator, float yModificator)
 		{
-			int d = (int)Math.Sqrt(Math.Pow(this.x, 2) + Math.Pow(this.y, 2));
+			int d = Distance;
 			if (d != 0)
 			{
 				int x = (int)((this.x * xModificator) / d);
@@ -44,7 +48,7 @@ namespace CoreLib
 		}
 
 		[JsonIgnore]
-		public int Distance => (int)Math.Pow(Math.Pow(x, 2) + Math.Pow(y, 2), 1d / 2);
+		public int Distance => (int)Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
 
 		#region operators
 

@@ -60,7 +60,7 @@ namespace Pokus1
 			return null;
 		}
 
-		public void Play(Map map)
+		public void Play(Environment map)
 		{
 			GameControl gf = new GameControl();
 			Game game = new Game(map.Clone(), gf, Form, gf, gf);
@@ -100,7 +100,7 @@ namespace Pokus1
 
 		private void Loader_Click(object sender, EventArgs e)
 		{
-			Map map = Form.Loading();
+			Environment map = Form.Loading();
 			if(map != null)
 				Play(map);
 		}

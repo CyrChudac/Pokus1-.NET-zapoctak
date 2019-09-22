@@ -9,10 +9,10 @@ using Newtonsoft.Json;
 
 namespace Pokus1
 {
-	public abstract class Player : Life
+	public abstract class PlayerCharacter : Life
 	{
-		public Player(int maxHealth, int currHealth,
-			Movement movement, string name, Location location, IAnimation animation, Size size, Map map)
+		public PlayerCharacter(int maxHealth, int currHealth,
+			Movement movement, string name, Location location, IAnimation animation, Size size, Environment map)
 			: base(maxHealth, currHealth, location, movement, animation, size, name, map)
 		{
 		}
@@ -45,26 +45,26 @@ namespace Pokus1
 
 	internal interface ILifeFactory<T> where T : Life
 	{
-		T GetPlayer(int maxHealth, Movement movement, string name, Location location, Map map);
+		T GetPlayer(int maxHealth, Movement movement, string name, Location location, Environment map);
 	}
 
-	internal interface PlayerFactory : ILifeFactory<Player> { }
+	internal interface PlayerFactory : ILifeFactory<PlayerCharacter> { }
 
 	internal class JumperFactory : PlayerFactory
 	{
-		public Player GetPlayer(int maxHealth, Movement movement, string name, Location location, Map map)
+		public PlayerCharacter GetPlayer(int maxHealth, Movement movement, string name, Location location, Environment map)
 			=> new Jumper(maxHealth, maxHealth, movement, name, location, Life.DefaultSize, map);
 	}
 
 	internal class KnifeThrowerFactory : PlayerFactory
 	{
-		public Player GetPlayer(int maxHealth, Movement movement, string name, Location location, Map map)
+		public PlayerCharacter GetPlayer(int maxHealth, Movement movement, string name, Location location, Environment map)
 			=> new KnifeThrower(maxHealth, maxHealth, movement, name, location, Life.DefaultSize, map);
 	}
 
 	internal class PuddlerFactory : PlayerFactory
 	{
-		public Player GetPlayer(int maxHealth, Movement movement, string name, Location location, Map map)
+		public PlayerCharacter GetPlayer(int maxHealth, Movement movement, string name, Location location, Environment map)
 			=> new Puddler(maxHealth, maxHealth, movement, name, location, Life.DefaultSize, map);
 	}
 
@@ -72,7 +72,7 @@ namespace Pokus1
 
 	internal class PassiveEnemyFactory : EnemyFactory
 	{
-		public Enemy GetPlayer(int maxHealth, Movement movement, string name, Location location, Map map)
+		public Enemy GetPlayer(int maxHealth, Movement movement, string name, Location location, Environment map)
 			 => new PassiveEnemy(location, -1, map);
 	}
 
