@@ -27,7 +27,7 @@ namespace Pokus1
 			this.Name = name;
 			this.Map = map;
 		}
-		public readonly string Name;
+		public string Name { get; private set; }
 		public Location Middle => Location + (Location)Size / 2;
 		public int Height => Size.Height;
 		public int Width => Size.Width;
@@ -49,7 +49,7 @@ namespace Pokus1
 			Movement.Reset();
 		}
 		public Direction LookingAt { get; protected set; } = Direction.right;
-		public readonly IAnimation Animation;
+		public IAnimation Animation { get; private set; }
 		public virtual IAnimation DeadAnimation => DefaultDeadAnimation.instance;
 		public Movement Movement { get; private set; }
 		public Location Location { get; set; }

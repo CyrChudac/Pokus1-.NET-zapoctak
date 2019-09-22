@@ -109,7 +109,7 @@ namespace Pokus1
 		}
 		void RenderInteractiveItems(Graphics g) => RenderItems(g, map.InteractiveItems);
 		void RenderNoninteractiveItems(Graphics g) => RenderItems(g, map.NoninteractiveItems);
-		void RenderItems(Graphics g, IEnumerable<IItem> collection)
+		void RenderItems(Graphics g, IEnumerable<INotLife> collection)
 		{
 			foreach (var item in collection)
 			{

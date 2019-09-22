@@ -7,17 +7,15 @@ using CoreLib;
 
 namespace Pokus1
 {
-	public interface IItem: INotLife
+	public interface INotLife: IGameObject
 	{
-		string Name { get; }
-		IAnimation Animation { get; }
 	}
-	public interface IInteractiveItem : IItem
+	public interface IInteractiveItem : INotLife
 	{
 		void Interact(PlayerCharacter interactingPlayer);
 	}
 
-	public interface INoninteractiveItem : IItem
+	public interface INoninteractiveItem : INotLife
 	{
 		void Update();
 	}

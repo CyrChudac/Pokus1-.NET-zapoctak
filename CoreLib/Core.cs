@@ -14,10 +14,8 @@ namespace CoreLib
 		int Width { get; }
 		int Height { get; }
 		Location Location { get; }
-    }
-
-	public interface INotLife : IGameObject
-	{
+		string Name { get; }
+		IAnimation Animation { get; }
 	}
 
 	public struct Location
