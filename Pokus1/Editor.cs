@@ -285,6 +285,7 @@ namespace Pokus1
 					FileMode.Create);
 				MapSerializer serializer = new MapSerializer(stream);
 				serializer.Save(map);
+				stream.Dispose();
 			}
 		}
 
