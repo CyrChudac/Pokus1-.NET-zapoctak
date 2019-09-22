@@ -22,6 +22,8 @@ namespace Pokus1
 
 		public Size CanvasSize => new Size(Size.Width, Size.Height - panel1.Height);
 
+		private int CurrMapWidth = 1;
+		private int CurrMapHeight = 1;
 		private IMapTile[,] tiles = new IMapTile[1, 1] { { Pokus1.NoTile.Tile } };
 		IMapTile active = FullWall.Tile;
 		public Editor()
@@ -57,7 +59,7 @@ namespace Pokus1
 		{
 			if (int.TryParse(MapWidth.Text, out int width))
 			{
-				NewTiles(width, tiles.GetLength(1));
+				NewTiles(width, CurrMapHeight);
 			}
 		}
 
@@ -72,25 +74,39 @@ namespace Pokus1
 		{
 			if (int.TryParse(MapHeight.Text, out int height))
 			{
-				NewTiles(tiles.GetLength(0), height);
+				NewTiles(CurrMapWidth, height);
 			}
 		}
 
 		private void NewTiles(int width, int height)
 		{
-			IMapTile[,] newField = new IMapTile[width, height];
-			for (int i = 0; i < width; i++)
-				for (int j = 0; j < height; j++)
-				{
-					if (i < tiles.GetLength(0) && j < tiles.GetLength(1))
-						newField[i, j] = tiles[i, j];
-					else
-						newField[i, j] = Pokus1.NoTile.Tile;
-				}
-			tiles = newField;
+			bool update = false;
+			if(width > tiles.GetLength(0))
+			{
+				update = true;
+			}
+			CurrMapWidth = width;
+			if (height > tiles.GetLength(1))
+			{
+				update = true;
+			}
+			CurrMapHeight = height;
+			if (update)
+			{
+				IMapTile[,] newField = new IMapTile[CurrMapWidth, CurrMapHeight];
+				for (int i = 0; i < CurrMapWidth; i++)
+					for (int j = 0; j < CurrMapHeight; j++)
+					{
+						if (i < tiles.GetLength(0) && j < tiles.GetLength(1))
+							newField[i, j] = tiles[i, j];
+						else
+							newField[i, j] = Pokus1.NoTile.Tile;
+					}
+				tiles = newField;
+			}
 			MakeBackground();
-			Camera = new Camera(new Size(tiles.GetLength(0) * Environment.OneTileWidth,
-					tiles.GetLength(1) * Environment.OneTileHeight), 
+			Camera = new Camera(new Size(CurrMapWidth * Environment.OneTileWidth,
+					CurrMapHeight * Environment.OneTileHeight),
 				this,
 				Camera.Location);
 			Camera.locationHolder = Movement;
@@ -100,12 +116,12 @@ namespace Pokus1
 
 		void MakeBackground()
 		{
-			Image result = new Bitmap(tiles.GetLength(0) * Environment.OneTileWidth, tiles.GetLength(1) * Environment.OneTileHeight);
+			Image result = new Bitmap(CurrMapWidth * Environment.OneTileWidth, CurrMapHeight * Environment.OneTileHeight);
 			using (Graphics g = Graphics.FromImage(result))
 			{
-				for (int i = 0; i < tiles.GetLength(0); i++)
+				for (int i = 0; i < CurrMapWidth; i++)
 				{
-					for (int j = 0; j < tiles.GetLength(1); j++)
+					for (int j = 0; j < CurrMapHeight; j++)
 					{
 						g.FillRectangle(tiles[i, j].Brush,
 							i * Environment.OneTileWidth,
