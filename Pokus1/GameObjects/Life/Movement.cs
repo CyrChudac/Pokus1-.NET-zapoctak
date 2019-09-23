@@ -66,4 +66,19 @@ namespace Pokus1
 
 		public static readonly NoMovement instance = new NoMovement();
 	}
+
+	public static class LocationExtensions
+	{
+		public static Location PseudoNormalize(this Location l, float xModificator, float yModificator)
+		{
+			int d = l.Distance;
+			if (d != 0)
+			{
+				int x = (int)((l.x * xModificator) / d);
+				int y = Math.Sign(l.y) * (int)yModificator;
+				return new Location(x, y);
+			}
+			return new Location();
+		}
+	}
 }

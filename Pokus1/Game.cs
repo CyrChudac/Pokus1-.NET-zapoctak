@@ -15,10 +15,10 @@ namespace Pokus1
 	public class Game
 	{
 		public static int ThreadsCount => Process.GetCurrentProcess().Threads.Count;
-		public static readonly string LevelsFileName = "Levels";
-		public static readonly string SaveFileName = "Saves";
-		public static readonly string MapsFileName = "Saves";
-		public static readonly string ImagesFileName = "Images";
+		public static readonly string LevelsFilePath = CurrentDirectory + @"\" + "Levels";
+		public static readonly string SaveFilePath = CurrentDirectory + @"\" + "Saves";
+		public static readonly string MapsFilePath = CurrentDirectory + @"\" + "Saves";
+		public static readonly string ImagesFilePath = CurrentDirectory + @"\" + "Images";
 		public static readonly string CurrentDirectory = 
 			Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString(); 
 

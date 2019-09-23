@@ -21,22 +21,6 @@ namespace CoreLib
 			this.y = y;
 		}
 
-
-		/// <summary>
-		/// Returns new Location(x * xModificator / Distance, Sign(y) * yMOdificator).
-		/// </summary>
-		public Location PseudoNormalize(float xModificator, float yModificator)
-		{
-			int d = Distance;
-			if (d != 0)
-			{
-				int x = (int)((this.x * xModificator) / d);
-				int y = Math.Sign(this.y) * (int)yModificator; //(int)((this.y * yModificator) / d);
-				return new Location(x, y);
-			}
-			return new Location();
-		}
-
 		[JsonIgnore]
 		public int Distance => (int)Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2));
 

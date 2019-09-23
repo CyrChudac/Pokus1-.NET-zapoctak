@@ -50,7 +50,7 @@ namespace Pokus1
 		private void HelpControl_Load(object sender, EventArgs e)
 		{
 			foreach (var i in Directory.GetFiles(
-				Game.CurrentDirectory + @"\" + Game.ImagesFileName))
+				Game.ImagesFilePath))
 				if (i.Contains("Help"))
 					images.Add(Image.FromFile(i));
 		}

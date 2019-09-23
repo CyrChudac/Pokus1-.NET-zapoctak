@@ -30,6 +30,7 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.load = new System.Windows.Forms.Button();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.passiveEnemy = new System.Windows.Forms.Button();
 			this.panel2 = new System.Windows.Forms.Panel();
@@ -45,7 +46,6 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.MapHeight = new System.Windows.Forms.TextBox();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
-			this.load = new System.Windows.Forms.Button();
 			this.panel1.SuspendLayout();
 			this.panel3.SuspendLayout();
 			this.panel2.SuspendLayout();
@@ -66,6 +66,23 @@
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(875, 64);
 			this.panel1.TabIndex = 0;
+			// 
+			// load
+			// 
+			this.load.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.load.BackColor = System.Drawing.Color.WhiteSmoke;
+			this.load.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.load.FlatAppearance.BorderColor = System.Drawing.Color.White;
+			this.load.FlatAppearance.BorderSize = 0;
+			this.load.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.load.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+			this.load.Location = new System.Drawing.Point(748, 10);
+			this.load.Name = "load";
+			this.load.Size = new System.Drawing.Size(48, 41);
+			this.load.TabIndex = 4;
+			this.load.Text = "&Load";
+			this.load.UseVisualStyleBackColor = false;
+			this.load.Click += new System.EventHandler(this.load_Click);
 			// 
 			// panel3
 			// 
@@ -136,6 +153,7 @@
 			this.save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.save.BackColor = System.Drawing.Color.WhiteSmoke;
 			this.save.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.save.Enabled = false;
 			this.save.FlatAppearance.BorderColor = System.Drawing.Color.White;
 			this.save.FlatAppearance.BorderSize = 0;
 			this.save.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
@@ -240,23 +258,6 @@
 			// timer1
 			// 
 			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-			// 
-			// load
-			// 
-			this.load.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.load.BackColor = System.Drawing.Color.WhiteSmoke;
-			this.load.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-			this.load.FlatAppearance.BorderColor = System.Drawing.Color.White;
-			this.load.FlatAppearance.BorderSize = 0;
-			this.load.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.load.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-			this.load.Location = new System.Drawing.Point(748, 10);
-			this.load.Name = "load";
-			this.load.Size = new System.Drawing.Size(48, 41);
-			this.load.TabIndex = 4;
-			this.load.Text = "&Load";
-			this.load.UseVisualStyleBackColor = false;
-			this.load.Click += new System.EventHandler(this.load_Click);
 			// 
 			// Editor
 			// 

@@ -159,7 +159,7 @@
     <Compile Include="UI\Saving.Designer.cs">
       <DependentUpon>Saving.cs</DependentUpon>
     </Compile>
-    <Compile Include="GameObjects\Life\StrightMovement.cs" />
+    <Compile Include="GameObjects\NotLife\StrightMovement.cs" />
     <Compile Include="UiDoThis.cs" />
     <Compile Include="Wall.cs" />
     <Compile Include="UI\EndControl.cs">

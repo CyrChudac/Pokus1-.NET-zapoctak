@@ -298,19 +298,15 @@ namespace Pokus1
 			Saving dialog = new Saving();
 			if(Form.ShowDialog(dialog))
 			{
-				if (!Directory.Exists(Game.CurrentDirectory + @"\" +
-					Game.MapsFileName))
-					Directory.CreateDirectory(
-					Game.CurrentDirectory + @"\" +
-					Game.MapsFileName);
+				if (!Directory.Exists(Game.MapsFilePath))
+					Directory.CreateDirectory(Game.MapsFilePath);
 				Environment map = new Environment(tiles);
 				FromObjectsToLife(players, map.Players, map);
 				FromObjectsToLife(enemies, map.Enemies, map);
 				FromObjectsToLife(interactiveItems, map.InteractiveItems, map);
 				FromObjectsToLife(noninteractiveItems, map.NoninteractiveItems, map);
 				Stream stream = new FileStream(
-					Game.CurrentDirectory + @"\" +
-					Game.MapsFileName + @"\" + 
+					Game.MapsFilePath + @"\" + 
 					dialog.fileName.Text,
 					FileMode.Create);
 				JsonMapSerializer serializer = new JsonMapSerializer(stream);
@@ -354,17 +350,24 @@ namespace Pokus1
 
 		private void jumper_Click(object sender, EventArgs e)
 		{
-			ItemInCentre(Jumper.Color, new JumperFactory(), players);
+			PlayerInCentre(Jumper.Color, new JumperFactory(), players);
 		}
 
 		private void knifeThrower_Click(object sender, EventArgs e)
 		{
-			ItemInCentre(KnifeThrower.Color, new KnifeThrowerFactory(), players);
+			PlayerInCentre(KnifeThrower.Color, new KnifeThrowerFactory(), players);
 		}
 
 		private void passiveEnemy_Click(object sender, EventArgs e)
 		{
 			ItemInCentre(PassiveEnemy.Color, new PassiveEnemyFactory(), enemies);
+		}
+
+		void PlayerInCentre<T>(Color c, IObjectFactory<T> factory,
+			IList<EditorObject<T>> addTo) where T : IGameObject
+		{
+			ItemInCentre(c, factory, addTo);
+			save.Enabled = true;
 		}
 
 		bool FoundDragged<T>(IEnumerable<EditorObject<T>> collection, Point mouseLocation) where T : IGameObject

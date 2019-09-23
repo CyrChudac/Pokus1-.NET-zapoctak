@@ -17,7 +17,7 @@ namespace Pokus1
 		public Menu()
 		{
 			InitializeComponent();
-			for (int i = 0; File.Exists(Game.CurrentDirectory + @"\" + Game.LevelsFileName + @"\Level" + i.ToString()); i++)
+			for (int i = 0; File.Exists(Game.LevelsFilePath + @"\Level" + i.ToString()); i++)
 				maxLevel = i;
 			maxLevel++;
 		}
@@ -25,7 +25,7 @@ namespace Pokus1
 		{
 			foreach (Control item in Controls)
 				item.Left = (this.Width - item.Width) / 2;
-			if (Directory.Exists(Game.SaveFileName) && Directory.GetFiles(Game.SaveFileName).Length > 0)
+			if (Directory.Exists(Game.SaveFilePath) && Directory.GetFiles(Game.SaveFilePath).Length > 0)
 				Loader.Enabled = true;
 		}
 
@@ -55,8 +55,8 @@ namespace Pokus1
 
 		string GetCurrLevelName()
 		{
-			if (File.Exists(Game.CurrentDirectory + @"\" + Game.LevelsFileName + @"\Level" + CurrLevel.ToString()))
-				return Game.CurrentDirectory + @"\" + Game.LevelsFileName + @"\Level" + CurrLevel.ToString();
+			if (File.Exists(Game.LevelsFilePath + @"\Level" + CurrLevel.ToString()))
+				return Game.LevelsFilePath + @"\Level" + CurrLevel.ToString();
 			return null;
 		}
 
