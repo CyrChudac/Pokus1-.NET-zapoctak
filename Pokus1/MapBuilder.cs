@@ -194,7 +194,7 @@ namespace Pokus1
 		public void Dispose() => stream.Dispose();
 		public Environment GetMap()
 		{
-			return GetMap(Json.DefaultSerializer);
+			return GetMap(JsonDefault.DefaultSerializer);
 		}
 		public Environment GetMap(JsonSerializer js)
 		{

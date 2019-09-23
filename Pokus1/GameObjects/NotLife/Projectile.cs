@@ -31,7 +31,7 @@ namespace Pokus1
 
 		List<Direction> dirs = new List<Direction>();
 
-		AttackSource source;
+		readonly AttackSource source;
 		public Projectile(AttackSource source, int distance, Location location,
 			Size size, string sourceName, Environment map, int speed, Direction direction, IAnimation animation)
 			: this(source, distance, location, size, sourceName, map, new StrightMovement(speed, direction), animation)

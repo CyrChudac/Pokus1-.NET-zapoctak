@@ -38,7 +38,7 @@ namespace Pokus1
 		[JsonIgnore]
 		public bool GameEnd => Victory || Defeat;
 
-		private static int OneTileSizeModifier = 38;
+		private readonly static int OneTileSizeModifier = 38;
 		//Both coordinates are made from width on purpose to make the tile size as square.
 		public static readonly Size OneTileSize = new Size(
 			Screen.PrimaryScreen.Bounds.Width / OneTileSizeModifier,
@@ -79,7 +79,7 @@ namespace Pokus1
 
 		public Environment Clone()
 		{
-			JsonSerializer js = Json.DefaultSerializer;
+			JsonSerializer js = JsonDefault.DefaultSerializer;
 			MemoryStream s = new MemoryStream();
 			new JsonMapSerializer(s).Save(this, js);
 			s.Position = 0;
@@ -163,11 +163,6 @@ namespace Pokus1
 		public bool DirectionAccesable(IMovableObject obj, Direction dir)
 			=> new DirectionAccesor(this).DirectionAccesable(obj, dir);
 
-		static Environment()
-		{
-			LocFindCycles = (int)Math.Log(OneTileHeight, 2);
-		}
-		private static int LocFindCycles;
 		public Location GoToLocation(IGameObject obj, Location vector)
 		{
 			DirectionAccesor da = new DirectionAccesor(this);

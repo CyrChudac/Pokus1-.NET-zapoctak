@@ -13,29 +13,29 @@ namespace Pokus1
 		T GetObj(int maxHealth, Movement movement, string name, Location location, Environment map);
 	}
 
-	internal interface PlayerFactory : IObjectFactory<PlayerCharacter> { }
+	internal interface IPlayerFactory : IObjectFactory<PlayerCharacter> { }
 
-	internal class JumperFactory : PlayerFactory
+	internal class JumperFactory : IPlayerFactory
 	{
 		public PlayerCharacter GetObj(int maxHealth, Movement movement, string name, Location location, Environment map)
 			=> new Jumper(maxHealth, maxHealth, movement, name, location, Life.DefaultSize, map);
 	}
 
-	internal class KnifeThrowerFactory : PlayerFactory
+	internal class KnifeThrowerFactory : IPlayerFactory
 	{
 		public PlayerCharacter GetObj(int maxHealth, Movement movement, string name, Location location, Environment map)
 			=> new KnifeThrower(maxHealth, maxHealth, movement, name, location, Life.DefaultSize, map);
 	}
 
-	internal class PuddlerFactory : PlayerFactory
+	internal class PuddlerFactory : IPlayerFactory
 	{
 		public PlayerCharacter GetObj(int maxHealth, Movement movement, string name, Location location, Environment map)
 			=> new Puddler(maxHealth, maxHealth, movement, name, location, Life.DefaultSize, map);
 	}
 
-	interface EnemyFactory : IObjectFactory<Enemy> { }
+	interface IEnemyFactory : IObjectFactory<Enemy> { }
 
-	internal class PassiveEnemyFactory : EnemyFactory
+	internal class PassiveEnemyFactory : IEnemyFactory
 	{
 		public Enemy GetObj(int maxHealth, Movement movement, string name, Location location, Environment map)
 			 => new PassiveEnemy(location, -1, map);

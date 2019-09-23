@@ -97,11 +97,13 @@ namespace Pokus1
 			{
 				case var x when (x is Input.WholeGame.Menu):
 					inputGetter.Reset();
-					InGameMenu menu = new InGameMenu();
-					menu.Dock = DockStyle.Fill;
-					menu.Map = this.map;
-					menu.BackgroundImage = Renderer.DarkenImage( Renderer.Screenshot(), 0.8f);
-					menu.BackgroundImageLayout = ImageLayout.Stretch;
+					InGameMenu menu = new InGameMenu()
+					{
+						Dock = DockStyle.Fill,
+						Map = this.map,
+						BackgroundImage = Renderer.DarkenImage(Renderer.Screenshot(), 0.8f),
+						BackgroundImageLayout = ImageLayout.Stretch,
+					};
 					uiDoThis.Do(() => opener.OpenControl(menu));
 					break;
 				case var x when (x is Input.WholeGame.ChangeChar.Right):

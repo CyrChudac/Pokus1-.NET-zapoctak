@@ -73,11 +73,13 @@ namespace Pokus1
 			charactersUi.Dock = DockStyle.Bottom;
 			charactersUi.Form = this.Form;
 
-			GameScreenControl gs = new GameScreenControl();
-			gs.Form = Form;
-			gs.Dock = DockStyle.Fill;
-			gs.charactersUi = charactersUi;
-			gs.gameControl = gf;
+			GameScreenControl gs = new GameScreenControl()
+			{
+				Form = Form,
+				Dock = DockStyle.Fill,
+				charactersUi = charactersUi,
+				gameControl = gf
+			};
 
 			game.FirstRun();
 			Form.OpenControl(gs);

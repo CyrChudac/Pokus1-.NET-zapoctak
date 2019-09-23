@@ -18,7 +18,7 @@ namespace Pokus1
 		Stream stream;
 		public JsonMapSerializer(Stream stream) => this.stream = stream;
 		public void Dispose() => stream.Dispose();
-		public void Save(Environment map) => Save(map, Json.DefaultSerializer);
+		public void Save(Environment map) => Save(map, JsonDefault.DefaultSerializer);
 		public void Save(Environment map, JsonSerializer jsonSerializer)
 		{
 			StreamWriter sw = new StreamWriter(stream);

@@ -62,8 +62,10 @@ namespace Pokus1
 
 		private void Editor_Load(object sender, EventArgs e)
 		{
-			Camera = new Camera(new Size(), this);
-			Camera.locationHolder = Movement;
+			Camera = new Camera(new Size(), this)
+			{
+				locationHolder = Movement
+			};
 			MapHeight.Text = DefaultHeight.ToString();
 			MapWidth.Text = DefaultWidth.ToString();
 			NewTiles(DefaultWidth, DefaultHeight);
@@ -128,8 +130,10 @@ namespace Pokus1
 			Camera = new Camera(new Size(CurrMapWidth * Environment.OneTileWidth,
 					CurrMapHeight * Environment.OneTileHeight),
 				this,
-				Camera.Location);
-			Camera.locationHolder = Movement;
+				Camera.Location)
+			{
+				locationHolder = Movement
+			};
 			Refresh();
 			
 		}
@@ -337,13 +341,15 @@ namespace Pokus1
 		private EditorObject<T> ItemInCentre<T>(Color c, IObjectFactory<T> factory,
 			IList<EditorObject<T>> addTo) where T : IGameObject
 		{
-			EditorObject<T> l = new EditorObject<T>();
-			l.Brush = new SolidBrush(c);
-			l.Size = Life.DefaultSize;
-			l.Location = new Point(CanvasSize.Width / 2, CanvasSize.Height / 2);
-			l.Factory = factory;
-			addTo.Add(l);
-			return l;
+			EditorObject<T> o = new EditorObject<T>()
+			{
+				Brush = new SolidBrush(c),
+				Size = Life.DefaultSize,
+				Location = new Point(CanvasSize.Width / 2, CanvasSize.Height / 2),
+				Factory = factory
+			};
+			addTo.Add(o);
+			return o;
 		}
 
 		private void jumper_Click(object sender, EventArgs e)

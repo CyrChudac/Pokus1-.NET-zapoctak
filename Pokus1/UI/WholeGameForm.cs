@@ -99,7 +99,7 @@ namespace Pokus1
 				if (!Directory.Exists(Game.SaveFileName))
 					Directory.CreateDirectory(Game.SaveFileName);
 				Stream s = new FileStream(Game.SaveFileName + @"\" + saving.fileName.Text, FileMode.Create);
-				new JsonMapSerializer(s).Save(map, Json.DefaultSerializer);
+				new JsonMapSerializer(s).Save(map, JsonDefault.DefaultSerializer);
 				s.Dispose();
 			}
 		}
@@ -120,7 +120,7 @@ namespace Pokus1
 				{
 					Stream s = new FileStream(Game.CurrentDirectory + @"\" + 
 						Game.SaveFileName + @"\" + (string)loading.list.SelectedItem, FileMode.Open);
-				Environment result = new JsonMapDeserializer(s).GetMap(Json.DefaultSerializer);
+				Environment result = new JsonMapDeserializer(s).GetMap(JsonDefault.DefaultSerializer);
 				s.Dispose();
 				return result;
 				}
