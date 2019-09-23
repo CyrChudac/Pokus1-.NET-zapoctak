@@ -43,38 +43,5 @@ namespace Pokus1
 		protected abstract void SkillUpdate();
 	}
 
-	internal interface ILifeFactory<T> where T : Life
-	{
-		T GetPlayer(int maxHealth, Movement movement, string name, Location location, Environment map);
-	}
-
-	internal interface PlayerFactory : ILifeFactory<PlayerCharacter> { }
-
-	internal class JumperFactory : PlayerFactory
-	{
-		public PlayerCharacter GetPlayer(int maxHealth, Movement movement, string name, Location location, Environment map)
-			=> new Jumper(maxHealth, maxHealth, movement, name, location, Life.DefaultSize, map);
-	}
-
-	internal class KnifeThrowerFactory : PlayerFactory
-	{
-		public PlayerCharacter GetPlayer(int maxHealth, Movement movement, string name, Location location, Environment map)
-			=> new KnifeThrower(maxHealth, maxHealth, movement, name, location, Life.DefaultSize, map);
-	}
-
-	internal class PuddlerFactory : PlayerFactory
-	{
-		public PlayerCharacter GetPlayer(int maxHealth, Movement movement, string name, Location location, Environment map)
-			=> new Puddler(maxHealth, maxHealth, movement, name, location, Life.DefaultSize, map);
-	}
-
-	interface EnemyFactory: ILifeFactory<Enemy> { }
-
-	internal class PassiveEnemyFactory : EnemyFactory
-	{
-		public Enemy GetPlayer(int maxHealth, Movement movement, string name, Location location, Environment map)
-			 => new PassiveEnemy(location, -1, map);
-	}
-
 	public class Inventory : List<Item> { }
 }

@@ -14,6 +14,26 @@ namespace Pokus1
 {
 	public partial class Editor : GameObjectControl, IWithCanvasSize
 	{
+		sealed class EditorObject<T> : IGameObject  where T : IGameObject
+		{
+			public Size Size { get; set; } = new Size();
+
+			public int Width => Size.Width;
+
+			public int Height => Size.Height;
+
+			public Location Location { get; set; } = new Location();
+
+			public string Name { get; set; } = String.Empty;
+
+			public IAnimation Animation => NoAnimation.Singleton;
+
+			public IObjectFactory<T> Factory;
+
+			public bool Dropped;
+
+			public Brush Brush;
+		}
 		static new readonly Size DefaultSize = new Size(45, 45);
 		static int DefaultWidth => DefaultSize.Width;
 		static int DefaultHeight => DefaultSize.Height;
@@ -151,15 +171,15 @@ namespace Pokus1
 		}
 		void MoveAllMovable(Location vector)
 		{
-			MoveLabels(players, vector);
-			MoveLabels(enemies, vector);
-			MoveLabels(interactiveItems, vector);
-			MoveLabels(noninteractiveItems, vector);
+			MoveEditorObjects(players, vector);
+			MoveEditorObjects(enemies, vector);
+			MoveEditorObjects(interactiveItems, vector);
+			MoveEditorObjects(noninteractiveItems, vector);
 		}
-		void MoveLabels(IEnumerable<Label> labels, Location vector)
+		void MoveEditorObjects<T>(IEnumerable<EditorObject<T>> objects, Location vector) where T : IGameObject
 		{
-			foreach (var l in labels)
-				l.Location = new Point(l.Location.X - vector.x, l.Location.Y - vector.y);
+			foreach (var l in objects)
+				l.Location = new Point(l.Location.x - vector.x, l.Location.y - vector.y);
 		}
 
 		PlayerButtons inputGetter = new PlayerButtons();
@@ -199,11 +219,11 @@ namespace Pokus1
 			PaintOthers(e, noninteractiveItems);
 		}
 
-		void PaintOthers(PaintEventArgs e, IEnumerable<Label> others)
+		void PaintOthers<T>(PaintEventArgs e, IEnumerable<EditorObject<T>> others) where T : IGameObject
 		{
 			foreach (var l in others)
-				e.Graphics.FillRectangle(new SolidBrush(l.BackColor),
-					l.Location.X, l.Location.Y,
+				e.Graphics.FillRectangle(l.Brush,
+					l.Location.x, l.Location.y,
 					l.Width, l.Height);
 		}
 
@@ -218,21 +238,21 @@ namespace Pokus1
 			if (shiftActive)
 				ChangeTile(e.Location);
 
-			if (!Dragging(players, e.Location))
-				if (!Dragging(enemies, e.Location))
-					if (!Dragging(interactiveItems, e.Location))
-						Dragging(noninteractiveItems, e.Location);
+			if (!Dragging(noninteractiveItems, e.Location))
+				if (!Dragging(interactiveItems, e.Location))
+					if (!Dragging(enemies, e.Location))
+						Dragging(players, e.Location);
 			LastMouseLoc = e.Location;
 		}
 
 
 		/// <returns> bool that indicates, if there was any dragged item found.</returns>
-		bool Dragging(IEnumerable<Label> collection, Point mouseLocation)
+		bool Dragging<T>(IEnumerable<EditorObject<T>> collection, Point mouseLocation) where T : IGameObject
 			=> ForeachIfConditionDoAction(collection,
-				(Label l) => l.AllowDrop,
-				(Label l) => l.Location = new Point(
-					l.Location.X + mouseLocation.X - LastMouseLoc.X,
-					l.Location.Y + mouseLocation.Y - LastMouseLoc.Y));
+				(EditorObject<T> l) => l.Dropped,
+				(EditorObject<T> l) => l.Location = new Point(
+					l.Location.x + mouseLocation.X - LastMouseLoc.X,
+					l.Location.y + mouseLocation.Y - LastMouseLoc.Y));
 
 		bool ForeachIfConditionDoAction<T>(IEnumerable<T> collection,
 			Func<T, bool> condition, Action<T> action)
@@ -280,20 +300,10 @@ namespace Pokus1
 					Game.CurrentDirectory + @"\" +
 					Game.MapsFileName);
 				Environment map = new Environment(tiles);
-				players.ForEach( l => map.Players.Add(((PlayerFactory)l.Tag).GetPlayer(
-					Life.defaultHealth,
-					new Movement(Life.defaultSpeed),
-					"Name", //TODO - implement this
-					new Location(Camera.Location.x + l.Location.X, Camera.Location.y + l.Location.Y),
-					map)));
-				enemies.ForEach(l => map.Enemies.Add(((EnemyFactory)l.Tag).GetPlayer(
-				   Life.defaultHealth,
-				   new Movement(Life.defaultSpeed),
-				   "Name", //TODO - implement this
-				   new Location(Camera.Location.x + l.Location.X, Camera.Location.y + l.Location.Y),
-				   map)));
-				if (interactiveItems.Count + noninteractiveItems.Count > 0)
-					throw new NotImplementedException("There is no code for making interactive and noninteractive items through editor yet.");
+				FromObjectsToLife(players, map.Players, map);
+				FromObjectsToLife(enemies, map.Enemies, map);
+				FromObjectsToLife(interactiveItems, map.InteractiveItems, map);
+				FromObjectsToLife(noninteractiveItems, map.NoninteractiveItems, map);
 				Stream stream = new FileStream(
 					Game.CurrentDirectory + @"\" +
 					Game.MapsFileName + @"\" + 
@@ -305,18 +315,33 @@ namespace Pokus1
 			}
 		}
 
-		List<Label> players = new List<Label>();
-		List<Label> enemies = new List<Label>();
-		List<Label> interactiveItems = new List<Label>();
-		List<Label> noninteractiveItems = new List<Label>();
+		List<EditorObject<PlayerCharacter>> players = new List<EditorObject<PlayerCharacter>>();
+		List<EditorObject<Enemy>> enemies = new List<EditorObject<Enemy>>();
+		List<EditorObject<IInteractiveItem>> interactiveItems = new List<EditorObject<IInteractiveItem>>();
+		List<EditorObject<INoninteractiveItem>> noninteractiveItems = new List<EditorObject<INoninteractiveItem>>();
 
-		private Label ItemInCentre<T>(Color c, ILifeFactory<T> factory, IList<Label> addTo) where T : Life
+		void FromObjectsToLife<T>(IEnumerable<EditorObject<T>> objs, 
+			IList<T> finalCollection, Environment envir) where T : IGameObject
 		{
-			Label l = new Label();
-			l.BackColor = c;
+			foreach (var obj in objs)
+			{
+				finalCollection.Add(obj.Factory.GetObj(
+				   Life.defaultHealth,
+				   new Movement(Life.defaultSpeed),
+				   "Name", //TODO - implement this
+				   new Location(Camera.Location.x + obj.Location.x, Camera.Location.y + obj.Location.y),
+				   envir));
+			}
+		}
+
+		private EditorObject<T> ItemInCentre<T>(Color c, IObjectFactory<T> factory,
+			IList<EditorObject<T>> addTo) where T : IGameObject
+		{
+			EditorObject<T> l = new EditorObject<T>();
+			l.Brush = new SolidBrush(c);
 			l.Size = Life.DefaultSize;
 			l.Location = new Point(CanvasSize.Width / 2, CanvasSize.Height / 2);
-			l.Tag = factory;
+			l.Factory = factory;
 			addTo.Add(l);
 			return l;
 		}
@@ -336,14 +361,14 @@ namespace Pokus1
 			ItemInCentre(PassiveEnemy.Color, new PassiveEnemyFactory(), enemies);
 		}
 
-		bool FoundDragged(IEnumerable<Label> collection, Point mouseLocation)
+		bool FoundDragged<T>(IEnumerable<EditorObject<T>> collection, Point mouseLocation) where T : IGameObject
 			=>
 			ForeachIfConditionDoAction(collection,
-				l => l.Location.X < mouseLocation.X &&
-					l.Location.Y < mouseLocation.Y &&
-					l.Location.X + l.Width > mouseLocation.X &&
-					l.Location.Y + l.Height > mouseLocation.Y,
-				l => l.AllowDrop = true);
+				l => l.Location.x < mouseLocation.X &&
+					l.Location.y < mouseLocation.Y &&
+					l.Location.x + l.Width > mouseLocation.X &&
+					l.Location.y + l.Height > mouseLocation.Y,
+				l => l.Dropped = true);
 		private void Editor_MouseDown(object sender, MouseEventArgs e)
 		{
 			if (!FoundDragged(players, e.Location))
@@ -354,10 +379,10 @@ namespace Pokus1
 
 		private void Editor_MouseUp(object sender, MouseEventArgs e)
 		{
-			players.ForEach(p => p.AllowDrop = false);
-			enemies.ForEach(en => en.AllowDrop = false);
-			interactiveItems.ForEach(ii => ii.AllowDrop = false);
-			noninteractiveItems.ForEach(ni => ni.AllowDrop = false);
+			players.ForEach(p => p.Dropped = false);
+			enemies.ForEach(en => en.Dropped = false);
+			interactiveItems.ForEach(ii => ii.Dropped = false);
+			noninteractiveItems.ForEach(ni => ni.Dropped = false);
 		}
 
 		private void load_Click(object sender, EventArgs e)
@@ -376,11 +401,11 @@ namespace Pokus1
 			MapWidth.Text = map.Width.ToString();
 			tiles = map.Tiles;
 			MakeBackground();
-			players = new List<Label>();
-			enemies = new List<Label>();
-			interactiveItems = new List<Label>();
-			noninteractiveItems = new List<Label>();
-			var s = new Dictionary<Type, Func<Label>>()
+			players = new List<EditorObject<PlayerCharacter>>();
+			enemies = new List<EditorObject<Enemy>>();
+			interactiveItems = new List<EditorObject<IInteractiveItem>>();
+			noninteractiveItems = new List<EditorObject<INoninteractiveItem>>();
+			var pd = new Dictionary<Type, Func<EditorObject<PlayerCharacter>>>()
 			{
 				{typeof(Jumper), () => ItemInCentre(Jumper.Color,
 				new JumperFactory(), players) },
@@ -388,22 +413,25 @@ namespace Pokus1
 				new KnifeThrowerFactory(), players) },
 				{typeof(Puddler), () => ItemInCentre(Puddler.Color,
 				new PuddlerFactory(), players) },
+			};
+			var ed = new Dictionary<Type, Func<EditorObject<Enemy>>>()
+			{
 				{typeof(PassiveEnemy), () => ItemInCentre(PassiveEnemy.Color,
 				new PassiveEnemyFactory(), enemies) }
 			};
 			foreach (PlayerCharacter p in map.Players)
-				LabelAtRightLocation(p, s);
+				ObjectAtRightLocation(p, pd);
 			foreach (Enemy e in map.Enemies)
-				LabelAtRightLocation(e, s);
-			foreach (IInteractiveItem i in map.InteractiveItems)
-				LabelAtRightLocation(i, s);
-			foreach (INoninteractiveItem n in map.NoninteractiveItems)
-				LabelAtRightLocation(n, s);
+				ObjectAtRightLocation(e, ed);
+			//foreach (IInteractiveItem i in map.InteractiveItems)
+			//	FakeGameObjectAtRightLocation(i, x);
+			//foreach (INoninteractiveItem n in map.NoninteractiveItems)
+			//	FakeGameObjectAtRightLocation(n, x);
 		}
 
-		void LabelAtRightLocation(IGameObject obj, Dictionary<Type, Func<Label>> dic)
+		void ObjectAtRightLocation<T>(T obj, Dictionary<Type, Func<EditorObject<T>>> dic) where T : Life
 		{
-			Label l = dic[obj.GetType()]();
+			EditorObject<T> l = dic[obj.GetType()]();
 			l.Location = obj.Location - Camera.Location;
 		}
 	}
