@@ -13,13 +13,5 @@ namespace Pokus1
 	//[System.ComponentModel.DesignerCategory("")]
 	public partial class GameObjectControl : UserControl {
 		public WholeGameForm Form { get; set; }
-		public GameObjectControl()
-		{
-			this.InitializeComponent();
-		}
-
-		private void GameObjectControl_Load(object sender, EventArgs e)
-		{
-		}
 	}
 }

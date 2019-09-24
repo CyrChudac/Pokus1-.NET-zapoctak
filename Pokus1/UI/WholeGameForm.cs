@@ -51,26 +51,7 @@ namespace Pokus1
 		public T OpenControl<T>(T control, bool add = false) where T : GameObjectControl, new()
 		{
 			if (!add)
-			{
-				if (CurrControls.Count > 0)
-				{
-					GameObjectControl previous = CurrControls.Pop();
-					Controls.Remove(previous);
-					previous.Dispose();
-				}
-				bool foundSame = false;
-				foreach (GameObjControlRet con in ControlOrder)
-					if (con.Type == typeof(T))
-					{
-						foundSame = true;
-						break;
-					}
-				if (!foundSame)
-					ControlOrder.Push(new ControlReturner<T>());
-				else
-					while (ControlOrder.Peek().Type != typeof(T))
-						ControlOrder.Pop();
-			}
+				NotAdding<T>();
 			else if (CurrControls.Count > 0)
 				Controls.Remove(CurrControls.Peek());
 			CurrControls.Push(control);
@@ -81,6 +62,29 @@ namespace Pokus1
 			control.Focus();
 			return control;
 		}
+
+		private void NotAdding<T>() where T : GameObjectControl, new()
+		{
+			if (CurrControls.Count > 0)
+			{
+				GameObjectControl previous = CurrControls.Pop();
+				Controls.Remove(previous);
+				previous.Dispose();
+			}
+			bool foundSame = false;
+			foreach (GameObjControlRet con in ControlOrder)
+				if (con.Type == typeof(T))
+				{
+					foundSame = true;
+					break;
+				}
+			if (!foundSame)
+				ControlOrder.Push(new ControlReturner<T>());
+			else
+				while (ControlOrder.Peek().Type != typeof(T))
+					ControlOrder.Pop();
+		}
+
 		public void CloseControl()
 		{
 			Controls.Remove(CurrControls.Pop());
@@ -99,6 +103,7 @@ namespace Pokus1
 					Close();
 			}
 		}
+
 		public void ToMenu()
 		{
 			Controls.Clear();
