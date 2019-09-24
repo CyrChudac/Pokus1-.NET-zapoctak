@@ -17,46 +17,43 @@ namespace Pokus1
 		public Menu()
 		{
 			InitializeComponent();
+		}
+
+		static Menu()
+		{
 			for (int i = 0; File.Exists(Game.LevelsFilePath + @"\Level" + i.ToString()); i++)
 				maxLevel = i;
 			maxLevel++;
 		}
+
 		private void Menu_Load(object sender, EventArgs e)
 		{
 			foreach (Control item in Controls)
 				item.Left = (this.Width - item.Width) / 2;
 			if (Directory.Exists(Game.SaveFilePath) && Directory.GetFiles(Game.SaveFilePath).Length > 0)
 				Loader.Enabled = true;
+			if (currLevel != 0)
+				NewGame.Text = "Next Level";
+			else
+				NewGame.Text = "New Game";
 		}
 
 		private void Options_Click(object sender, EventArgs e) => Form.OpenControl<Options>();
 
 		static int maxLevel;
-		static int _currLevel = 0;
-		int CurrLevel
-		{
-			get => _currLevel;
-			set
-			{
-				if (value != 0)
-					NewGame.Text = "Next Level";
-				else
-					NewGame.Text = "New Game";
-				_currLevel = value;
-			}
-		}
+		static int currLevel = 0;
 		private void NewGame_Click(object sender, EventArgs e)
 		{
 			string fileName = GetCurrLevelName();
-			CurrLevel = (++CurrLevel).Modulo(maxLevel);
+			currLevel = (++currLevel).Modulo(maxLevel);
 			using (Stream s = new FileStream(fileName, FileMode.Open))
 				Play(new JsonMapDeserializer(s).GetMap());
 		}
 
 		string GetCurrLevelName()
 		{
-			if (File.Exists(Game.LevelsFilePath + @"\Level" + CurrLevel.ToString()))
-				return Game.LevelsFilePath + @"\Level" + CurrLevel.ToString();
+			if (File.Exists(Game.LevelsFilePath + @"\Level" + currLevel.ToString()))
+				return Game.LevelsFilePath + @"\Level" + currLevel.ToString();
 			return null;
 		}
 

@@ -75,7 +75,7 @@ namespace Pokus1
 		{
 			
 		}
-		static readonly int shotRange = 550;
+		static readonly int shotRange = Environment.OneTileWidth * 10;
 		static readonly int sizeModifier = 2;
 		static int projectileSpeed => Life.defaultSpeed * 2;
 		public KnifeThrower(int maxHealth, int currHealth, Movement movement,

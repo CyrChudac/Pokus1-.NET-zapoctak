@@ -410,6 +410,8 @@ namespace Pokus1
 			tiles = map.Tiles;
 			MakeBackground();
 			players = new List<EditorObject<PlayerCharacter>>();
+			if(players.Count > 0)
+				save.Enabled = true;
 			enemies = new List<EditorObject<Enemy>>();
 			interactiveItems = new List<EditorObject<IInteractiveItem>>();
 			noninteractiveItems = new List<EditorObject<INoninteractiveItem>>();

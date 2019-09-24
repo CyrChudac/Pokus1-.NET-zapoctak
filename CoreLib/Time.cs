@@ -13,7 +13,7 @@ namespace CoreLib
 		/// </summary>
 		public static float TimeFlow { get; private set; } = 1;
 		public static readonly int delay = 20;
-		public static long Now { get; private set; } = 0;
+		public static long Now { get; private set; } = _now;
 		public static bool IsRunning => TimeFlow > 0;
 
 		private static long milisOfInactive = 0;
