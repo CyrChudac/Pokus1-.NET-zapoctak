@@ -3809,23 +3809,17 @@
       "$id": "4",
       "$type": "Pokus1.Jumper, Pokus1",
       "lastTimeActivated": 0.0,
+      "Items": [],
       "Name": "Francis",
+      "Alive": true,
+      "CurrHealth": 100,
+      "MaxHealth": 100,
+      "LookingAt": 2,
       "Animation": {
         "$id": "5",
         "$type": "CoreLib.SingleColorAnimation, CoreLib",
         "color": "GreenYellow"
       },
-      "Items": [],
-      "Middle": {
-        "x": 358,
-        "y": 805
-      },
-      "Height": 100,
-      "Width": 100,
-      "Alive": true,
-      "CurrHealth": 100,
-      "MaxHealth": 100,
-      "LookingAt": 2,
       "DeadAnimation": {
         "$type": "CoreLib.DefaultDeadAnimation, CoreLib",
         "color": "LightSlateGray"
@@ -3845,9 +3839,9 @@
       "Location": {
         "$id": "8",
         "x": 308,
-        "y": 755
+        "y": 734
       },
-      "Size": "100, 100",
+      "Size": "88, 88",
       "Map": {
         "$ref": "1"
       }
@@ -3856,23 +3850,17 @@
       "$id": "9",
       "$type": "Pokus1.KnifeThrower, Pokus1",
       "lastTimeActivated": 0,
+      "Items": [],
       "Name": "Gerry",
+      "Alive": true,
+      "CurrHealth": 100,
+      "MaxHealth": 100,
+      "LookingAt": 2,
       "Animation": {
         "$id": "10",
         "$type": "CoreLib.SingleColorAnimation, CoreLib",
         "color": "ForestGreen"
       },
-      "Items": [],
-      "Middle": {
-        "x": 343,
-        "y": 989
-      },
-      "Height": 100,
-      "Width": 100,
-      "Alive": true,
-      "CurrHealth": 100,
-      "MaxHealth": 100,
-      "LookingAt": 2,
       "DeadAnimation": {
         "$type": "CoreLib.DefaultDeadAnimation, CoreLib",
         "color": "LightSlateGray"
@@ -3892,9 +3880,9 @@
       "Location": {
         "$id": "13",
         "x": 293,
-        "y": 939
+        "y": 918
       },
-      "Size": "100, 100",
+      "Size": "88, 88",
       "Map": {
         "$ref": "1"
       }

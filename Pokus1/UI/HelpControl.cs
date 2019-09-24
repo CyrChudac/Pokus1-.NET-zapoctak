@@ -24,6 +24,8 @@ namespace Pokus1
 		int currImage = 0;
 
 		private void HelpControl_Click(object sender, EventArgs e)
+			=> NextPage();
+		void NextPage()
 		{
 			currImage = ++currImage;
 			if (currImage == images.Count)

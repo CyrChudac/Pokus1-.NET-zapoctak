@@ -22,7 +22,7 @@ namespace Pokus1
 			_exLoc = CalculatedVector;
 		}
 		[JsonRequired]
-		public int fallingSpeed { get; protected set; } = 8 * Environment.OneTileHeight;
+		public int fallingSpeed { get; protected set; } = 10 * Environment.OneTileHeight;
 
 		public void AddDirectionToDirection(Direction dir) => AddToDirection((Location)dir * DirectionsImportness);
 		public static readonly int DirectionsImportness = Time.delay / 3;

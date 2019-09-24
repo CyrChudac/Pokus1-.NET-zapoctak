@@ -410,8 +410,6 @@ namespace Pokus1
 			tiles = map.Tiles;
 			MakeBackground();
 			players = new List<EditorObject<PlayerCharacter>>();
-			if(players.Count > 0)
-				save.Enabled = true;
 			enemies = new List<EditorObject<Enemy>>();
 			interactiveItems = new List<EditorObject<IInteractiveItem>>();
 			noninteractiveItems = new List<EditorObject<INoninteractiveItem>>();
@@ -437,6 +435,9 @@ namespace Pokus1
 			//	FakeGameObjectAtRightLocation(i, x);
 			//foreach (INoninteractiveItem n in map.NoninteractiveItems)
 			//	FakeGameObjectAtRightLocation(n, x);
+
+			if (players.Count > 0)
+				save.Enabled = true;
 		}
 
 		void ObjectAtRightLocation<T>(T obj, Dictionary<Type, Func<EditorObject<T>>> dic) where T : Life
