@@ -132,10 +132,10 @@ namespace Pokus1
 				IMapTile[,] field = builder.BordersAndSomething_Wall();
 				Environment result = new Environment(field);
 				result.Players.Add(new Jumper(100, 100, new Movement(Life.defaultSpeed),
-				"Vlad", new Location{ x = 143, y = 59},
+				new Location{ x = 143, y = 59},
 				Life.DefaultSize, result));
 				result.Players.Add(new Jumper(100, 100, new Movement(Life.defaultSpeed),
-				"Vlad", new Location{ x = 300, y = 59}, new SingleColorAnimation(Color.OrangeRed),
+				new Location{ x = 300, y = 59}, new SingleColorAnimation(Color.OrangeRed),
 				Life.DefaultSize, result));
 				return result;
 			}
@@ -153,10 +153,10 @@ namespace Pokus1
 				IMapTile[,] field = builder.BordersAndSomething2_Wall();
 				Environment result = new Environment(field);
 				result.Players.Add(new Jumper(100, 100, new Movement(Life.defaultSpeed),
-					"Vlad", new Location { x = 143, y = 59 }, new SingleColorAnimation(Color.GreenYellow),
+					new Location { x = 143, y = 59 }, new SingleColorAnimation(Color.GreenYellow),
 					Life.DefaultSize, result));
 				result.Players.Add(new KnifeThrower(100, 100, new Movement(Life.defaultSpeed),
-					"Vlad2", new Location{ x = 300, y = 59}, new SingleColorAnimation(Color.OrangeRed),
+					new Location{ x = 300, y = 59}, new SingleColorAnimation(Color.OrangeRed),
 					Life.DefaultSize, result));
 				return result;
 			}
@@ -174,7 +174,7 @@ namespace Pokus1
 				IMapTile[,] field = builder.BordersAndSomething2_Wall();
 				Environment result = new Environment(field);
 				result.Players.Add(new KnifeThrower(100, 100, new Movement(Life.defaultSpeed),
-					"Vlad", new Location { x = 300, y = 59 }, new SingleColorAnimation(Color.GreenYellow),
+					new Location { x = 300, y = 59 }, new SingleColorAnimation(Color.GreenYellow),
 					Life.DefaultSize, result));
 				result.Enemies.Add(new PassiveEnemy(new Location { x = 100, y = 30 }, 1, result));
 				return result;

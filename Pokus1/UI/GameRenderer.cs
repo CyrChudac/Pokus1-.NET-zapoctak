@@ -12,7 +12,7 @@ namespace Pokus1
 {
 	public interface IMapRenderer : IWithCanvasSize
 	{
-		void FirstRender(Environment map);
+		void Initialize(Environment map);
 		void Render();
 		void SetCameraMovement(ILocationHolder locationHolder);
 		void NewPlayerLocation(Location location);
@@ -45,7 +45,7 @@ namespace Pokus1
 			base.Dispose();
 		}
 
-		public void FirstRender(Environment map)
+		public void Initialize(Environment map)
 		{
 			this.map = map;
 			SetStyle(ControlStyles.OptimizedDoubleBuffer //Canvas do not blink cause of that

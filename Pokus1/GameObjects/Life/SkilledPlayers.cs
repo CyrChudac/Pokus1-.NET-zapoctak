@@ -14,7 +14,8 @@ namespace Pokus1
 	class Jumper : PlayerCharacter
 	{
 		public static Color Color = Color.GreenYellow;
-		static int jumpDuration = 650;
+		[JsonIgnore]
+		int jumpDuration => 666;
 		[JsonIgnore]
 		int jumpImportness => Movement.DirectionsImportness * 2 / 3;
 		[JsonRequired]
@@ -40,14 +41,14 @@ namespace Pokus1
 		}
 		[JsonConstructor]
 		public Jumper(int maxHealth, int currHealth, Movement movement,
-			string name, Location location, IAnimation animation, Size size, Environment map)
-			: base(maxHealth, currHealth, movement, name,
+			Location location, IAnimation animation, Size size, Environment map)
+			: base(maxHealth, currHealth, movement, "Francis",
 				  location, animation, size, map)
 		{
 		}
 		public Jumper(int maxHealth, int currHealth, Movement movement,
-			string name, Location location, Size size, Environment map)
-			: this(maxHealth, currHealth, movement, name,
+			Location location, Size size, Environment map)
+			: this(maxHealth, currHealth, movement,
 				  location, new SingleColorAnimation(Color), size, map)
 		{
 		}
@@ -78,14 +79,14 @@ namespace Pokus1
 		static readonly int sizeModifier = 2;
 		static int projectileSpeed => Life.defaultSpeed * 2;
 		public KnifeThrower(int maxHealth, int currHealth, Movement movement,
-			string name, Location location, Size size, Environment map)
-			: this(maxHealth, currHealth, movement, name, location, new SingleColorAnimation(Color), size, map)
+			Location location, Size size, Environment map)
+			: this(maxHealth, currHealth, movement, location, new SingleColorAnimation(Color), size, map)
 		{
 		}
 		[JsonConstructor]
 		public KnifeThrower(int maxHealth, int currHealth, Movement movement,
-			string name, Location location, IAnimation animation, Size size, Environment map)
-			: base(maxHealth, currHealth, movement, name, location, animation, size, map)
+			Location location, IAnimation animation, Size size, Environment map)
+			: base(maxHealth, currHealth, movement, "Gerry", location, animation, size, map)
 		{
 			attack = new RangedAttack(AttackSource.ally, shotRange,
 				new Size(Environment.OneTileWidth / sizeModifier, Environment.OneTileHeight / sizeModifier), projectileSpeed);
@@ -113,13 +114,13 @@ namespace Pokus1
 
 		[JsonConstructor]
 		public Puddler(int maxHealth, int currHealth, Movement movement,
-			string name, Location location, IAnimation animation, Size size, Environment map)
-			: base(maxHealth, currHealth, movement, name, location, animation, size, map)
+			Location location, IAnimation animation, Size size, Environment map)
+			: base(maxHealth, currHealth, movement, "Igor", location, animation, size, map)
 		{
 		}
 		public Puddler(int maxHealth, int currHealth, Movement movement,
-			string name, Location location, Size size, Environment map)
-			: this(maxHealth, currHealth, movement, name, location, new SingleColorAnimation(Color), size, map)
+			Location location, Size size, Environment map)
+			: this(maxHealth, currHealth, movement, location, new SingleColorAnimation(Color), size, map)
 		{
 		}
 	}

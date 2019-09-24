@@ -28,8 +28,11 @@ namespace Pokus1
 			this.Map = map;
 		}
 		public string Name { get; private set; }
+		[JsonIgnore]
 		public Location Middle => Location + (Location)Size / 2;
+		[JsonIgnore]
 		public int Height => Size.Height;
+		[JsonIgnore]
 		public int Width => Size.Width;
 		public bool Alive { get; protected set; } = true;
 		public int CurrHealth { get; protected set; }

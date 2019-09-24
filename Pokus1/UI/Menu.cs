@@ -31,8 +31,8 @@ namespace Pokus1
 
 		private void Options_Click(object sender, EventArgs e) => Form.OpenControl<Options>();
 
-		int maxLevel;
-		int _currLevel = 0;
+		static int maxLevel;
+		static int _currLevel = 0;
 		int CurrLevel
 		{
 			get => _currLevel;
@@ -81,7 +81,7 @@ namespace Pokus1
 				gameControl = gf
 			};
 
-			game.FirstRun();
+			//game.FirstRun();
 			Form.OpenControl(gs);
 		}
 

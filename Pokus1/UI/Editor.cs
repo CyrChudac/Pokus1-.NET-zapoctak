@@ -328,7 +328,6 @@ namespace Pokus1
 				finalCollection.Add(obj.Factory.GetObj(
 				   Life.defaultHealth,
 				   new Movement(Life.defaultSpeed),
-				   "Name", //TODO - implement this
 				   new Location(Camera.Location.x + obj.Location.x, Camera.Location.y + obj.Location.y),
 				   envir));
 			}

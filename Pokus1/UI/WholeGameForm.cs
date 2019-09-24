@@ -15,16 +15,16 @@ namespace Pokus1
 {
 	public interface IGameObjectOpener
 	{
-		GameObjectControl OpenControl<T>() where T : GameObjectControl, new();
-		GameObjectControl OpenControl(GameObjectControl control);
+		T OpenControl<T>() where T : GameObjectControl, new();
+		T OpenControl<T>(T control, bool add = false) where T : GameObjectControl, new ();
 	}
 
 	public partial class WholeGameForm : Form, IGameObjectOpener
 	{ 
-		Stack<GameObjectControl> ControlOrder = new Stack<GameObjectControl>();
+		Stack<GameObjControlRet> ControlOrder = new Stack<GameObjControlRet>();
+		Stack<GameObjectControl> CurrControls = new Stack<GameObjectControl>();
 		public WholeGameForm()
 		{
-			//this.WindowState = FormWindowState.Maximized;
 			InitializeComponent();
 			this.Location = new Point(0, 0);
 			this.Size = Screen.PrimaryScreen.Bounds.Size;
@@ -45,41 +45,71 @@ namespace Pokus1
 			gameThread.Abort();
 			gameThread = null;
 		}
-
-		protected void GameForm_Load(object sender, EventArgs e)
+		
+		public T OpenControl<T>() where T : GameObjectControl, new()
+		 => OpenControl(new T());
+		public T OpenControl<T>(T control, bool add = false) where T : GameObjectControl, new()
 		{
-		}
-		public GameObjectControl OpenControl<T>() where T : GameObjectControl, new()
-		{
-			T control = new T();
-			return OpenControl(control);
-		}
-		public GameObjectControl OpenControl(GameObjectControl control)
-		{
-			Controls.Add(control);
-			if (ControlOrder.Count > 0)
-					ControlOrder.Peek().Visible = false;
-			ControlOrder.Push(control);
+			if (!add)
+			{
+				if (CurrControls.Count > 0)
+				{
+					GameObjectControl previous = CurrControls.Pop();
+					Controls.Remove(previous);
+					previous.Dispose();
+				}
+				bool foundSame = false;
+				foreach (GameObjControlRet con in ControlOrder)
+					if (con.Type == typeof(T))
+					{
+						foundSame = true;
+						break;
+					}
+				if (!foundSame)
+					ControlOrder.Push(new ControlReturner<T>());
+				else
+					while (ControlOrder.Peek().Type != typeof(T))
+						ControlOrder.Pop();
+			}
+			else if (CurrControls.Count > 0)
+				Controls.Remove(CurrControls.Peek());
+			CurrControls.Push(control);
+			control.Size = this.Size;
 			control.Dock = DockStyle.Fill;
 			control.Form = this;
+			Controls.Add(control);
 			control.Focus();
 			return control;
 		}
 		public void CloseControl()
 		{
-			Controls.Remove(ControlOrder.Pop());
-
-			if (ControlOrder.Count > 0)
+			Controls.Remove(CurrControls.Pop());
+			if (CurrControls.Count > 0)
 			{
-				ControlOrder.Peek().Visible = true;
-				ControlOrder.Peek().Focus();
+				OpenControl(CurrControls.Pop(), true);
+			}
+			else
+			{
+				ControlOrder.Pop();
+				if (ControlOrder.Count > 0)
+				{
+					OpenControl(ControlOrder.Pop().Get());
+				}
+				else
+					Close();
 			}
 		}
 		public void ToMenu()
 		{
-			while(ControlOrder.Count > 1)
-				CloseControl();
+			Controls.Clear();
+			ControlOrder.Clear();
+			foreach (GameObjectControl con in CurrControls)
+				con.Dispose();
+			CurrControls.Clear();
+			OpenControl<Menu>();
 		}
+
+
 		public new void Close()
 		{
 			if (ShowDialog(new ReallyEndDialog()))
@@ -117,20 +147,32 @@ namespace Pokus1
 
 		public Environment Loading()
 		{
-			Pokus1.Loading loading = new Loading();
+			Loading loading = new Loading();
 			if (ShowDialog(loading))
 			{
 				try
 				{
 					Stream s = new FileStream(Game.SaveFilePath + @"\" +
 						(string)loading.list.SelectedItem, FileMode.Open);
-				Environment result = new JsonMapDeserializer(s).GetMap(JsonDefault.DefaultSerializer);
+				Environment result = new JsonMapDeserializer(s).GetMap();
 				s.Dispose();
 				return result;
 				}
 				catch (IOException) { }
 			}
 			return null;
+		}
+
+		abstract class GameObjControlRet
+		{
+			public abstract GameObjectControl Get();
+			public abstract Type Type { get; }
+		}
+
+		class ControlReturner<T> : GameObjControlRet where T : GameObjectControl, new()
+		{
+			public override GameObjectControl Get() => new T();
+			public override Type Type => typeof(T);
 		}
 	}
 }

@@ -19,7 +19,7 @@ namespace Pokus1
 		public static readonly string SaveFilePath = CurrentDirectory + @"\" + "Saves";
 		public static readonly string MapsFilePath = CurrentDirectory + @"\" + "Saves";
 		public static readonly string ImagesFilePath = CurrentDirectory + @"\" + "Images";
-		public static readonly string CurrentDirectory = 
+		public static string CurrentDirectory =>
 			Directory.GetParent(Directory.GetParent(Directory.GetCurrentDirectory()).ToString()).ToString(); 
 
 		internal Environment map;
@@ -28,7 +28,8 @@ namespace Pokus1
 		public IMapRenderer Renderer { get; private set; }
 		private IInputGetter inputGetter;
 		private UiDoThis uiDoThis; 
-		public Game(Environment map, IMapRenderer renderer, IGameObjectOpener opener, IInputGetter inputGetter, IWithToDo withToDo)
+		public Game(Environment map, IMapRenderer renderer, IGameObjectOpener opener,
+			IInputGetter inputGetter, IWithToDo withToDo)
 		{
 			this.startingMap = map;
 			this.opener = opener;
@@ -43,9 +44,11 @@ namespace Pokus1
 		{
 			Time.Start();
 			map = startingMap.Clone(); 
-			Renderer.Camera = new Camera(new Size(map.Width * Environment.OneTileWidth, map.Height * Environment.OneTileHeight), Renderer);
+			Renderer.Camera = new Camera(new Size(
+				map.Width * Environment.OneTileWidth,
+				map.Height * Environment.OneTileHeight), Renderer);
 			SetCorrectCameraMovement();
-			Renderer.FirstRender(map);
+			Renderer.Initialize(map);
 		}
 		public void Update()
 		{
@@ -68,7 +71,7 @@ namespace Pokus1
 						new EndControl() { Text = "You Failed!" }));
 				}
 				else throw new Exception("Unexpected game end");
-			}//<-----------TODO: udělat game over
+			}
 		}
 		void PropagateInput()
 		{
@@ -99,12 +102,11 @@ namespace Pokus1
 					inputGetter.Reset();
 					InGameMenu menu = new InGameMenu()
 					{
-						Dock = DockStyle.Fill,
 						Map = this.map,
 						BackgroundImage = Renderer.DarkenImage(Renderer.Screenshot(), 0.8f),
 						BackgroundImageLayout = ImageLayout.Stretch,
 					};
-					uiDoThis.Do(() => opener.OpenControl(menu));
+					uiDoThis.Do(() => opener.OpenControl(menu, true));
 					break;
 				case var x when (x is Input.WholeGame.ChangeChar.Right):
 					activePlayer = (activePlayer - 1).Modulo(map.Players.Count);

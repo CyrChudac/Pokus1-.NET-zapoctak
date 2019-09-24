@@ -27,16 +27,16 @@ namespace Pokus1
 
 		private void GameScreenControl_Load(object sender, EventArgs e)
 		{
+			Controls.Add(gameControl);
+			Controls.Add(charactersUi);
+			gameControl.Focus();
+			charactersUi.TabStop = false;
+
 			GameLoop = new GameLoop(gameControl.Game, this);
 			GameLoopThread = new Thread(new ThreadStart(GameLoop.Start));
 			GameLoopThread.Start();
 			Form.SetGameThread(GameLoopThread);
 
-			Controls.Add(gameControl);
-			Controls.Add(charactersUi);
-			gameControl.Focus();
-			charactersUi.TabStop = false;
-			
 			Cursor.Hide();
 		}
 		public new void Update()

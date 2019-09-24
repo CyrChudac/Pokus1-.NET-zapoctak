@@ -3809,7 +3809,7 @@
       "$id": "4",
       "$type": "Pokus1.Jumper, Pokus1",
       "lastTimeActivated": 0.0,
-      "Name": "Name",
+      "Name": "Francis",
       "Animation": {
         "$id": "5",
         "$type": "CoreLib.SingleColorAnimation, CoreLib",
@@ -3856,7 +3856,7 @@
       "$id": "9",
       "$type": "Pokus1.KnifeThrower, Pokus1",
       "lastTimeActivated": 0,
-      "Name": "Name",
+      "Name": "Gerry",
       "Animation": {
         "$id": "10",
         "$type": "CoreLib.SingleColorAnimation, CoreLib",
